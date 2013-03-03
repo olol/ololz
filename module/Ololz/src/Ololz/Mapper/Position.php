@@ -34,4 +34,40 @@ class Position extends Base
     {
         return parent::findOneBy(array('code' => $code), $orderBy, $limit, $offset);
     }
+
+    /**
+     * @param string        $keyField field name or null for id
+     * @param string        $valueField field name or 'toString' or null for whole entity
+     * @param array         $criteria
+     * @param string|array  $orderBy
+     * @param int           $limit
+     * @param int           $offset
+     *
+     * @return array
+     */
+    public function findWithKey(
+            $keyField = null,
+            $valueField = 'toString',
+            $criteria = array(),
+            $orderBy = array('name' => 'ASC'),
+            $limit = null,
+            $offset = null
+    ) {
+        $found = array();
+
+        $keyGetter = $this->getterForField($keyField);
+        $keyGetter ? $keyGetter : 'getId';
+        $valueGetter = null;
+        if ($valueField == 'toString') {
+            $valueGetter = 'getDisplayedLabel';
+        } else {
+            $valueGetter = $valueField ? $this->getterForField($valueField) : null;
+        }
+
+        foreach (parent::findBy($criteria, $orderBy, $limit, $offset) as $entity) {
+            $found[$entity->$keyGetter()] = $valueGetter ? $entity->$valueGetter() : $entity;
+        }
+
+        return $found;
+    }
 }
