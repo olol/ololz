@@ -28,7 +28,7 @@ class Match extends Base
      * @param int           $limit
      * @param int           $offset
      *
-     * @return array
+     * @return \Ololz\Entity\Match
      */
     public function findOneByHash($hash, $orderBy = null, $limit = null, $offset = null)
     {

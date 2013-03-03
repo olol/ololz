@@ -28,7 +28,7 @@ class Source extends Base
      * @param int           $limit
      * @param int           $offset
      *
-     * @return array
+     * @return \Ololz\Entity\Source
      */
     public function findOneByCode($code, $orderBy = null, $limit = null, $offset = null)
     {

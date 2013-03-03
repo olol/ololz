@@ -28,7 +28,7 @@ class Position extends Base
      * @param int           $limit
      * @param int           $offset
      *
-     * @return array
+     * @return \Ololz\Entity\Position
      */
     public function findOneByCode($code, $orderBy = null, $limit = null, $offset = null)
     {

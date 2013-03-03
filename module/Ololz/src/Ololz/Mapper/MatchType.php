@@ -21,4 +21,17 @@ class MatchType extends Base
     {
         parent::__construct('Ololz\Entity\MatchType', $em);
     }
+
+    /**
+     * @param string        $code
+     * @param string|array  $orderBy
+     * @param int           $limit
+     * @param int           $offset
+     *
+     * @return \Ololz\Entity\MatchType
+     */
+    public function findOneByCode($code, $orderBy = null, $limit = null, $offset = null)
+    {
+        return parent::findOneBy(array('code' => $code), $orderBy, $limit, $offset);
+    }
 }

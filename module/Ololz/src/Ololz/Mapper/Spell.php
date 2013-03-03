@@ -28,7 +28,7 @@ class Spell extends Base
      * @param int           $limit
      * @param int           $offset
      *
-     * @return array
+     * @return \Ololz\Entity\Spell
      */
     public function findOneByCode($code, $orderBy = null, $limit = null, $offset = null)
     {
