@@ -41,7 +41,7 @@ class Invocation extends Base
     protected $matchTeam;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Item", fetch="LAZY", cascade={"detach"})
+     * @ORM\ManyToMany(targetEntity="Item", fetch="LAZY")
      * @ORM\JoinTable(
      *      name="invocation_item",
      *      joinColumns={@ORM\JoinColumn(name="invocation_id", referencedColumnName="id")},
@@ -52,7 +52,7 @@ class Invocation extends Base
     protected $items;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Spell", fetch="LAZY", cascade={"detach"})
+     * @ORM\ManyToMany(targetEntity="Spell", fetch="LAZY")
      * @ORM\JoinTable(
      *      name="invocation_spell",
      *      joinColumns={@ORM\JoinColumn(name="invocation_id", referencedColumnName="id")},
@@ -63,7 +63,7 @@ class Invocation extends Base
     protected $spells;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Position", fetch="LAZY", cascade={"detach"})
+     * @ORM\ManyToOne(targetEntity="Position", fetch="LAZY")
      * @ORM\JoinColumn(name="position_id", referencedColumnName="id")
      * @JMS\Type("Ololz\Entity\Position")
      */
