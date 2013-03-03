@@ -20,7 +20,7 @@ use JMS\Serializer\Annotation as JMS;
 class Match extends Base
 {
     /**
-     * @ORM\ManyToOne(targetEntity="Map", fetch="LAZY", cascade={"detach"})
+     * @ORM\ManyToOne(targetEntity="Map", fetch="LAZY")
      * @ORM\JoinColumn(name="map_id", referencedColumnName="id")
      * @JMS\Type("Ololz\Entity\Map")
      */
@@ -47,7 +47,7 @@ class Match extends Base
     protected $matchTeams;
 
     /**
-     * @ORM\ManyToOne(targetEntity="MatchType", fetch="LAZY", cascade={"detach"})
+     * @ORM\ManyToOne(targetEntity="MatchType", fetch="LAZY")
      * @ORM\JoinColumn(name="match_type_id", referencedColumnName="id")
      * @JMS\Type("Ololz\Entity\MatchType")
      */
