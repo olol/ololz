@@ -1,0 +1,22 @@
+{
+    "name": "olol/ololz",
+    "description": "Open League of Legends Ztatistics - an hosted application to follow the statistics of the players you're following.",
+    "license": "BSD-3-Clause",
+    "keywords": [
+        "lol",
+        "open",
+        "league-of-legends",
+        "League of Legends",
+        "statistic"
+    ],
+    "homepage": "http://framework.zend.com/",
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=5.3.5",
+        "zendframework/zendframework": "2.*",
+        "zendframework/zend-developer-tools": "dev-master",
+        "doctrine/doctrine-orm-module": "0.*",
+        "sp/jms-serializer-module": "dev-master",
+        "gedmo/doctrine-extensions": "2.*"
+    }
+}

@@ -1,0 +1,10 @@
+<div class="row">
+
+    <p><?php echo sprintf($this->translate('Updated %s'), $this->name) ?></p>
+
+    <ul>
+    <?php foreach ($this->logs as $log) : ?>
+        <li><?php echo $log['message'] ?></li>
+    <?php endforeach; ?>
+    </ul>
+</div>
