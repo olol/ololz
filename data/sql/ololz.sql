@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Serveur: localhost
--- Généré le : Dim 03 Mars 2013 à 13:06
+-- Généré le : Dim 03 Mars 2013 à 13:36
 -- Version du serveur: 5.1.63
 -- Version de PHP: 5.3.5-1ubuntu7.11
 
@@ -481,7 +481,7 @@ CREATE TABLE IF NOT EXISTS `mapping` (
   UNIQUE KEY `source_type_theirs` (`source_id`,`type`,`theirs`),
   UNIQUE KEY `source_type_ours` (`source_id`,`type`,`ours`),
   KEY `mapping_source_id` (`source_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=366 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=368 ;
 
 --
 -- Contenu de la table `mapping`
@@ -834,7 +834,9 @@ INSERT INTO `mapping` (`id`, `source_id`, `type`, `ours`, `theirs`) VALUES
 (357, 1, 'match_type', 4, 'Normal 3v3'),
 (358, 1, 'match_type', 5, 'Ranked Team 3v3'),
 (359, 1, 'match_type', 6, 'Custom'),
-(365, 1, 'match_type', 7, 'Proving Grounds');
+(365, 1, 'match_type', 7, 'Proving Grounds'),
+(366, 1, 'match_type', 8, 'Dominion'),
+(367, 1, 'match_type', 9, 'Co-Op Vs AI');
 
 -- --------------------------------------------------------
 
@@ -896,7 +898,7 @@ CREATE TABLE IF NOT EXISTS `match_type` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `code` (`code`),
   KEY `match_type_map_id` (`map_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=8 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=10 ;
 
 --
 -- Contenu de la table `match_type`
@@ -909,7 +911,9 @@ INSERT INTO `match_type` (`id`, `name`, `code`, `map_id`) VALUES
 (4, 'Normal 3v3', 'normal-3v3', 4),
 (5, 'Ranked Team 3v3', 'ranked-team-3v3', 4),
 (6, 'Custom', 'custom', NULL),
-(7, 'ARAM', 'aram', 2);
+(7, 'ARAM', 'aram', 2),
+(8, 'Dominion', 'dominion', 1),
+(9, 'Co-op vs AI', 'co-op-vs-ai', NULL);
 
 -- --------------------------------------------------------
 
@@ -1036,8 +1040,8 @@ ALTER TABLE `invocation`
 -- Contraintes pour la table `invocation_item`
 --
 ALTER TABLE `invocation_item`
-  ADD CONSTRAINT `invocation_spell_invocation_id0` FOREIGN KEY (`invocation_id`) REFERENCES `invocation` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `invocation_spell_spell_id0` FOREIGN KEY (`item_id`) REFERENCES `item` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `invocation_item_invocation_id` FOREIGN KEY (`invocation_id`) REFERENCES `invocation` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `invocation_item_item_id` FOREIGN KEY (`item_id`) REFERENCES `item` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Contraintes pour la table `invocation_spell`
@@ -1065,11 +1069,11 @@ ALTER TABLE `match`
 -- Contraintes pour la table `match_team`
 --
 ALTER TABLE `match_team`
-  ADD CONSTRAINT `opponent_match_id` FOREIGN KEY (`match_id`) REFERENCES `match` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `match_team_match_id` FOREIGN KEY (`match_id`) REFERENCES `match` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Contraintes pour la table `match_type`
 --
 ALTER TABLE `match_type`
-  ADD CONSTRAINT `match_type_ibfk_1` FOREIGN KEY (`map_id`) REFERENCES `map` (`id`);
+  ADD CONSTRAINT `match_type_map_id` FOREIGN KEY (`map_id`) REFERENCES `map` (`id`);
 SET FOREIGN_KEY_CHECKS=1;
