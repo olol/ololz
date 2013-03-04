@@ -1,8 +1,6 @@
 <?php
 namespace Ololz\Service\Updater;
 
-require_once(__DIR__ . '/../../../../../../vendor/TobiaszCudnik/phpquery/phpQuery.php');
-
 use Ololz\Entity;
 
 /**

@@ -15,7 +15,7 @@ $summoners = array(
 
 $stats = array();
 
-require_once(__DIR__ . '/../vendor/TobiaszCudnik/phpquery/phpQuery.php');
+require_once(__DIR__ . '/../vendor/duvanmonsa/php-query/src/phpQuery.php');
 @include_once(__DIR__ . '/../data/stats.php');
 
 function getUniqueHashOfMatch($game) {

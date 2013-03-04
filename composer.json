@@ -17,6 +17,7 @@
         "zendframework/zend-developer-tools": "dev-master",
         "doctrine/doctrine-orm-module": "0.*",
         "sp/jms-serializer-module": "dev-master",
-        "gedmo/doctrine-extensions": "2.*"
+        "gedmo/doctrine-extensions": "2.*",
+        "duvanmonsa/php-query": "dev-master"
     }
 }
