@@ -237,8 +237,8 @@ CREATE TABLE IF NOT EXISTS `invocation_spell` (
 
 CREATE TABLE IF NOT EXISTS `item` (
   `id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(32) NOT NULL,
-  `code` varchar(32) NOT NULL,
+  `name` varchar(40) NOT NULL,
+  `code` varchar(40) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `code` (`code`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=193 ;
@@ -325,11 +325,11 @@ INSERT INTO `item` (`id`, `name`, `code`) VALUES
 (75, 'Ichor of Rage', 'ichor-of-rage'),
 (76, 'Infinity Edge', 'infinity-edge'),
 (77, 'Ionian Boots of Lucidity', 'ionian-boots-of-lucidity'),
-(78, 'Ionian Boots of Lucidity - Alacr', 'ionian-boots-of-lucidity-alacrit'),
-(79, 'Ionian Boots of Lucidity - Capta', 'ionian-boots-of-lucidity-captain'),
-(80, 'Ionian Boots of Lucidity - Disto', 'ionian-boots-of-lucidity-distort'),
+(78, 'Ionian Boots of Lucidity - Alacrity', 'ionian-boots-of-lucidity-alacrity'),
+(79, 'Ionian Boots of Lucidity - Captain', 'ionian-boots-of-lucidity-captain'),
+(80, 'Ionian Boots of Lucidity - Distortion', 'ionian-boots-of-lucidity-distortion'),
 (81, 'Ionian Boots of Lucidity - Furor', 'ionian-boots-of-lucidity-furor'),
-(82, 'Ionian Boots of Lucidity - Homeg', 'ionian-boots-of-lucidity-homegua'),
+(82, 'Ionian Boots of Lucidity - Homeguard', 'ionian-boots-of-lucidity-homeguard'),
 (83, 'Kage''s Lucky Pick', 'kage-s-lucky-pick'),
 (84, 'Kindlegem', 'kindlegem'),
 (85, 'Kitae''s Bloodrazor', 'kitae-s-bloodrazor'),
