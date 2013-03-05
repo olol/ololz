@@ -22,6 +22,8 @@ class Match extends Base
     {
         $this->getMapper()->getEventManager()->attach('save.hydrated', array($this, 'onSaveSetHash'));
         $this->getMapper()->getEventManager()->attach('save.hydrated', array($this, 'onSaveMergeWithExisting'));
+
+        $this->getMapper()->getEventManager()->attach('delete.hydrated', array($this, 'onDeleteRemoveWinnerLoser'));
     }
 
     /**
@@ -111,6 +113,7 @@ class Match extends Base
      */
     public function onSaveMergeWithExisting(Event $e)
     {
+        /* @var $match \Ololz\Entity\Match */
         $match = $e->getParam('entity');
         // Was already in database, the check has already been done, no need to merge again
         if (! $match instanceof Entity\Match || $match->getId()) {
@@ -144,6 +147,7 @@ class Match extends Base
      */
     public function onSaveSetHash(Event $e)
     {
+        /* @var $match \Ololz\Entity\Match */
         $match = $e->getParam('entity');
         // Has already a hash, no need to create a new one
         if (! $match instanceof Entity\Match || $match->getHash()) {
@@ -152,4 +156,21 @@ class Match extends Base
 
         $match->setHash($this->calculateHash($match));
     }
+
+    /**
+     * To prevent FK problem while deleting a match, we first remove
+     * associations for the winner and the loser teams. They will still get
+     * on cascade deleted as they are match's MatchTeams.
+     *
+     * @param \Zend\EventManager\Event  $e
+     */
+    public function onDeleteRemoveWinnerLoser(Event $e)
+    {
+        /* @var $match \Ololz\Entity\Match */
+        $match = $e->getParam('entity');
+        $match->setWinner(null);
+        $match->setLoser(null);
+        $this->getMapper()->flush($match);
+    }
+
 }
