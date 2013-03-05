@@ -24,14 +24,11 @@ class MatchType extends Base
 
     /**
      * @param string        $code
-     * @param string|array  $orderBy
-     * @param int           $limit
-     * @param int           $offset
      *
      * @return \Ololz\Entity\MatchType
      */
-    public function findOneByCode($code, $orderBy = null, $limit = null, $offset = null)
+    public function findOneByCode($code)
     {
-        return parent::findOneBy(array('code' => $code), $orderBy, $limit, $offset);
+        return parent::findOneBy(array('code' => $code));
     }
 }

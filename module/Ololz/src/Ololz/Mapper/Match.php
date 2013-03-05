@@ -24,14 +24,11 @@ class Match extends Base
 
     /**
      * @param string        $hash
-     * @param string|array  $orderBy
-     * @param int           $limit
-     * @param int           $offset
      *
      * @return \Ololz\Entity\Match
      */
-    public function findOneByHash($hash, $orderBy = null, $limit = null, $offset = null)
+    public function findOneByHash($hash)
     {
-        return parent::findOneBy(array('hash' => $hash), $orderBy, $limit, $offset);
+        return parent::findOneBy(array('hash' => $hash));
     }
 }
