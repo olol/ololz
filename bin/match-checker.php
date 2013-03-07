@@ -1,5 +1,11 @@
 <?php
 
+use Ololz\Entity;
+
+require __DIR__ . '/../autoload_init.php';
+\Zend\Loader\AutoloaderFactory::factory();
+$application = \Zend\Mvc\Application::init(include 'config/application.config.php');
+
 $summoners = array(
 
 //    '19704654' // Avvoo
@@ -13,28 +19,35 @@ $summoners = array(
     '22929106', // MBlackMamba
 );
 
-$stats = array();
-
-require_once(__DIR__ . '/../vendor/duvanmonsa/php-query/src/phpQuery.php');
 $stats = @include_once(__DIR__ . '/../data/stats.php');
 
-function getUniqueHashOfMatch($game) {
+/* @var $mappingService \Ololz\Service\Persist\Mapping */
+$mappingService     = $application->getServiceManager()->get('Ololz\Service\Persist\Mapping');
+/* @var $lolKingSource \Ololz\Entity\Source */
+$lolKingSource      = $application->getServiceManager()->get('Ololz\Mapper\Source')->findOneByCode(Entity\Source::CODE_LOLKING);
+
+
+function getUniqueHashOfMatch($game, $mappingService, $lolKingSource) {
     $string = '';
 
-    ksort($game['teammates']);
-    foreach ($game['teammates'] as $teammateName => $teammate) {
-        $string .= $teammateName . $teammate['champion'];
+    // Sort all invocations with same order
+    $invocations = array_merge($game['teammates'], $game['ennemies']);
+    uksort($invocations, 'strcasecmp');
+    foreach ($invocations as $summonerName => $invocation) {
+        $champion = $mappingService->getMapper()->findOneOurs($lolKingSource, Entity\Mapping::TYPE_CHAMPION, $invocation['champion']);
+        if (! $champion) {
+            throw new \Exception('Champion for ' . $invocation['champion'] . ' was not found in database');
+        }
+        $string .= $summonerName . $champion->getCode();
     }
 
-    ksort($game['ennemies']);
-    foreach ($game['ennemies'] as $ennemyName => $ennemy) {
-        $string .= $ennemyName . $ennemy['champion'];
+    $matchType = $mappingService->getMapper()->findOneOurs($lolKingSource, Entity\Mapping::TYPE_MATCH_TYPE, $game['type']);
+    if (! $matchType) {
+        throw new \Exception('Match type for ' . $game['type'] . ' was not found in database');
     }
-
-    $string .= $game['type'];
-    $string .= $game['result'];
+    $string .= $matchType->getCode();
     $string .= $game['length'];
-    $string .= $game['date'] instanceof \DateTime ? $game['date']->format('Y-m-d') : substr($game['date'], 0, 10);
+    $string .= $game['date'] instanceof \DateTime ? $game['date']->format('Y-m-d\TH:i:s') : strlen($game['date']) != 19 ? $game['date'] . 'T00:00' : str_replace(' ', 'T', substr($game['date'], 0, -3));
 
     $hash = hash('md5', $string);
     return $hash;
@@ -172,7 +185,7 @@ foreach ($summoners as $summonerLolKingId) {
                 break;
             }
         }
-        $hash = getUniqueHashOfMatch($game);
+        $hash = getUniqueHashOfMatch($game, $mappingService, $lolKingSource);
         if (array_key_exists($hash, $stats['matches'])) {
             $game = array_merge_recursive_distinct($stats['matches'][$hash], $game);
         }
@@ -180,7 +193,7 @@ foreach ($summoners as $summonerLolKingId) {
     }
 }
 
-usort($stats['matches'], function($match1, $match2) {
+uasort($stats['matches'], function($match1, $match2) {
     $date1 = array_key_exists('date', $match1) ? $match1['date'] : '9999-99-99 99:99:99';
     $date2 = array_key_exists('date', $match2) ? $match2['date'] : '9999-99-99 99:99:99';
     return strcmp($date1, $date2);
