@@ -15,9 +15,6 @@ use Zend\EventManager\Event;
  */
 class Match extends Base
 {
-    static $matchTeam1;
-    static $matchTeam2;
-
     public function init()
     {
         $this->getMapper()->getEventManager()->attach('save.hydrated', array($this, 'onSaveSetHash'));
