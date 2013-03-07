@@ -16,7 +16,7 @@ $summoners = array(
 $stats = array();
 
 require_once(__DIR__ . '/../vendor/duvanmonsa/php-query/src/phpQuery.php');
-@include_once(__DIR__ . '/../data/stats.php');
+$stats = @include_once(__DIR__ . '/../data/stats.php');
 
 function getUniqueHashOfMatch($game) {
     $string = '';
@@ -34,7 +34,7 @@ function getUniqueHashOfMatch($game) {
     $string .= $game['type'];
     $string .= $game['result'];
     $string .= $game['length'];
-    $string .= $game['date'] instanceof \DateTime ? $game['date']->format('Y-m-d') : $game['date'];
+    $string .= $game['date'] instanceof \DateTime ? $game['date']->format('Y-m-d') : substr($game['date'], 0, 10);
 
     $hash = hash('md5', $string);
     return $hash;
@@ -112,7 +112,7 @@ foreach ($summoners as $summonerLolKingId) {
                     $game['type'] = $details['div div:eq(0)']->text();
                     $game['result'] = $details['div div:eq(1)']->text() == 'Loss' ? 'L' : 'V';
                     $game['date'] = new \DateTime($details['div div:eq(2) span']->attr('data-hoverswitch'));
-                    $game['date'] = $game['date']->format('Y-m-d');
+                    $game['date'] = $game['date']->format('Y-m-d H:i:s');
                 break;
                 case 2: // Length
                     $game['length'] = (int) str_replace(' mins', '', $details['div strong']->text());
@@ -180,5 +180,11 @@ foreach ($summoners as $summonerLolKingId) {
     }
 }
 
-file_put_contents(__DIR__ . '/../data/stats.php', '<?php $stats = ' . var_export($stats, true) . ';');
+usort($stats['matches'], function($match1, $match2) {
+    $date1 = array_key_exists('date', $match1) ? $match1['date'] : '9999-99-99 99:99:99';
+    $date2 = array_key_exists('date', $match2) ? $match2['date'] : '9999-99-99 99:99:99';
+    return strcmp($date1, $date2);
+} );
+
+file_put_contents(__DIR__ . '/../data/stats.php', '<?php return ' . var_export($stats, true) . ';');
 file_put_contents(__DIR__ . '/../data/stats.js', json_encode($stats));
