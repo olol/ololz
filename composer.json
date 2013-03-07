@@ -18,6 +18,15 @@
         "doctrine/doctrine-orm-module": "0.*",
         "sp/jms-serializer-module": "dev-master",
         "gedmo/doctrine-extensions": "2.*",
-        "duvanmonsa/php-query": "dev-master"
-    }
+        "duvanmonsa/php-query": "dev-master",
+        "neilime/zf2-assets-bundle": "dev-master",
+        "neilime/zf2-twb-bundle": "dev-master"
+    },
+    "repositories": [ {
+        "type": "vcs",
+        "url": "http://github.com/Nodge/lessphp"
+    }, {
+        "type": "vcs",
+        "url": "http://github.com/neilime/CssMin"
+    } ]
 }
