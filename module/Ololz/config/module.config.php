@@ -37,6 +37,52 @@ return array(
                             ),
                         ),
                     ),
+
+                    'summoner' => array(
+                        'type' => 'Segment',
+                        'options' => array(
+                            'route' => 'summoner[/:summoner]',
+                            'defaults' => array(
+                                'controller' => 'summoner',
+                                'action'     => 'index',
+                            ),
+                        ),
+                    ),
+
+                    'summoners' => array(
+                        'type' => 'Segment',
+                        'options' => array(
+                            'route' => 'summoners[/page/:page]',
+                            'defaults' => array(
+                                'page'       => 1,
+                                'controller' => 'summoner',
+                                'action'     => 'list',
+                            ),
+                        ),
+                    ),
+
+                    'match' => array(
+                        'type' => 'Segment',
+                        'options' => array(
+                            'route' => 'match[/:match]',
+                            'defaults' => array(
+                                'controller' => 'match',
+                                'action'     => 'index',
+                            ),
+                        ),
+                    ),
+
+                    'matches' => array(
+                        'type' => 'Segment',
+                        'options' => array(
+                            'route' => 'matches[/page/:page]',
+                            'defaults' => array(
+                                'page'       => 1,
+                                'controller' => 'match',
+                                'action'     => 'list',
+                            ),
+                        ),
+                    ),
                 ),
             ),
         ),
@@ -59,7 +105,9 @@ return array(
     'controllers' => array(
         'invokables' => array(
             'Ololz\Controller\Index'    => 'Ololz\Controller\IndexController',
-            'Ololz\Controller\Updater'  => 'Ololz\Controller\UpdaterController'
+            'Ololz\Controller\Updater'  => 'Ololz\Controller\UpdaterController',
+            'Ololz\Controller\Summoner' => 'Ololz\Controller\SummonerController',
+            'Ololz\Controller\Match'    => 'Ololz\Controller\MatchController',
         ),
     ),
     'view_manager' => array(

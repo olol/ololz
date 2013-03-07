@@ -1,0 +1,18 @@
+<div style="float:left; padding-right:16px; width: 150px;">
+    <h2><?php echo $summoner->getName() ?></h2>
+</div>
+<div style="margin-left: 160px;">
+    <?php if (count($matches)) : ?>
+    <div id="matches">
+        <h3>Its matches</h3>
+        <ul class="nav nav-tabs nav-stacked">
+        <?php foreach ($matches as $match) : ?>
+            <?php if ($match instanceof \Ololz\Entity\Match) : ?>
+                <li><a href="<?php echo $this->url('ololz/match', array('match' => $match->getId()))?>"><?php echo $match ?></a></li>
+            <?php endif; ?>
+        <?php endforeach; ?>
+        </ul>
+    <?php endif; ?>
+    </div>
+</div>
+<div style="clear:both;"></div>

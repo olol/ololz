@@ -1,0 +1,24 @@
+<div style="float:left; padding-right:16px; width: 150px;">
+    <h2>On the <?php echo $match->getDate()->format('d/m/Y \a\t H:i') ?></h2>
+</div>
+<div style="margin-left: 160px;">
+    <div id="teams">
+        <h3>The players of winner team</h3>
+        <ul class="nav nav-tabs nav-stacked">
+        <?php foreach ($winner->getInvocations() as $invocation) : ?>
+            <?php if ($invocation instanceof \Ololz\Entity\Invocation) : ?>
+                <li><a href="<?php echo $this->url('ololz/summoner', array('summoner' => $invocation->getSummoner()->getId()))?>"><?php echo $invocation->getSummoner() ?></a></li>
+            <?php endif; ?>
+        <?php endforeach; ?>
+        </ul>
+        <h3>The players of loser team</h3>
+        <ul class="nav nav-tabs nav-stacked">
+        <?php foreach ($loser->getInvocations() as $invocation) : ?>
+            <?php if ($invocation instanceof \Ololz\Entity\Invocation) : ?>
+                <li><a href="<?php echo $this->url('ololz/summoner', array('summoner' => $invocation->getSummoner()->getId()))?>"><?php echo $invocation->getSummoner() ?></a></li>
+            <?php endif; ?>
+        <?php endforeach; ?>
+        </ul>
+    </div>
+</div>
+<div style="clear:both;"></div>
