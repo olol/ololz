@@ -15,7 +15,7 @@ class Champion extends Updater
 {
     private function positionMapping($lolKingSource, $mappingService)
     {
-        $mappings = $mappingService->getMapper()->findBySourceAndType($lolKingSource, Entity\Mapping::TYPE_POSITION);
+        $mappings = $mappingService->getMapper()->findBySourceAndTypeAndColumn($lolKingSource, Entity\Mapping::TYPE_POSITION, Entity\Mapping::COLUMN_ID);
 
         $return = array();
         foreach ($mappings as $mapping) {
@@ -46,9 +46,11 @@ class Champion extends Updater
                 continue;
             }
             $htmlChampion = pq($htmlChampion);
-            $htmlChampionName = $htmlChampion['> td:eq(0) > div:eq(1) a'];
+            $htmlChampionName = pq($htmlChampion['> td:eq(0) > div:eq(1) a']);
             $championName = $htmlChampionName->text();
-            $championTheirs = str_replace('/champions/', '', $htmlChampionName->attr('href'));
+            $championTheirsCode = str_replace('/champions/', '', $htmlChampionName->attr('href'));
+            $htmlChampionContainer = pq($htmlChampionName->parent()->parent());
+            $championTheirsId = str_replace(array('background:url(//img.lolking.net/images/alayton/images/champions/', '_icon_32.png)'), '', $htmlChampionContainer['.champion-list-icon']->attr('style'));
             $championPosition = $htmlChampion['> td:eq(6)']->text();
             $championPositionId = @$positionMapping[$championPosition];
             if (!$championPositionId) {
@@ -68,12 +70,21 @@ class Champion extends Updater
                 $this->getLogger()->info('Saving champion ' . $champion . '.');
                 $champion = $championService->save($champion, true);
 
-                $mapping = new Entity\Mapping;
-                $mapping->setSource($lolKingSource)
-                        ->setType(Entity\Mapping::TYPE_CHAMPION)
-                        ->setOurs($champion->getId())
-                        ->setTheirs($championTheirs);
-                $mappingService->save($mapping);
+                $mappingId = new Entity\Mapping;
+                $mappingId->setSource($lolKingSource)
+                          ->setType(Entity\Mapping::TYPE_CHAMPION)
+                          ->setColumn(Entity\Mapping::COLUMN_ID)
+                          ->setOurs($champion->getId())
+                          ->setTheirs($championTheirsId);
+                $mappingService->save($mappingId);
+
+                $mappingCode = new Entity\Mapping;
+                $mappingCode->setSource($lolKingSource)
+                            ->setType(Entity\Mapping::TYPE_CHAMPION)
+                            ->setColumn(Entity\Mapping::COLUMN_CODE)
+                            ->setOurs($champion->getId())
+                            ->setTheirs($championTheirsCode);
+                $mappingService->save($mappingCode);
             } else {
                 $this->getLogger()->info('Champion ' . $champion . ' already exists.');
             }

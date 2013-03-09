@@ -34,14 +34,14 @@ function getUniqueHashOfMatch($game, $mappingService, $lolKingSource) {
     $invocations = array_merge($game['teammates'], $game['ennemies']);
     uksort($invocations, 'strcasecmp');
     foreach ($invocations as $summonerName => $invocation) {
-        $champion = $mappingService->getMapper()->findOneOurs($lolKingSource, Entity\Mapping::TYPE_CHAMPION, $invocation['champion']);
+        $champion = $mappingService->getMapper()->findOneOurs($lolKingSource, Entity\Mapping::TYPE_CHAMPION, Entity\Mapping::COLUMN_CODE, $invocation['champion']);
         if (! $champion) {
             throw new \Exception('Champion for ' . $invocation['champion'] . ' was not found in database');
         }
         $string .= $summonerName . $champion->getCode();
     }
 
-    $matchType = $mappingService->getMapper()->findOneOurs($lolKingSource, Entity\Mapping::TYPE_MATCH_TYPE, $game['type']);
+    $matchType = $mappingService->getMapper()->findOneOurs($lolKingSource, Entity\Mapping::TYPE_MATCH_TYPE, Entity\Mapping::COLUMN_CODE, $game['type']);
     if (! $matchType) {
         throw new \Exception('Match type for ' . $game['type'] . ' was not found in database');
     }
