@@ -6,7 +6,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\ServiceManager\FactoryInterface;
 
 /**
- * Mapper factory
+ * Persist service factory
  *
  * @since   0.1
  * @author  Jérémy Huet <jeremy.huet+olol@gmail.com>
@@ -35,6 +35,10 @@ class ServicePersist implements FactoryInterface
         /* @var $mapper \Ololz\Mapper\Base */
         $mapper = $serviceLocator->get('Ololz\Mapper\\'  . $this->serviceName);
         $servicePersistClass = 'Ololz\Service\Persist\\' . $this->serviceName;
+
+        if (! class_exists($servicePersistClass)) {
+            throw new \InvalidArgumentException('The class ' . $servicePersistClass . ' doest not exist and can not be created.');
+        }
 
         /* @var $servicePersist \Ololz\Service\Persist\Base */
         $servicePersist = new $servicePersistClass();

@@ -37,14 +37,19 @@ class Updater implements FactoryInterface
             // Chain
         }
 
+        $updaterClass = '\Ololz\Service\Updater\\' . $this->type;
+
+        if (! class_exists($updaterClass)) {
+            throw new \InvalidArgumentException('The class ' . $updaterClass . ' doest not exist and can not be created.');
+        }
+
         $logger = new Logger(array(
             'writers' => array(array(
                 'name' => 'mock',
             ) )
         ) );
 
-        $className = '\Ololz\Service\Updater\\' . $this->type;
-        $service = new $className;
+        $service = new $updaterClass;
         $service->setServiceManager($serviceLocator);
         $service->setLogger($logger);
         return $service;
