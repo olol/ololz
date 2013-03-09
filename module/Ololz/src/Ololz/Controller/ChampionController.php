@@ -10,16 +10,21 @@
 namespace Ololz\Controller;
 
 use Ololz\Service\Persist as ServicePersist;
+use Ololz\Service\Persist as ServiceChart;
 
 use Zend\View\Model\ViewModel;
-use Zend\Mvc\Controller\AbstractActionController;
 
-class ChampionController extends AbstractActionController
+class ChampionController extends BaseController
 {
     /**
      * @var \Ololz\Service\Persist\Champion
      */
     protected $service;
+
+    /**
+     * @var \Ololz\Service\Chart\Champion
+     */
+    protected $chartService;
 
     /**
      * Public champion page
@@ -53,12 +58,66 @@ class ChampionController extends AbstractActionController
         ) );
     }
 
+    public function summonerAction()
+    {
+        $this->getViewHelper('HeadScript')->appendFile($this->getRequest()->getBasePath() . '/js/highcharts.js');
+
+        $champion = $this->getService()->getMapper()->findOneByCode($this->params('champion'));
+        $summoner = $this->getService('Summoner')->getMapper()->find($this->params('summoner'));
+
+        $data = $this->getChartService('Invocation')->lastGamesOf($summoner, $champion);
+
+        $chart = new \HighRollerColumnChart;
+        $chart->title->text = 'Last games of ' . $summoner . ' with ' . $champion;
+        $chart->plotOptions->column = array(
+//            'stacking' => 'normal',
+            'dataLabels'    => array(
+                'enabled'   => true,
+                'color'     => 'white'
+            )
+        );
+        $chart->yAxis->min = 0;
+        $chart->yAxis->title = array('text' => 'K D A');
+        $chart->yAxis->stackLabels = array(
+            'enabled'   => true,
+            'style'     => array(
+                'fontWeight'    => 'bold',
+                'color'         => 'black'
+            )
+        );
+        $chart->xAxis->categories = array_keys($data['kills']);
+
+        foreach ($data as $dataType => $dataOfType) {
+            $series = new \HighRollerSeries;
+            $series->name = $dataType;
+            foreach ($dataOfType as $data) {
+                if (! is_null($data)) {
+                    $series->addData($data);
+                }
+            }
+            $chart->addSeries($series);
+        }
+
+        return new ViewModel(array(
+            'summoner'  => $summoner,
+            'champion'  => $champion,
+            'chart'     => $chart
+        ) );
+
+    }
+
     /**
+     * @param $serviceName  string
+     *
      * @return \Ololz\Service\Persist\Champion
      */
-    public function getService()
+    public function getService($serviceName = null)
     {
-        if (null === $this->service) {
+        if (! is_null($serviceName)) {
+            return $this->getServiceLocator()->get('Ololz\Service\Persist\\' . ucfirst($serviceName));
+        }
+
+        if (is_null($this->service)) {
             $this->setService($this->getServiceLocator()->get('Ololz\Service\Persist\Champion'));
         }
 
@@ -73,6 +132,36 @@ class ChampionController extends AbstractActionController
     public function setService(ServicePersist\Champion $service)
     {
         $this->service = $service;
+
+        return $this;
+    }
+
+    /**
+     * @param $serviceName  string
+     *
+     * @return \Ololz\Service\Chart\Champion
+     */
+    public function getChartService($serviceName = null)
+    {
+        if (! is_null($serviceName)) {
+            return $this->getServiceLocator()->get('Ololz\Service\Chart\\' . ucfirst($serviceName));
+        }
+
+        if (is_null($this->chartService)) {
+            $this->setChartService($this->getChartServiceLocator()->get('Ololz\Service\Chart\Champion'));
+        }
+
+        return $this->chartService;
+    }
+
+    /**
+     * @param \Ololz\Service\Chart\Champion     $chartServiec
+     *
+     * @return \Ololz\Controller\ChampionController
+     */
+    public function setChartService(ServiceChart\Champion $chartServiec)
+    {
+        $this->chartService = $chartServiec;
 
         return $this;
     }

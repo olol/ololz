@@ -751,7 +751,7 @@ abstract class Base
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
-    protected function restrictQuery(QueryBuilder $query, $orderBy = null, $limit = null, $offset = null)
+    public function restrictQuery(QueryBuilder $query, $orderBy = null, $limit = null, $offset = null)
     {
         if (! is_null($orderBy)) {
             if (is_string($orderBy)) {

@@ -94,6 +94,9 @@ class Module implements
                 'Ololz\Service\Persist\Source'      => new ServiceFactory\ServicePersist('Source'),
                 'Ololz\Service\Persist\Summoner'    => new ServiceFactory\ServicePersist('Summoner'),
 
+                'Ololz\Service\Chart\Champion'      => new ServiceFactory\ServiceChart('Champion'),
+                'Ololz\Service\Chart\Invocation'    => new ServiceFactory\ServiceChart('Invocation'),
+
                 'Ololz\Service\Updater\Champion'    => new ServiceFactory\Updater('Champion'),
                 'Ololz\Service\Updater\Item'        => new ServiceFactory\Updater('Item'),
                 'Ololz\Service\Updater\Match'       => new ServiceFactory\Updater('Match'),
@@ -143,6 +146,5 @@ class Module implements
                 },
             ),
         );
-
     }
 }
