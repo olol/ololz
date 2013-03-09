@@ -12,9 +12,8 @@ namespace Ololz\Controller;
 use Ololz\Service\Persist as ServicePersist;
 
 use Zend\View\Model\ViewModel;
-use Zend\Mvc\Controller\AbstractActionController;
 
-class MatchController extends AbstractActionController
+class MatchController extends BaseController
 {
     /**
      * @var \Ololz\Service\Persist\Match

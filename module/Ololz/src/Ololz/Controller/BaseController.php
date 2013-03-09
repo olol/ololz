@@ -9,14 +9,12 @@
 
 namespace Ololz\Controller;
 
-use Ololz\Entity;
+use Zend\Mvc\Controller\AbstractActionController;
 
-use Zend\View\Model\ViewModel;
-
-class IndexController extends BaseController
+abstract class BaseController extends AbstractActionController
 {
-    public function indexAction()
+    protected function getViewHelper($helperName)
     {
-        return new ViewModel();
+        return $this->getServiceLocator()->get('ViewHelperManager')->get($helperName);
     }
 }
