@@ -22,7 +22,7 @@
         "cssmin/cssmin": "3.0.*",
         "jsminplus/jsminplus": "1.4.*",
         "rwoverdijk/assetmanager": "1.2.*",
-        "jfloff/highroller-zf2": "dev-master",
+        "jfloff/highroller-zf2": "1.0.*",
         "neilime/zf2-twb-bundle": "dev-master"
     },
     "repositories": [ {

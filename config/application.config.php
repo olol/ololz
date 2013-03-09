@@ -7,6 +7,7 @@ return array(
         'DoctrineORMModule',
         'JMSSerializerModule',
         'AssetManager',
+        'HighRoller',
         'TwbBundle',
         'Ololz',
     ),

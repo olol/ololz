@@ -21,6 +21,9 @@ return array(
                     'assets/bootstrap/bootstrap.js',
                     'assets/ololz/ololz.js'
                 ),
+                'js/highcharts.js' => array(
+                    'assets/highcharts/highcharts.src.js'
+                ),
             ),
             'paths' => array(
                 __DIR__ . '/../public',
@@ -81,7 +84,7 @@ return array(
                     'summoner' => array(
                         'type' => 'Segment',
                         'options' => array(
-                            'route' => 'summoner[/:summoner]',
+                            'route' => 'summoner/:summoner',
                             'constraints' => array(
                                 'summoner' => '[0-9]+',
                             ),
@@ -110,7 +113,7 @@ return array(
                     'match' => array(
                         'type' => 'Segment',
                         'options' => array(
-                            'route' => 'match[/:match]',
+                            'route' => 'match/:match',
                             'constraints' => array(
                                 'match' => '[0-9]+',
                             ),
@@ -139,7 +142,7 @@ return array(
                     'champion' => array(
                         'type' => 'Segment',
                         'options' => array(
-                            'route' => 'champion[/:champion]',
+                            'route' => 'champion/:champion',
                             'constraints' => array(
                                 'champion' => '[a-zA-Z][a-zA-Z0-9_-]+',
                             ),
@@ -168,7 +171,7 @@ return array(
                     'item' => array(
                         'type' => 'Segment',
                         'options' => array(
-                            'route' => 'item[/:item]',
+                            'route' => 'item/:item',
                             'constraints' => array(
                                 'item' => '[0-9]+',
                             ),
