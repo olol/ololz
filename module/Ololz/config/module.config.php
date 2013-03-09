@@ -42,6 +42,9 @@ return array(
                         'type' => 'Segment',
                         'options' => array(
                             'route' => 'summoner[/:summoner]',
+                            'constraints' => array(
+                                'summoner' => '[0-9]+',
+                            ),
                             'defaults' => array(
                                 'controller' => 'summoner',
                                 'action'     => 'index',
@@ -53,6 +56,9 @@ return array(
                         'type' => 'Segment',
                         'options' => array(
                             'route' => 'summoners[/page/:page]',
+                            'constraints' => array(
+                                'page' => '[0-9]+',
+                            ),
                             'defaults' => array(
                                 'page'       => 1,
                                 'controller' => 'summoner',
@@ -65,6 +71,9 @@ return array(
                         'type' => 'Segment',
                         'options' => array(
                             'route' => 'match[/:match]',
+                            'constraints' => array(
+                                'match' => '[0-9]+',
+                            ),
                             'defaults' => array(
                                 'controller' => 'match',
                                 'action'     => 'index',
@@ -76,9 +85,70 @@ return array(
                         'type' => 'Segment',
                         'options' => array(
                             'route' => 'matches[/page/:page]',
+                            'constraints' => array(
+                                'page'      => '[0-9]+',
+                            ),
                             'defaults' => array(
                                 'page'       => 1,
                                 'controller' => 'match',
+                                'action'     => 'list',
+                            ),
+                        ),
+                    ),
+
+                    'champion' => array(
+                        'type' => 'Segment',
+                        'options' => array(
+                            'route' => 'champion[/:champion]',
+                            'constraints' => array(
+                                'champion' => '[a-zA-Z][a-zA-Z0-9_-]+',
+                            ),
+                            'defaults' => array(
+                                'controller' => 'champion',
+                                'action'     => 'index',
+                            ),
+                        ),
+                    ),
+
+                    'champions' => array(
+                        'type' => 'Segment',
+                        'options' => array(
+                            'route' => 'champions[/page/:page]',
+                            'constraints' => array(
+                                'page'      => '[0-9]+',
+                            ),
+                            'defaults' => array(
+                                'page'       => 1,
+                                'controller' => 'champion',
+                                'action'     => 'list',
+                            ),
+                        ),
+                    ),
+
+                    'item' => array(
+                        'type' => 'Segment',
+                        'options' => array(
+                            'route' => 'item[/:item]',
+                            'constraints' => array(
+                                'item' => '[0-9]+',
+                            ),
+                            'defaults' => array(
+                                'controller' => 'item',
+                                'action'     => 'index',
+                            ),
+                        ),
+                    ),
+
+                    'items' => array(
+                        'type' => 'Segment',
+                        'options' => array(
+                            'route' => 'items[/page/:page]',
+                            'constraints' => array(
+                                'page'      => '[0-9]+',
+                            ),
+                            'defaults' => array(
+                                'page'       => 1,
+                                'controller' => 'item',
                                 'action'     => 'list',
                             ),
                         ),
@@ -106,8 +176,10 @@ return array(
         'invokables' => array(
             'Ololz\Controller\Index'    => 'Ololz\Controller\IndexController',
             'Ololz\Controller\Updater'  => 'Ololz\Controller\UpdaterController',
-            'Ololz\Controller\Summoner' => 'Ololz\Controller\SummonerController',
+            'Ololz\Controller\Champion' => 'Ololz\Controller\ChampionController',
             'Ololz\Controller\Match'    => 'Ololz\Controller\MatchController',
+            'Ololz\Controller\Item'     => 'Ololz\Controller\ItemController',
+            'Ololz\Controller\Summoner' => 'Ololz\Controller\SummonerController',
         ),
     ),
     'view_manager' => array(

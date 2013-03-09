@@ -1,0 +1,13 @@
+<div style="float:left; padding-right:16px; width: 150px;">
+    <h2><?php echo $item->getName() ?></h2>
+    <img src="<?php echo $this->itemPictureUrl($item, \Ololz\View\Helper\Champion\PictureUrl::TYPE_SMALL)?>" alt="item icon" />
+</div>
+<div style="margin-left: 160px;">
+    <div id="details">
+        <h3>Details</h3>
+        <div>
+            <div><span>Name</span> : <?php echo $item->getName() ?></div>
+        </div>
+    </div>
+</div>
+<div style="clear:both;"></div>

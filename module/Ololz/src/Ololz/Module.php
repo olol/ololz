@@ -10,6 +10,7 @@
 namespace Ololz;
 
 use Ololz\Service\Factory as ServiceFactory;
+use Ololz\View;
 
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Zend\ModuleManager\Feature\BootstrapListenerInterface;
@@ -115,5 +116,33 @@ class Module implements
             'aliases' => array(
             ),
         );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getViewHelperConfig()
+    {
+        return array(
+            'factories' => array(
+                'championPictureUrl' => function ($sm) {
+                    $locator = $sm->getServiceLocator();
+                    $viewHelper = new View\Helper\Champion\PictureUrl;
+                    // @todo handle default source via config
+                    $viewHelper->setDefaultSource($locator->get('Ololz\Mapper\Source')->findOneByCode('lolking'))
+                               ->setMappingMapper($locator->get('Ololz\Mapper\Mapping'));
+                    return $viewHelper;
+                },
+                'itemPictureUrl' => function ($sm) {
+                    $locator = $sm->getServiceLocator();
+                    $viewHelper = new View\Helper\Item\PictureUrl;
+                    // @todo handle default source via config
+                    $viewHelper->setDefaultSource($locator->get('Ololz\Mapper\Source')->findOneByCode('lolking'))
+                               ->setMappingMapper($locator->get('Ololz\Mapper\Mapping'));
+                    return $viewHelper;
+                },
+            ),
+        );
+
     }
 }

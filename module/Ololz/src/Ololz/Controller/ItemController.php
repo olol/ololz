@@ -14,25 +14,22 @@ use Ololz\Service\Persist as ServicePersist;
 use Zend\View\Model\ViewModel;
 use Zend\Mvc\Controller\AbstractActionController;
 
-class MatchController extends AbstractActionController
+class ItemController extends AbstractActionController
 {
     /**
-     * @var \Ololz\Service\Persist\Match
+     * @var \Ololz\Service\Persist\Item
      */
     protected $service;
 
     /**
-     * Public match page
+     * Public item page
      */
     public function indexAction()
     {
-        $match = $this->getService()->getMapper()->find($this->params('match'));
+        $item = $this->getService()->getMapper()->find($this->params('item'));
 
         return new ViewModel(array(
-            'match'     => $match,
-            'winner'    => $match->getWinner(),
-            'loser'     => $match->getLoser(),
-            'teams'     => $match->getMatchTeams()
+            'item'  => $item,
         ) );
     }
 
@@ -45,31 +42,31 @@ class MatchController extends AbstractActionController
 //        $criteria = array('active' => 1);
         $criteria = array();
 
-        $matches = $this->getService()->getMapper()->findBy($criteria, 'date');
+        $items = $this->getService()->getMapper()->findBy($criteria, 'name');
 
         return new ViewModel(array(
-            'matches' => $matches
+            'items' => $items
         ) );
     }
 
     /**
-     * @return \Ololz\Service\Persist\Match
+     * @return \Ololz\Service\Persist\Item
      */
     public function getService()
     {
         if (null === $this->service) {
-            $this->setService($this->getServiceLocator()->get('Ololz\Service\Persist\Match'));
+            $this->setService($this->getServiceLocator()->get('Ololz\Service\Persist\Item'));
         }
 
         return $this->service;
     }
 
     /**
-     * @param \Ololz\Service\Persist\Match   $service
+     * @param \Ololz\Service\Persist\Item   $service
      *
-     * @return \Ololz\Controller\MatchController
+     * @return \Ololz\Controller\ItemController
      */
-    public function setService(ServicePersist\Match $service)
+    public function setService(ServicePersist\Item $service)
     {
         $this->service = $service;
 

@@ -14,25 +14,26 @@ use Ololz\Service\Persist as ServicePersist;
 use Zend\View\Model\ViewModel;
 use Zend\Mvc\Controller\AbstractActionController;
 
-class MatchController extends AbstractActionController
+class ChampionController extends AbstractActionController
 {
     /**
-     * @var \Ololz\Service\Persist\Match
+     * @var \Ololz\Service\Persist\Champion
      */
     protected $service;
 
     /**
-     * Public match page
+     * Public champion page
      */
     public function indexAction()
     {
-        $match = $this->getService()->getMapper()->find($this->params('match'));
+        $champion = $this->getService()->getMapper()->findOneByCode($this->params('champion'));
+
+        if (! $champion) {
+            throw new \InvalidArgumentException('Champion ' . $this->params('champion') . ' does not exist.');
+        }
 
         return new ViewModel(array(
-            'match'     => $match,
-            'winner'    => $match->getWinner(),
-            'loser'     => $match->getLoser(),
-            'teams'     => $match->getMatchTeams()
+            'champion'  => $champion,
         ) );
     }
 
@@ -45,31 +46,31 @@ class MatchController extends AbstractActionController
 //        $criteria = array('active' => 1);
         $criteria = array();
 
-        $matches = $this->getService()->getMapper()->findBy($criteria, 'date');
+        $champions = $this->getService()->getMapper()->findBy($criteria, 'name');
 
         return new ViewModel(array(
-            'matches' => $matches
+            'champions' => $champions
         ) );
     }
 
     /**
-     * @return \Ololz\Service\Persist\Match
+     * @return \Ololz\Service\Persist\Champion
      */
     public function getService()
     {
         if (null === $this->service) {
-            $this->setService($this->getServiceLocator()->get('Ololz\Service\Persist\Match'));
+            $this->setService($this->getServiceLocator()->get('Ololz\Service\Persist\Champion'));
         }
 
         return $this->service;
     }
 
     /**
-     * @param \Ololz\Service\Persist\Match   $service
+     * @param \Ololz\Service\Persist\Champion   $service
      *
-     * @return \Ololz\Controller\MatchController
+     * @return \Ololz\Controller\ChampionController
      */
-    public function setService(ServicePersist\Match $service)
+    public function setService(ServicePersist\Champion $service)
     {
         $this->service = $service;
 

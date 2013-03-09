@@ -26,20 +26,16 @@ class SummonerController extends AbstractActionController
      */
     public function indexAction()
     {
-        $summoner = $this->getService()->getMapper()->find($this->params('summoner'));
-        $invocations = $summoner->getInvocations();
-        $matches = array();
-        foreach ($invocations as $invocation) {
-            $matches[] = $invocation->getMatchTeam()->getMatch();
-        }
-
-//        echo('<pre>');
-//        \Doctrine\Common\Util\Debug::dump($matches);
-//        die('</pre>' . "\n");
+        $summoner       = $this->getService()->getMapper()->find($this->params('summoner'));
+        $last10Matches  = $this->getServiceLocator()->get('Ololz\Service\Persist\Match')->getMapper()->findBySummoner($summoner, null, 10);
+        $lastWeek = new \DateTime;
+        $lastWeek->sub(new \DateInterval('P7D'));
+        $championsPlayedThisWeek = $this->getServiceLocator()->get('Ololz\Service\Persist\Champion')->getMapper()->findDistinctBySummonerAndMatchDate($summoner, $lastWeek);
 
         return new ViewModel(array(
             'summoner'  => $summoner,
-            'matches'   => $matches
+            'matches'   => $last10Matches,
+            'champions' => $championsPlayedThisWeek
         ) );
     }
 
@@ -49,10 +45,7 @@ class SummonerController extends AbstractActionController
 //        $paginator = new \Zend\Paginator\Paginator(new \Zend\Paginator\Adapter\Array());
 //        $paginator->setCurrentPageNumber($this->params('page'));
 
-//        $criteria = array('active' => 1);
-        $criteria = array();
-
-        $summoners = $this->getService()->getMapper()->findBy($criteria, 'name');
+        $summoners = $this->getService()->getMapper()->findBy(array('active' => true), 'name');
 
         return new ViewModel(array(
             'summoners' => $summoners
