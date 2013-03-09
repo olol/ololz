@@ -6,7 +6,7 @@ return array(
         'DoctrineModule',
         'DoctrineORMModule',
         'JMSSerializerModule',
-        'AssetsBundle',
+        'AssetManager',
         'TwbBundle',
         'Ololz',
     ),

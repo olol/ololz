@@ -8,6 +8,46 @@
  */
 
 return array(
+    'asset_manager' => array(
+        'resolver_configs' => array(
+            'collections' => array(
+                'css/ololz.css' => array(
+                    'assets/bootstrap/bootstrap.css',
+                    'assets/ololz/ololz.css',
+                    'assets/bootstrap/bootstrap-responsive.css',
+                ),
+                'js/ololz.js' => array(
+                    'assets/jquery/jquery.js',
+                    'assets/bootstrap/bootstrap.js',
+                    'assets/ololz/ololz.js'
+                ),
+            ),
+            'paths' => array(
+                __DIR__ . '/../public',
+            ),
+        ),
+        'caching' => array(
+            'default' => array(
+                'cache'     => 'FilePath',
+                'options' => array(
+                    'dir' => __DIR__ . '/../../../data/cache/assets', // path/to/cache
+                ),
+            ),
+        ),
+        'filters' => array(
+            'application/javascript' => array(
+                array(
+                    'filter' => 'JSMinPlus',  // Allowed format is Filtername[Filter]. Can also be FQCN
+                ),
+            ),
+//            'text/css' => array(
+//                array(
+//                    'filter' => 'CssMin',  // Allowed format is Filtername[Filter]. Can also be FQCN
+//                ),
+//            ),
+        ),
+    ),
+
     'router' => array(
         'routes' => array(
             'ololz' => array(
