@@ -44,7 +44,7 @@ class Match extends Updater
         /* @var $summoner \Ololz\Entity\Summoner */
         foreach ($summonerService->getMapper()->findByActive(true) as $summoner) {
 
-            if (! $summoner->getMappingBySource($lolKingSource)) {
+            if (! $summoner->getMappingBySource($lolKingSource, 'id')) {
                 continue;
             }
 
@@ -92,7 +92,7 @@ class Match extends Updater
                     $teammate->setSummoner($teammateSummoner);
 
                     $lolKingChampion = str_replace('/champions/', '', $htmlTeammate['td:eq(0) a']->attr('href'));
-                    $champion = $mappingService->getMapper()->findOneOurs($lolKingSource, Entity\Mapping::TYPE_CHAMPION, $lolKingChampion);
+                    $champion = $mappingService->getMapper()->findOneOurs($lolKingSource, Entity\Mapping::TYPE_CHAMPION, Entity\Mapping::COLUMN_CODE, $lolKingChampion);
 
                     if (!$champion) {
                         continue;
@@ -127,7 +127,7 @@ class Match extends Updater
                     $ennemy->setSummoner($ennemySummoner);
 
                     $lolKingChampion = str_replace('/champions/', '', $htmlEnnemy['td:eq(0) a']->attr('href'));
-                    $champion = $mappingService->getMapper()->findOneOurs($lolKingSource, Entity\Mapping::TYPE_CHAMPION, $lolKingChampion);
+                    $champion = $mappingService->getMapper()->findOneOurs($lolKingSource, Entity\Mapping::TYPE_CHAMPION, Entity\Mapping::COLUMN_CODE, $lolKingChampion);
 
                     if (!$champion) {
                         continue;
@@ -150,7 +150,7 @@ class Match extends Updater
                         case 1: // Type
                             { // Match type
                                 $lolKingMatchType = $details['div div:eq(0)']->text();
-                                $matchType = $mappingService->getMapper()->findOneOurs($lolKingSource, Entity\Mapping::TYPE_MATCH_TYPE, $lolKingMatchType);
+                                $matchType = $mappingService->getMapper()->findOneOurs($lolKingSource, Entity\Mapping::TYPE_MATCH_TYPE, Entity\Mapping::COLUMN_CODE, $lolKingMatchType);
                                 if ($matchType) {
                                     $match->setMatchType($matchType);
                                 }
@@ -192,7 +192,7 @@ class Match extends Updater
                             foreach ($details['div.icon_36'] as $htmlSpell) {
                                 $htmlSpell = pq($htmlSpell)->attr('style');
                                 $lolKingSpell = substr($htmlSpell, strrpos($htmlSpell, '/') + 1, strrpos($htmlSpell, '.') - 1 - strrpos($htmlSpell, '/'));
-                                $spell = $mappingService->getMapper()->findOneOurs($lolKingSource, Entity\Mapping::TYPE_SPELL, $lolKingSpell);
+                                $spell = $mappingService->getMapper()->findOneOurs($lolKingSource, Entity\Mapping::TYPE_SPELL, Entity\Mapping::COLUMN_ID, $lolKingSpell);
                                 if ($spell) {
                                     $actualInvocation->addSpell($spell);
                                 }
@@ -203,7 +203,7 @@ class Match extends Updater
                             foreach ($details['div.icon_32 a'] as $htmlItem) {
                                 $htmlItem = pq($htmlItem);
                                 $lolKingItem = str_replace('/items/', '', $htmlItem->attr('href'));
-                                $item = $mappingService->getMapper()->findOneOurs($lolKingSource, Entity\Mapping::TYPE_ITEM, $lolKingItem);
+                                $item = $mappingService->getMapper()->findOneOurs($lolKingSource, Entity\Mapping::TYPE_ITEM, Entity\Mapping::COLUMN_ID, $lolKingItem);
                                 if ($item) {
                                     $actualInvocation->addItem($item);
                                 }

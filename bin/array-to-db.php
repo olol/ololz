@@ -1,7 +1,7 @@
 <?php
 
 require __DIR__ . '/../autoload_init.php';
-@include_once(__DIR__ . '/../data/stats.php');
+$stats = include_once(__DIR__ . '/../data/stats.php');
 
 \Zend\Loader\AutoloaderFactory::factory();
 
@@ -38,7 +38,7 @@ function fillUpInvocation($aInvocationName, $aInvocation, $lolKingSource, $mappi
             $val = $aInvocation[$key];
             switch ($key) {
                 case 'champion':
-                    $champion = $mappingService->getMapper()->findOneOurs($lolKingSource, Entity\Mapping::TYPE_CHAMPION, $val);
+                    $champion = $mappingService->getMapper()->findOneOurs($lolKingSource, Entity\Mapping::TYPE_CHAMPION, Entity\Mapping::COLUMN_CODE, $val);
                     if ($champion) {
                         $invocation->setChampion($champion);
                     }
@@ -46,7 +46,7 @@ function fillUpInvocation($aInvocationName, $aInvocation, $lolKingSource, $mappi
 
                 case 'spells':
                     foreach ($val as $aSpell) {
-                        $spell = $mappingService->getMapper()->findOneOurs($lolKingSource, Entity\Mapping::TYPE_SPELL, $aSpell);
+                        $spell = $mappingService->getMapper()->findOneOurs($lolKingSource, Entity\Mapping::TYPE_SPELL, Entity\Mapping::COLUMN_ID, $aSpell);
                         if ($spell) {
                             $invocation->addSpell($spell);
                         }
@@ -56,7 +56,7 @@ function fillUpInvocation($aInvocationName, $aInvocation, $lolKingSource, $mappi
                 case 'items':
                     $summoner->setActive(true);
                     foreach ($val as $aItem) {
-                        $item = $mappingService->getMapper()->findOneOurs($lolKingSource, Entity\Mapping::TYPE_ITEM, $aItem);
+                        $item = $mappingService->getMapper()->findOneOurs($lolKingSource, Entity\Mapping::TYPE_ITEM, Entity\Mapping::COLUMN_ID, $aItem);
                         if ($item) {
                             $invocation->addItem($item);
                         }
@@ -158,7 +158,7 @@ foreach ($stats['matches'] as $aMatch) {
     $match = new Entity\Match;
 
     // Match date
-    $match->setDate(new \DateTime($aMatch['date'] . ' 00:00:00'));
+    $match->setDate(new \DateTime(strlen($aMatch['date']) == 10 ? $aMatch['date'] . ' 00:00:00' : $aMatch['date']));
 
     // Match length
     $match->setLength($aMatch['length']);
@@ -189,7 +189,7 @@ foreach ($stats['matches'] as $aMatch) {
     }
 
     // Match type
-    $matchType = $mappingService->getMapper()->findOneOurs($lolKingSource, Entity\Mapping::TYPE_MATCH_TYPE, $aMatch['type']);
+    $matchType = $mappingService->getMapper()->findOneOurs($lolKingSource, Entity\Mapping::TYPE_MATCH_TYPE, Entity\Mapping::COLUMN_CODE, $aMatch['type']);
     if ($matchType) {
         $match->setMatchType($matchType);
 

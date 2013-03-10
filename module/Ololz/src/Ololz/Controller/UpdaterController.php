@@ -11,10 +11,9 @@ namespace Ololz\Controller;
 
 use Ololz\Entity;
 
-use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
-class UpdaterController extends AbstractActionController
+class UpdaterController extends BaseController
 {
     public function indexAction()
     {
@@ -69,7 +68,7 @@ class UpdaterController extends AbstractActionController
         $service->update();
         $writer = $service->getLogger()->getWriters()->current();
 
-        $variables = array( 
+        $variables = array(
             'name' => 'Matches',
             'logs' => $writer->events
         );

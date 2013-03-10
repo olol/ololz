@@ -2,7 +2,7 @@
 
 namespace Ololz\Mapper;
 
-use \Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManager;
 
 /**
  * MatchTeam mapper

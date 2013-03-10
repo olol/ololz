@@ -41,6 +41,12 @@ class Champion extends Base
     protected $position;
 
     /**
+     * @ORM\OneToMany(targetEntity="Invocation", cascade={"persist"}, fetch="LAZY", mappedBy="champion")
+     * @JMS\Type("ArrayCollection<Ololz\Entity\Invocation>")
+     */
+    protected $invocations;
+
+    /**
      * Construct entity Champion
      */
     public function __construct()

@@ -1,0 +1,15 @@
+<div style="float:left; padding-right:16px; width: 150px;">
+    <h3>The summoners</h3>
+</div>
+<div style="margin-left: 160px;">
+<?php if (count($summoners)) : ?>
+    <ul class="nav nav-tabs nav-stacked">
+        <?php foreach ($summoners as $summoner) : ?>
+            <?php if ($summoner instanceof \Ololz\Entity\Summoner) : ?>
+                <li><a href="<?php echo $this->url('ololz/summoner', array('summoner' => $summoner->getId()))?>"><?php echo $summoner->getName() ?></a></li>
+            <?php endif; ?>
+        <?php endforeach; ?>
+    </ul>
+<?php endif; ?>
+</div>
+<div style="clear:both;"></div>

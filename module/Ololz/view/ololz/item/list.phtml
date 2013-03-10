@@ -1,0 +1,15 @@
+<div style="float:left; padding-right:16px; width: 150px;">
+    <h3>The items</h3>
+</div>
+<div style="margin-left: 160px;">
+<?php if (count($items)) : ?>
+    <ul class="nav nav-tabs nav-stacked">
+        <?php foreach ($items as $item) : ?>
+            <?php if ($item instanceof \Ololz\Entity\Item) : ?>
+                <li><a href="<?php echo $this->url('ololz/item', array('item' => $item->getId()))?>"><img src="<?php echo $this->itemPictureUrl($item)?>" alt="item icon" /> <?php echo $item->getName() ?></a></li>
+            <?php endif; ?>
+        <?php endforeach; ?>
+    </ul>
+<?php endif; ?>
+</div>
+<div style="clear:both;"></div>

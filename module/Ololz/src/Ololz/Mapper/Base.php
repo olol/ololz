@@ -2,7 +2,7 @@
 namespace Ololz\Mapper;
 
 use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use JMS\Serializer;
 use Ololz\Entity;
 
@@ -741,5 +741,33 @@ abstract class Base
         $this->getEventManager()->trigger('delete.post', $this, array_merge($argv, array('deleted' => $entity)));
 
         return $entity;
+    }
+
+    /**
+     * @param $query        \Doctrine\ORM\QueryBuilder
+     * @param string|array  $orderBy
+     * @param int           $limit
+     * @param int           $offset
+     *
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function restrictQuery(QueryBuilder $query, $orderBy = null, $limit = null, $offset = null)
+    {
+        if (! is_null($orderBy)) {
+            if (is_string($orderBy)) {
+                $orderBy = array($orderBy, 'ASC');
+            }
+            if (is_array($orderBy)) {
+                $query->orderBy($orderBy[0], $orderBy[1]);
+            }
+        }
+        if (is_numeric($limit)) {
+            $query->setMaxResults($limit);
+        }
+        if (is_numeric($offset)) {
+            $query->setFirstResult($offset);
+        }
+
+        return $query;
     }
 }

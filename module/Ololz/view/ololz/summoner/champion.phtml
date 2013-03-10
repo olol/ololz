@@ -1,0 +1,4 @@
+<div id="highroller"></div>
+<?php
+    $chart->chart->renderTo = "highroller";
+    echo $this->headScript()->appendScript($chart->renderChart());
