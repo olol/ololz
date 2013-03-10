@@ -95,7 +95,7 @@ return array(
                         ),
                         'may_terminate' => true,
                         'child_routes' => array(
-                            'default' => array(
+                            'champion' => array(
                                 'type'    => 'Segment',
                                 'options' => array(
                                     'route'    => '/champion/:champion',
@@ -103,8 +103,7 @@ return array(
                                         'champion' => '[a-zA-Z][a-zA-Z0-9_-]+',
                                     ),
                                     'defaults' => array(
-                                        'controller'    => 'champion',
-                                        'action'        => 'summoner',
+                                        'action'        => 'champion',
                                     ),
                                 ),
                             ),
