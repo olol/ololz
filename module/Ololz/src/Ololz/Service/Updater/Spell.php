@@ -36,6 +36,7 @@ class Spell extends Updater
             $htmlSpell = pq($htmlSpell['> td:eq(1) a']);
             $spellName = $htmlSpell->text();
             $spellTheirs = str_replace('/league-of-legends/summoner-spell/', '', $htmlSpell->attr('href'));
+            list($spellTheirsCode, $spellTheirsId) = explode('-', $spellTheirs);
 
             $spell = new Entity\Spell;
             $spell->setName($spellName);
@@ -44,12 +45,21 @@ class Spell extends Updater
                 $this->getLogger()->info('Saving spell ' . $spell . '.');
                 $spell = $spellService->save($spell, true);
 
-                $mapping = new Entity\Mapping;
-                $mapping->setSource($mobaFireSource)
-                        ->setType(Entity\Mapping::TYPE_SPELL)
-                        ->setOurs($spell->getId())
-                        ->setTheirs($spellTheirs);
-                $mappingService->save($mapping);
+                $mappingId = new Entity\Mapping;
+                $mappingId->setSource($mobaFireSource)
+                          ->setType(Entity\Mapping::TYPE_SPELL)
+                          ->setColumn(Entity\Mapping::COLUMN_ID)
+                          ->setOurs($spell->getId())
+                          ->setTheirs($spellTheirsId);
+                $mappingService->save($mappingId);
+
+                $mappingCode = new Entity\Mapping;
+                $mappingCode->setSource($mobaFireSource)
+                            ->setType(Entity\Mapping::TYPE_SPELL)
+                            ->setColumn(Entity\Mapping::COLUMN_CODE)
+                            ->setOurs($spell->getId())
+                            ->setTheirs($spellTheirsCode);
+                $mappingService->save($mappingCode);
             } else {
                 $this->getLogger()->info('Spell ' . $spell . ' already exists.');
             }

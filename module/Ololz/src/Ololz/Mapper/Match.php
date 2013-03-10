@@ -2,7 +2,10 @@
 
 namespace Ololz\Mapper;
 
-use \Doctrine\ORM\EntityManager;
+use Ololz\Entity;
+
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\QueryBuilder;
 
 /**
  * Match mapper
@@ -30,5 +33,51 @@ class Match extends Base
     public function findOneByHash($hash)
     {
         return parent::findOneBy(array('hash' => $hash));
+    }
+
+    /**
+     * The query to find matches of the given summoner.
+     *
+     * @param \Ololz\Entity\Summoner    $summoner
+     * @param string|array              $orderBy
+     * @param int                       $limit
+     * @param int                       $offset
+     *
+     * @return QueryBuilder
+     */
+    public function findBySummonerQuery(Entity\Summoner $summoner, $orderBy = null, $limit = null, $offset = null)
+    {
+        if (is_null($orderBy)) {
+            $orderBy = array('m.date', 'DESC');
+        }
+
+        $query = $this->getEntityManager()->createQueryBuilder()
+            ->select('m')
+            ->from($this->getEntityName(), 'm')
+            ->leftJoin('m.matchTeams', 'mt')
+            ->leftJoin('mt.invocations', 'i')
+            ->leftJoin('i.summoner', 's')
+            ->andWhere('s.id = :summoner')
+            ->setParameter('summoner', $summoner->getId())
+        ;
+
+        return $this->restrictQuery($query, $orderBy, $limit, $offset);
+    }
+
+    /**
+     * Find matches of the given summoner.
+     *
+     * @param \Ololz\Entity\Summoner    $summoner
+     * @param string|array              $orderBy
+     * @param int                       $limit
+     * @param int                       $offset
+     *
+     * @return array
+     */
+    public function findBySummoner(Entity\Summoner $summoner, $orderBy = null, $limit = null, $offset = null)
+    {
+        $query = $this->findBySummonerQuery($summoner, $orderBy, $limit, $offset);
+
+        return $query->getQuery()->getResult();
     }
 }

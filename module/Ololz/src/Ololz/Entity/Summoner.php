@@ -110,15 +110,17 @@ class Summoner extends Base
 
     /**
      * @param \Ololz\Entity\Source  $source
+     * @param \Ololz\Entity\Source  $column
      *
      * @return \Ololz\Entity\Mapping
      */
-    public function getMappingBySource($source)
+    public function getMappingBySource($source, $column)
     {
 //        if ($this->mappings->count()) {
             $criteria = Criteria::create()
                 ->where(Criteria::expr()->eq('type', Mapping::TYPE_SUMMONER))
-                ->andWhere(Criteria::expr()->eq('source', $source));
+                ->andWhere(Criteria::expr()->eq('source', $source))
+                ->andWhere(Criteria::expr()->eq('column', $column));
             return $this->mappings->matching($criteria)->first();
 //        }
 

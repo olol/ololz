@@ -1,6 +1,6 @@
 {
     "name": "olol/ololz",
-    "description": "Open League of Legends Ztatistics - an hosted application to follow the statistics of the players you're following.",
+    "description": "Open League of Legends Ztatistics - an hosted application to get statistics of the players you're following.",
     "license": "BSD-3-Clause",
     "keywords": [
         "lol",
@@ -18,6 +18,28 @@
         "doctrine/doctrine-orm-module": "0.*",
         "sp/jms-serializer-module": "dev-master",
         "gedmo/doctrine-extensions": "2.*",
-        "duvanmonsa/php-query": "dev-master"
-    }
+        "duvanmonsa/php-query": "dev-master",
+        "cssmin/cssmin": "3.0.*",
+        "jsminplus/jsminplus": "1.4.*",
+        "rwoverdijk/assetmanager": "1.2.*",
+        "jfloff/highroller-zf2": "1.0.*",
+        "neilime/zf2-twb-bundle": "dev-master"
+    },
+    "repositories": [ {
+        "type": "package",
+        "package": {
+            "name": "cssmin/cssmin",
+            "version": "3.0.1",
+            "dist": { "url": "http://cssmin.googlecode.com/files/cssmin-v3.0.1.php", "type": "file" },
+            "autoload": { "classmap": [ "cssmin-v3.0.1.php" ] }
+        }
+    }, {
+        "type": "package",
+        "package": {
+            "name": "jsminplus/jsminplus",
+            "version": "1.4",
+            "dist": { "url": "https://raw.github.com/mrclay/minify/v2.1.5/min/lib/JSMinPlus.php", "type": "file" },
+            "autoload": { "classmap": [ "JSMinPlus.php" ] }
+        }
+    } ]
 }

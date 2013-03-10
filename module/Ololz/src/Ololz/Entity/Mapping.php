@@ -40,6 +40,15 @@ class Mapping extends Base
      */
     protected $type;
 
+    const COLUMN_ID     = 'id';
+    const COLUMN_CODE   = 'code';
+
+    /**
+     * @ORM\Column(type="string", name="`column`", length=16, nullable=false)
+     * @JMS\Type("string")
+     */
+    protected $column;
+
     /**
      * @ORM\Column(type="integer", name="ours", length=10, nullable=false)
      * @JMS\Type("integer")
@@ -122,11 +131,44 @@ class Mapping extends Base
 
     /**
      * @return string
-     *
      */
     public function getType()
     {
         return $this->type;
+    }
+
+    /**
+     * @return array
+     */
+    public static function getColumns()
+    {
+        return array(
+            self::COLUMN_ID,
+            self::COLUMN_CODE,
+        );
+    }
+
+    /**
+     * @param string    $column
+     *
+     * @return \Ololz\Entity\Mapping
+     */
+    public function setColumn($column)
+    {
+        if (! in_array($column, self::getColumns())) {
+            throw new \InvalidArgumentException('Invalid column. "' + $column + '" given while only "' . implode('", "', self::getColumns() . '" are allowed.'));
+        }
+        $this->column = (string) $column;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getColumn()
+    {
+        return $this->column;
     }
 
     /**

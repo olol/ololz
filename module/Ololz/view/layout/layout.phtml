@@ -9,14 +9,18 @@
 
         <!-- Le styles -->
         <?php echo $this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/images/favicon.ico'))
-                        ->prependStylesheet($this->basePath() . '/css/bootstrap-responsive.min.css')
-                        ->prependStylesheet($this->basePath() . '/css/style.css')
-                        ->prependStylesheet($this->basePath() . '/css/bootstrap.min.css') ?>
+                        ->prependStylesheet($this->basePath() . '/css/ololz.css')
+//                        ->prependStylesheet($this->basePath() . '/assets/bootstrap/bootstrap-responsive.css')
+//                        ->prependStylesheet($this->basePath() . '/assets/ololz/ololz.css')
+//                        ->prependStylesheet($this->basePath() . '/assets/bootstrap/bootstrap.css') ?>
 
         <!-- Scripts -->
-        <?php echo $this->headScript()->prependFile($this->basePath() . '/js/html5.js', 'text/javascript', array('conditional' => 'lt IE 9',))
-                                      ->prependFile($this->basePath() . '/js/bootstrap.min.js')
-                                      ->prependFile($this->basePath() . '/js/jquery.min.js') ?>
+        <?php echo $this->headScript()
+                        ->prependFile($this->basePath() . '/assets/ololz/html5.js', 'text/javascript', array('conditional' => 'lt IE 9',))
+                        ->prependFile($this->basePath() . '/js/ololz.js')
+//                        ->prependFile($this->basePath() . '/assets/ololz/ololz.js')
+//                        ->prependFile($this->basePath() . '/assets/bootstrap/bootstrap.js')
+//                        ->prependFile($this->basePath() . '/assets/jquery/jquery.js') ?>
 
     </head>
     <body>
@@ -32,6 +36,10 @@
                     <div class="nav-collapse collapse">
                         <ul class="nav">
                             <li class="active"><a href="<?php echo $this->url('ololz') ?>"><?php echo $this->translate('Home') ?></a></li>
+                            <li><a href="<?php echo $this->url('ololz/summoners') ?>"><?php echo $this->translate('Summoners') ?></a></li>
+                            <li><a href="<?php echo $this->url('ololz/matches') ?>"><?php echo $this->translate('Matches') ?></a></li>
+                            <li><a href="<?php echo $this->url('ololz/champions') ?>"><?php echo $this->translate('Champions') ?></a></li>
+                            <li><a href="<?php echo $this->url('ololz/items') ?>"><?php echo $this->translate('Items') ?></a></li>
                         </ul>
                     </div><!--/.nav-collapse -->
                 </div>

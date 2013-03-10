@@ -1,0 +1,26 @@
+<div style="float:left; padding-right:16px; width: 150px;">
+    <h2><?php echo $summoner->getName() ?></h2>
+</div>
+<div style="margin-left: 160px;">
+    <div id="most-played">
+        <h3>Champions played the last 7 days</h3>
+        <ul class="nav nav-tabs nav-stacked">
+        <?php foreach ($champions as $champion) : ?>
+            <?php if ($champion instanceof \Ololz\Entity\Champion) : ?>
+                <li><a href="<?php echo $this->url('ololz/summoner/champion', array('champion' => $champion->getCode(), 'summoner' => $summoner->getId()))?>"><img src="<?php echo $this->championPictureUrl($champion)?>" alt="champion icon" /> <?php echo $champion->getName() ?></a></li>
+            <?php endif; ?>
+        <?php endforeach; ?>
+        </ul>
+    </div>
+    <div id="matches">
+        <h3>Last matches</h3>
+        <ul class="nav nav-tabs nav-stacked">
+        <?php foreach ($matches as $match) : ?>
+            <?php if ($match instanceof \Ololz\Entity\Match) : ?>
+                <li><a href="<?php echo $this->url('ololz/match', array('match' => $match->getId()))?>"><?php echo $match ?></a></li>
+            <?php endif; ?>
+        <?php endforeach; ?>
+        </ul>
+    </div>
+</div>
+<div style="clear:both;"></div>

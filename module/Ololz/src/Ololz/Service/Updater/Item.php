@@ -42,6 +42,7 @@ class Item extends Updater
                 $mapping = new Entity\Mapping;
                 $mapping->setSource($lolKingSource)
                         ->setType(Entity\Mapping::TYPE_ITEM)
+                        ->setColumn(Entity\Mapping::COLUMN_ID)
                         ->setOurs($item->getId())
                         ->setTheirs($itemTheirs);
                 $mappingService->save($mapping);

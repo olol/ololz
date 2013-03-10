@@ -25,11 +25,12 @@ class Mapping extends Base
     /**
      * @param \Ololz\Entity\Source|int|string   $source
      * @param string                            $type
+     * @param string                            $column
      * @param string                            $theirs
      *
      * @return \Ololz\Entity\Base
      */
-    public function findOneOurs($source, $type, $theirs)
+    public function findOneOurs($source, $type, $column, $theirs)
     {
         if (! $source instanceof Entity\Source) {
             $sourceMapper = $this->getMapper('source');
@@ -43,6 +44,7 @@ class Mapping extends Base
         $mapping = $this->findOneBy(array(
             'source'    => $source,
             'type'      => $type,
+            'column'    => $column,
             'theirs'    => $theirs
         ) );
 
@@ -58,10 +60,11 @@ class Mapping extends Base
     /**
      * @param \Ololz\Entity\Source|int|string   $source
      * @param string                            $type
+     * @param string                            $column
      *
      * @return array
      */
-    public function findOurs($source, $type)
+    public function findOurs($source, $type, $column = null)
     {
         if (! $source instanceof Entity\Source) {
             $sourceMapper = $this->getMapper('source');
@@ -72,10 +75,15 @@ class Mapping extends Base
             }
         }
 
-        $mappings = $this->findBy(array(
+        $data = array(
             'source'    => $source,
             'type'      => $type
-        ) );
+        );
+        if (! is_null($column)) {
+            $data['column'] = $column;
+        }
+
+        $mappings = $this->findBy($data);
 
         $ids = array();
         foreach ($mappings as $mapping) {
@@ -90,11 +98,12 @@ class Mapping extends Base
     /**
      * @param \Ololz\Entity\Source|int|string   $source
      * @param string                            $type
+     * @param string                            $column
      * @param \Ololz\Entity\Base|int            $ours
      *
      * @return string
      */
-    public function findOneTheirs($source, $type, $ours)
+    public function findOneTheirs($source, $type, $column, $ours)
     {
         if (! $source instanceof Entity\Source) {
             $sourceMapper = $this->getMapper('source');
@@ -108,6 +117,7 @@ class Mapping extends Base
         $mapping = $this->findOneBy(array(
             'source'    => $source,
             'type'      => $type,
+            'column'    => $column,
             'ours'      => $ours instanceof Entity\Base ? $ours->getId() : $ours
         ) );
 
@@ -121,10 +131,11 @@ class Mapping extends Base
     /**
      * @param \Ololz\Entity\Source|int|string   $source
      * @param string                            $type
+     * @param string                            $column
      *
      * @return array
      */
-    public function findTheirs($source, $type)
+    public function findTheirs($source, $type, $column = null)
     {
         if (! $source instanceof Entity\Source) {
             $sourceMapper = $this->getMapper('source');
@@ -135,10 +146,15 @@ class Mapping extends Base
             }
         }
 
-        $mappings = $this->findBy(array(
+        $data = array(
             'source'    => $source,
             'type'      => $type
-        ) );
+        );
+        if (! is_null($column)) {
+            $data['column'] = $column;
+        }
+
+        $mappings = $this->findBy($data);
 
         $theirs = array();
         foreach ($mappings as $mapping) {
@@ -151,13 +167,14 @@ class Mapping extends Base
     /**
      * @param \Ololz\Entity\Source|int|string   $source
      * @param string                            $type
+     * @param string                            $column
      * @param string|array                      $orderBy
      * @param int                               $limit
      * @param int                               $offset
      *
      * @return array
      */
-    public function findBySourceAndType($source, $type, $orderBy = null, $limit = null, $offset = null)
+    public function findBySourceAndType($source, $type, $column, $orderBy = null, $limit = null, $offset = null)
     {
         if (! $source instanceof Entity\Source) {
             $sourceMapper = $this->getMapper('source');
@@ -168,6 +185,6 @@ class Mapping extends Base
             }
         }
 
-        return $this->findBy(array('source' => $source, 'type' => $type), $orderBy, $limit, $offset);
+        return $this->findBy(array('source' => $source, 'type' => $type, 'column' => $column), $orderBy, $limit, $offset);
     }
 }
