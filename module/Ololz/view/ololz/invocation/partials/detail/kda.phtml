@@ -1,0 +1,11 @@
+                    <div class="summoner-invocation-details-kda">
+                        <?php if (! is_null($invocation->getKills())) : ?>
+                            <p><?php echo sprintf($this->translate('%d kills'), $invocation->getKills()) ?></p>
+                        <?php endif; ?>
+                        <?php if (! is_null($invocation->getDeaths())) : ?>
+                            <p><?php echo sprintf($this->translate('%d deaths'), $invocation->getDeaths()) ?></p>
+                        <?php endif; ?>
+                        <?php if (! is_null($invocation->getAssists())) : ?>
+                            <p><?php echo sprintf($this->translate('%d assists'), $invocation->getAssists()) ?></p>
+                        <?php endif; ?>
+                    </div>

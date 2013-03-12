@@ -1,8 +1,8 @@
 <?php
 
-namespace Ololz\View\Helper\Champion;
+namespace Ololz\View\Helper\Spell;
 
-use Ololz\Entity\Champion;
+use Ololz\Entity\Spell;
 use Ololz\Entity\Source;
 use Ololz\Entity\Mapping;
 use Ololz\Mapper\Mapping as MappingMapper;
@@ -31,39 +31,35 @@ class PictureUrl extends AbstractHelper
      *
      * @return string
      */
-    public function __invoke(Champion $champion, $type = self::TYPE_ICON, Source $source = null)
+    public function __invoke(Spell $spell, $type = self::TYPE_ICON, Source $source = null)
     {
         if (is_null($source)) {
             $source = $this->defaultSource;
         }
 
         if (is_null($source)) {
-            throw new \InvalidArgumentException('Please set a default source to retrieve champion\'s picture URL from the view helper');
+            throw new \InvalidArgumentException('Please set a default source to retrieve spell\'s picture URL from the view helper');
         }
 
         switch ($source->getCode())
         {
             case Source::CODE_LOLKING:
-                $lolKingId = $this->getMappingMapper()->findOneTheirs($source, Mapping::TYPE_CHAMPION, Mapping::COLUMN_ID, $champion->getId());
+                $lolKingId = $this->getMappingMapper()->findOneTheirs($source, Mapping::TYPE_SPELL, Mapping::COLUMN_ID, $spell->getId());
 
                 switch ($type)
                 {
                     case self::TYPE_ICON:
-                        $url = 'http://img.lolking.net/images/alayton/images/champions/' . $lolKingId . '_icon_32.png';
-                        break;
-
-                    case self::TYPE_SMALL:
-                        $url = 'http://img.lolking.net/images/alayton/images/champions/' . $lolKingId . '_icon_64.png';
+                        $url = 'http://img.lolking.net/images/spells/' . $lolKingId . '.png';
                         break;
 
                     default:
-                        throw new \Exception('Can only retrieve champion picture\'s urls for LolKing\'s icons for now.');
+                        throw new \Exception('Can only retrieve spell picture\'s urls for LolKing\'s icons for now.');
                         break;
                 }
                 break;
 
             default:
-                throw new \Exception('Can only retrieve champion picture\'s urls from LolKing for now.');
+                throw new \Exception('Can only retrieve spell picture\'s urls from LolKing for now.');
                 break;
         }
 
@@ -81,7 +77,7 @@ class PictureUrl extends AbstractHelper
     /**
      * @param  \Ololz\Entity\Source $defaultSource
      *
-     * @return \Ololz\View\Helper\Champion
+     * @return \Ololz\View\Helper\Spell
      */
     public function setDefaultSource(Source $defaultSource)
     {
@@ -101,7 +97,7 @@ class PictureUrl extends AbstractHelper
     /**
      * @param  \Ololz\Entity\Source $mappingMapper
      *
-     * @return \Ololz\View\Helper\Champion
+     * @return \Ololz\View\Helper\Spell
      */
     public function setMappingMapper(MappingMapper $mappingMapper)
     {

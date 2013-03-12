@@ -35,3 +35,99 @@ div.container a.brand {
     margin-left: 0;
     padding: 8px 20px 12px 40px;
 }
+
+.nav-tabs > li {
+    min-width: 200px;
+}
+
+.nav .icon {
+    border-radius: 8px;
+    box-shadow: 0 0 2px #000;
+    border: 1px solid #111;
+}
+
+.nav .icon-32 {
+    width:  32px;
+    height: 32px;
+    background-size: 38px !important;
+    background-position: center center !important;
+}
+
+.nav .icon-36 {
+    width:  36px;
+    height: 36px;
+    background-size: 42px !important;
+    background-position: center center !important;
+}
+
+.nav .icon-64 {
+    width:  64px;
+    height: 64px;
+    background-size: 72px !important;
+    background-position: center center !important;
+}
+
+/**
+ * Summoner page
+ */
+
+/* Champion section */
+
+.summoner-champion > div:nth-child(n+2),
+.summoner-invocation-details > div:nth-child(n+2) {
+    margin-left: 5px;
+}
+
+.summoner-champion > *,
+.summoner-invocation-details > * {
+    display: inline-block;
+    vertical-align: top;
+}
+
+/* Invocation section */
+.summoner-invocation-details > * p {
+    line-height: normal;
+}
+.summoner-invocation-details-result {
+    width: 120px;
+}
+.summoner-invocation-details-summoner {
+    width: 120px;
+}
+.summoner-invocation-details-length {
+    width: 100px;
+}
+.summoner-invocation-details-kda {
+    width: 80px;
+}
+.summoner-invocation-details-gold {
+    width: 40px;
+}
+.summoner-invocation-details-minions {
+    width: 60px;
+}
+.summoner-invocation-details-spells {
+    width: 90px;
+}
+.summoner-invocation-details-items {
+    width: 230px;
+}
+/*.summoner-invocations-list a {
+    color : #FFF;
+}
+
+.win {
+    background-color: #00611A !important;
+}
+.win:hover,
+.win:focus {
+    background-color: #00611A !important;
+}
+
+.loss {
+    background-color: #690019 !important;
+}
+.loss:hover,
+.loss:focus {
+    background-color: #690019 !important;
+}*/

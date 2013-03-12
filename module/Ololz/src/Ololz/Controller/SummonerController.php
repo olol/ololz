@@ -25,16 +25,16 @@ class SummonerController extends BaseController
      */
     public function indexAction()
     {
-        $summoner       = $this->getService()->getMapper()->find($this->params('summoner'));
-        $last10Matches  = $this->getServiceLocator()->get('Ololz\Service\Persist\Match')->getMapper()->findBySummoner($summoner, null, 10);
+        $summoner           = $this->getService()->getMapper()->find($this->params('summoner'));
+        $last10Invocations  = $this->getServiceLocator()->get('Ololz\Service\Persist\Invocation')->getMapper()->findBySummoner($summoner, null, 10);
         $lastWeek = new \DateTime;
         $lastWeek->sub(new \DateInterval('P7D'));
         $championsPlayedThisWeek = $this->getServiceLocator()->get('Ololz\Service\Persist\Champion')->getMapper()->findDistinctBySummonerAndMatchDate($summoner, $lastWeek);
 
         return new ViewModel(array(
-            'summoner'  => $summoner,
-            'matches'   => $last10Matches,
-            'champions' => $championsPlayedThisWeek
+            'summoner'      => $summoner,
+            'invocations'   => $last10Invocations,
+            'champions'     => $championsPlayedThisWeek
         ) );
     }
 

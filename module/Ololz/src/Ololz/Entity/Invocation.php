@@ -491,7 +491,7 @@ class Invocation extends Base
      */
     public function getGold()
     {
-        return (float) $this->gold;
+        return $this->gold;
     }
 
     /**

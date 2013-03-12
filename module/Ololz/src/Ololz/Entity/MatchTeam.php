@@ -189,4 +189,20 @@ class MatchTeam extends Base
     {
         return $this->getMatch()->getOpponentOf($this);
     }
+
+    /**
+     * @return bool
+     */
+    public function hasWon()
+    {
+        return $this->getMatch()->getWinner() == $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasLost()
+    {
+        return ! $this->hasWon();
+    }
 }

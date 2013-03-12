@@ -1,0 +1,5 @@
+                    <div class="summoner-invocation-details-result">
+                        <p><?php echo $this->translate((string) $match->getMatchType()) ?></p>
+                        <p><?php echo $invocation->getMatchTeam()->hasWon() ? $this->translate('Win') : $this->translate('Loss') ?></p>
+                        <p><?php echo $match->getDate()->format('d/m/y H:i') ?></p>
+                    </div>

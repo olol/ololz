@@ -1,0 +1,8 @@
+                    <div class="summoner-invocation-details-minions">
+                        <?php if (! is_null($invocation->getMinions())) : ?>
+                            <p>
+                                <?php echo sprintf($this->translate('%d'), $invocation->getMinions()) ?><br />
+                                <?php echo $this->translate('Minions') ?>
+                            </p>
+                        <?php endif; ?>
+                    </div>

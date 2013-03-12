@@ -25,9 +25,11 @@ class PictureUrl extends AbstractHelper
     protected $mappingMapper;
 
     /**
-     * @param  UserInterface           $item
-     * @param  string                  $providerName
-     * @return UserProviderMapper|bool
+     * @param  \Ololz\Entity\Spell  $spell
+     * @param  string               $type
+     * @param  \Ololz\Entity\Source $source
+     *
+     * @return string
      */
     public function __invoke(Item $item, $type = self::TYPE_ICON, Source $source = null)
     {

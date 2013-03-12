@@ -1,0 +1,12 @@
+<li>
+    <a href="<?php echo $this->url('ololz/summoner/champion', array('champion' => $champion->getCode(), 'summoner' => $summoner->getId()))?>">
+        <div class="summoner-champion">
+            <?php echo $this->partial('ololz/p/champion/picture-small', array('champion' => $champion)) ?>
+            <div class="details">
+                <div class="name"><?php echo $champion->getName() ?></div>
+                <div class="stats">KDA : 42</div>
+                <div class="stats">Trend : +</div>
+            </div>
+        </div>
+    </a>
+</li>

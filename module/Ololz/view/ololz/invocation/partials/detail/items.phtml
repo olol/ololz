@@ -1,0 +1,5 @@
+                    <div class="summoner-invocation-details-items">
+                        <?php foreach ($invocation->getItems() as $item) : ?>
+                            <?php echo $this->partial('ololz/p/item/picture-icon', array('item' => $item)) ?>
+                        <?php endforeach; ?>
+                    </div>

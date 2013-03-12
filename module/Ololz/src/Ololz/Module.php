@@ -144,6 +144,14 @@ class Module implements
                                ->setMappingMapper($locator->get('Ololz\Mapper\Mapping'));
                     return $viewHelper;
                 },
+                'spellPictureUrl' => function ($sm) {
+                    $locator = $sm->getServiceLocator();
+                    $viewHelper = new View\Helper\Spell\PictureUrl;
+                    // @todo handle default source via config
+                    $viewHelper->setDefaultSource($locator->get('Ololz\Mapper\Source')->findOneByCode('lolking'))
+                               ->setMappingMapper($locator->get('Ololz\Mapper\Mapping'));
+                    return $viewHelper;
+                },
             ),
         );
     }

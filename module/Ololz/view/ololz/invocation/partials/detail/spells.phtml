@@ -1,0 +1,5 @@
+                    <div class="summoner-invocation-details-spells">
+                        <?php foreach ($invocation->getSpells() as $spell) : ?>
+                            <?php echo $this->partial('ololz/p/spell/picture-icon', array('spell' => $spell)) ?>
+                        <?php endforeach; ?>
+                    </div>

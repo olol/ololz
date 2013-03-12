@@ -1,0 +1,12 @@
+        <div class="summoner-invocation">
+            <div class="summoner-invocation-details">
+                <?php foreach ($details as $detail) : ?>
+                <div class="cell">
+                    <?php echo $this->partial('ololz/p/invocation/detail/' . $detail, array('summoner' => $summoner, 'invocation' => $invocation, 'match' => $match)) ?>
+                </div>
+                <?php endforeach; ?>
+            </div>
+            <div class="summoner-match-details" style="display:none">
+
+            </div>
+        </div>
