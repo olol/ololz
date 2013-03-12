@@ -1,0 +1,5 @@
+                    <div class="match-details-summary">
+                        <p><?php echo $match->getMatchType() ?></p>
+                        <p><?php echo $match->getDate()->format('d/m/y H:i') ?></p>
+                        <p><?php echo sprintf($this->translate('%d mins'), $match->getLength()) ?></p>
+                    </div>

@@ -41,10 +41,9 @@ class MatchController extends BaseController
 //        $paginator = new \Zend\Paginator\Paginator(new \Zend\Paginator\Adapter\Array());
 //        $paginator->setCurrentPageNumber($this->params('page'));
 
-//        $criteria = array('active' => 1);
         $criteria = array();
 
-        $matches = $this->getService()->getMapper()->findBy($criteria, 'date');
+        $matches = $this->getService()->getMapper()->findBy($criteria, array('date' => 'DESC'));
 
         return new ViewModel(array(
             'matches' => $matches

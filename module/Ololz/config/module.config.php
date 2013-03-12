@@ -272,6 +272,9 @@ return array(
             'ololz/p/invocation/detail/result'      => __DIR__ . '/../view/ololz/invocation/partials/detail/result.phtml',
             'ololz/p/invocation/detail/spells'      => __DIR__ . '/../view/ololz/invocation/partials/detail/spells.phtml',
             'ololz/p/invocation/detail/summoner'    => __DIR__ . '/../view/ololz/invocation/partials/detail/summoner.phtml',
+            'ololz/p/invocation/detail/summoner'    => __DIR__ . '/../view/ololz/invocation/partials/detail/summoner.phtml',
+            'ololz/p/match/line'                => __DIR__ . '/../view/ololz/match/partials/line.phtml',
+            'ololz/p/match/detail/summary'      => __DIR__ . '/../view/ololz/match/partials/detail/summary.phtml',
         ),
         'template_path_stack' => array(
             __DIR__ . '/../view',

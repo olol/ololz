@@ -67,6 +67,15 @@ div.container a.brand {
     background-position: center center !important;
 }
 
+
+.summoner-champion > *,
+.summoner-invocation-details > *,
+.match-champions > *,
+.match-champions > div > * {
+    display: inline-block;
+    vertical-align: top;
+}
+
 /**
  * Summoner page
  */
@@ -77,15 +86,9 @@ div.container a.brand {
 .summoner-invocation-details > div:nth-child(n+2) {
     margin-left: 5px;
 }
-
-.summoner-champion > *,
-.summoner-invocation-details > * {
-    display: inline-block;
-    vertical-align: top;
-}
-
 /* Invocation section */
-.summoner-invocation-details > * p {
+.summoner-invocation-details > * p,
+.match-details-summary > p {
     line-height: normal;
 }
 .summoner-invocation-details-result {
@@ -131,3 +134,25 @@ div.container a.brand {
 .loss:focus {
     background-color: #690019 !important;
 }*/
+
+/**
+ * Match list page
+ */
+.match-champions .winner {
+    text-align: right;
+}
+.match-champions .winner,
+.match-champions .loser {
+    width: 350px;
+}
+.match-champions .match-summary,
+.match-champions .match-vs {
+    width: 120px;
+}
+.match-champions .match-vs {
+    margin-top: 5px;
+    height: 64px;
+    background-image: url(../images/versus.png);
+    background-position: center center !important;
+    background-repeat: no-repeat;
+}

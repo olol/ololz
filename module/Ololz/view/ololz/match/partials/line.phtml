@@ -1,0 +1,27 @@
+        <div class="match-details">
+            <div class="match-champions">
+                <div class="match-summary">
+                    <div class="cell">
+                        <?php echo $this->partial('ololz/p/match/detail/summary', array('match' => $match)) ?>
+                    </div>
+                </div>
+                <div class="winner">
+                <?php foreach ($match->getWinner()->getInvocations() as $invocation) : ?>
+                    <div class="cell">
+                        <?php echo $this->partial('ololz/p/invocation/detail/champion', array('invocation' => $invocation)) ?>
+                    </div>
+                <?php endforeach; ?>
+                </div>
+                <div class="match-vs"></div>
+                <div class="loser">
+                <?php foreach ($match->getLoser()->getInvocations() as $invocation) : ?>
+                    <div class="cell">
+                        <?php echo $this->partial('ololz/p/invocation/detail/champion', array('invocation' => $invocation)) ?>
+                    </div>
+                <?php endforeach; ?>
+                </div>
+            </div>
+            <div class="match-details-extra" style="display:none;">
+
+            </div>
+        </div>
