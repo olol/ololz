@@ -174,7 +174,7 @@ class Mapping extends Base
      *
      * @return array
      */
-    public function findBySourceAndType($source, $type, $column, $orderBy = null, $limit = null, $offset = null)
+    public function findBySourceAndTypeAndColumn($source, $type, $column, $orderBy = null, $limit = null, $offset = null)
     {
         if (! $source instanceof Entity\Source) {
             $sourceMapper = $this->getMapper('source');
