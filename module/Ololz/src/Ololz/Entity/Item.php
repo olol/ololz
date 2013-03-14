@@ -21,13 +21,13 @@ use JMS\Serializer\Annotation as JMS;
 class Item extends Base
 {
     /**
-     * @ORM\Column(type="string", name="name", length=32, nullable=false)
+     * @ORM\Column(type="string", name="name", length=40, nullable=false)
      * @JMS\Type("string")
      */
     protected $name;
 
     /**
-     * @ORM\Column(type="string", name="code", length=32, nullable=false, unique=true)
+     * @ORM\Column(type="string", name="code", length=40, nullable=false, unique=true)
      * @JMS\Type("string")
      * @Gedmo\Slug(fields={"name"}, unique=true)
      */
