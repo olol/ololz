@@ -47,7 +47,7 @@ function getUniqueHashOfMatch($game, $mappingService, $lolKingSource) {
     }
     $string .= $matchType->getCode();
     $string .= $game['length'];
-    $string .= $game['date'] instanceof \DateTime ? $game['date']->format('Y-m-d\TH:i:s') : strlen($game['date']) != 19 ? $game['date'] . 'T00:00' : str_replace(' ', 'T', substr($game['date'], 0, -3));
+    $string .= $game['date'] instanceof \DateTime ? $game['date']->format('Y-m-d\TH:i') : strlen($game['date']) != 19 ? $game['date'] . 'T00:00' : str_replace(' ', 'T', substr($game['date'], 0, -3));
 
     $hash = hash('md5', $string);
     return $hash;
