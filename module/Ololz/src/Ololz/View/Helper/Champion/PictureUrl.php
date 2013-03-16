@@ -49,11 +49,11 @@ class PictureUrl extends AbstractHelper
                 switch ($type)
                 {
                     case self::TYPE_ICON:
-                        $url = 'http://img.lolking.net/images/alayton/images/champions/' . $lolKingId . '_icon_32.png';
+                        $url = 'http://img.lolking.net/shared/riot/images/champions/' . $lolKingId . '_64.png';
                         break;
 
                     case self::TYPE_SMALL:
-                        $url = 'http://img.lolking.net/images/alayton/images/champions/' . $lolKingId . '_icon_64.png';
+                        $url = 'http://img.lolking.net/shared/riot/images/champions/' . $lolKingId . '_92.png';
                         break;
 
                     default:
