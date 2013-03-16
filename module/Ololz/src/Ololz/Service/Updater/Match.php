@@ -16,6 +16,20 @@ use Ololz\Entity;
  */
 class Match extends Updater
 {
+    /**
+     * Default source to LoL King
+     *
+     * @return \Ololz\Entity\Source
+     */
+    public function getSource()
+    {
+        if (is_null($this->source)) {
+            $this->setSource($this->getService('Source')->getMapper()->findOneByCode(Entity\Source::CODE_LOLKING));
+        }
+
+        return $this->source;
+    }
+
     protected function arraySummonerToEntity(array $array, Entity\Summoner $summoner = null)
     {
         if (is_null($summoner)) {
@@ -189,26 +203,24 @@ class Match extends Updater
         $em = $this->getServiceManager()->get('doctrine.entitymanager.orm_default');
 
         /* @var $matchService \Ololz\Service\Persist\Match */
-        $matchService       = $this->getServiceManager()->get('Ololz\Service\Persist\Match');
+        $matchService       = $this->getService('Match');
         /* @var $summonerService \Ololz\Service\Persist\Summoner */
-        $summonerService    = $this->getServiceManager()->get('Ololz\Service\Persist\Summoner');
+        $summonerService    = $this->getService('Summoner');
         /* @var $mappingService \Ololz\Service\Persist\Mapping */
-        $mappingService     = $this->getServiceManager()->get('Ololz\Service\Persist\Mapping');
+        $mappingService     = $this->getService('Mapping');
         /* @var $mapService \Ololz\Service\Persist\Map */
-        $mapService         = $this->getServiceManager()->get('Ololz\Service\Persist\Map');
+        $mapService         = $this->getService('Map');
 
-        /* @var $lolKingSource \Ololz\Entity\Source */
-        $lolKingSource      = $this->getServiceManager()->get('Ololz\Mapper\Source')->findOneByCode(Entity\Source::CODE_LOLKING);
         /* @var $smiteSpell \Ololz\Entity\Spell */
-        $smiteSpell         = $this->getServiceManager()->get('Ololz\Mapper\Spell')->findOneByCode('smite');
+        $smiteSpell         = $this->getService('Spell')->getMapper()->findOneByCode('smite');
         /* @var $junglerPosition \Ololz\Entity\Position */
-        $junglerPosition    = $this->getServiceManager()->get('Ololz\Mapper\Position')->findOneByCode('jungle');
+        $junglerPosition    = $this->getService('Position')->getMapper()->findOneByCode('jungle');
 
         /* @var $summoner \Ololz\Entity\Summoner */
         foreach ($summonerService->getMapper()->findByActive(true) as $summoner) {
 
             // Skip summoners for whom we don't have a LolKing ID
-            if (! $summonerMapping = $summoner->getMappingBySource($lolKingSource, 'id')) {
+            if (! $summonerMapping = $summoner->getMappingBySource($this->getSource(), 'id')) {
                 continue;
             }
 
@@ -266,7 +278,7 @@ class Match extends Updater
                     );
 
                     $lolKingChampion = str_replace('/champions/', '', $htmlTeammate['td:eq(0) a']->attr('href'));
-                    $champion = $mappingService->getMapper()->findOneOurs($lolKingSource, Entity\Mapping::TYPE_CHAMPION, Entity\Mapping::COLUMN_CODE, $lolKingChampion);
+                    $champion = $mappingService->getMapper()->findOneOurs($this->getSource(), Entity\Mapping::TYPE_CHAMPION, Entity\Mapping::COLUMN_CODE, $lolKingChampion);
 
                     if (! $champion) {
                         continue;
@@ -315,7 +327,7 @@ class Match extends Updater
                     );
 
                     $lolKingChampion = str_replace('/champions/', '', $htmlEnnemy['td:eq(0) a']->attr('href'));
-                    $champion = $mappingService->getMapper()->findOneOurs($lolKingSource, Entity\Mapping::TYPE_CHAMPION, Entity\Mapping::COLUMN_CODE, $lolKingChampion);
+                    $champion = $mappingService->getMapper()->findOneOurs($this->getSource(), Entity\Mapping::TYPE_CHAMPION, Entity\Mapping::COLUMN_CODE, $lolKingChampion);
 
                     if (! $champion) {
                         continue;
@@ -340,7 +352,7 @@ class Match extends Updater
                         case 1: // Type
                             { // Match type
                                 $lolKingMatchType = $details['div div:eq(0)']->text();
-                                $matchType = $mappingService->getMapper()->findOneOurs($lolKingSource, Entity\Mapping::TYPE_MATCH_TYPE, Entity\Mapping::COLUMN_CODE, $lolKingMatchType);
+                                $matchType = $mappingService->getMapper()->findOneOurs($this->getSource(), Entity\Mapping::TYPE_MATCH_TYPE, Entity\Mapping::COLUMN_CODE, $lolKingMatchType);
                                 if ($matchType) {
 //                                    $match->setMatchType($matchType);
                                     $match['matchType'] = $matchType;
@@ -394,7 +406,7 @@ class Match extends Updater
                             foreach ($details['div.icon_36'] as $htmlSpell) {
                                 $htmlSpell = pq($htmlSpell)->attr('style');
                                 $lolKingSpell = substr($htmlSpell, strrpos($htmlSpell, '/') + 1, strrpos($htmlSpell, '.') - 1 - strrpos($htmlSpell, '/'));
-                                $spell = $mappingService->getMapper()->findOneOurs($lolKingSource, Entity\Mapping::TYPE_SPELL, Entity\Mapping::COLUMN_ID, $lolKingSpell);
+                                $spell = $mappingService->getMapper()->findOneOurs($this->getSource(), Entity\Mapping::TYPE_SPELL, Entity\Mapping::COLUMN_ID, $lolKingSpell);
                                 if ($spell) {
 //                                    $actualInvocation->addSpell($spell);
                                     $actualInvocation['spells'][] = $spell;
@@ -406,7 +418,7 @@ class Match extends Updater
                             foreach ($details['div.icon_32 a'] as $htmlItem) {
                                 $htmlItem = pq($htmlItem);
                                 $lolKingItem = str_replace('/items/', '', $htmlItem->attr('href'));
-                                $item = $mappingService->getMapper()->findOneOurs($lolKingSource, Entity\Mapping::TYPE_ITEM, Entity\Mapping::COLUMN_ID, $lolKingItem);
+                                $item = $mappingService->getMapper()->findOneOurs($this->getSource(), Entity\Mapping::TYPE_ITEM, Entity\Mapping::COLUMN_ID, $lolKingItem);
                                 if ($item) {
 //                                    $actualInvocation->addItem($item);
                                     $actualInvocation['items'][] = $item;
