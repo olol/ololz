@@ -43,7 +43,7 @@ class MatchController extends BaseController
 
         $criteria = array();
 
-        $matches = $this->getService()->getMapper()->findBy($criteria, array('date' => 'DESC'));
+        $matches = $this->getService()->getMapper()->findBy($criteria, array('date' => 'DESC'), 20);
 
         return new ViewModel(array(
             'matches' => $matches
