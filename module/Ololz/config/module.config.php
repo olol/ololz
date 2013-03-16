@@ -259,6 +259,7 @@ return array(
             'ololz/p/champion/line'             => __DIR__ . '/../view/ololz/champion/partials/line.phtml',
             'ololz/p/champion/picture-icon'     => __DIR__ . '/../view/ololz/champion/partials/picture-icon.phtml',
             'ololz/p/champion/picture-small'    => __DIR__ . '/../view/ololz/champion/partials/picture-small.phtml',
+            'ololz/p/item/line'                 => __DIR__ . '/../view/ololz/item/partials/line.phtml',
             'ololz/p/item/picture-icon'         => __DIR__ . '/../view/ololz/item/partials/picture-icon.phtml',
             'ololz/p/item/picture-small'        => __DIR__ . '/../view/ololz/item/partials/picture-small.phtml',
             'ololz/p/spell/picture-icon'        => __DIR__ . '/../view/ololz/spell/partials/picture-icon.phtml',

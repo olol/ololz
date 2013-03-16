@@ -72,7 +72,8 @@ div.container a.brand {
 .summoner-invocation-details > *,
 .match-champions > *,
 .match-champions > div > *,
-.champion-details > * {
+.champion-details > *,
+.item-details > * {
     display: inline-block;
     vertical-align: top;
 }

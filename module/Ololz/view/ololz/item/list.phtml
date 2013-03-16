@@ -6,7 +6,7 @@
     <ul class="nav nav-tabs nav-stacked">
         <?php foreach ($items as $item) : ?>
             <?php if ($item instanceof \Ololz\Entity\Item) : ?>
-                <li><a href="<?php echo $this->url('ololz/item', array('item' => $item->getId()))?>"><img src="<?php echo $this->itemPictureUrl($item)?>" alt="item icon" /> <?php echo $item->getName() ?></a></li>
+                <li><a href="<?php echo $this->url('ololz/item', array('item' => $item->getId()))?>"><?php echo $this->partial('ololz/p/item/line', array('item' => $item)) ?></a></li>
             <?php endif; ?>
         <?php endforeach; ?>
     </ul>
