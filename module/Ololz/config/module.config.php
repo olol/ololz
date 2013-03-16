@@ -256,6 +256,7 @@ return array(
             'ololz/p/summoner/champion'         => __DIR__ . '/../view/ololz/summoner/partials/champion.phtml',
             'ololz/p/summoner/invocation'       => __DIR__ . '/../view/ololz/summoner/partials/invocation.phtml',
             'ololz/p/match/invocation'          => __DIR__ . '/../view/ololz/match/partials/invocation.phtml',
+            'ololz/p/champion/line'             => __DIR__ . '/../view/ololz/champion/partials/line.phtml',
             'ololz/p/champion/picture-icon'     => __DIR__ . '/../view/ololz/champion/partials/picture-icon.phtml',
             'ololz/p/champion/picture-small'    => __DIR__ . '/../view/ololz/champion/partials/picture-small.phtml',
             'ololz/p/item/picture-icon'         => __DIR__ . '/../view/ololz/item/partials/picture-icon.phtml',

@@ -6,7 +6,7 @@
     <ul class="nav nav-tabs nav-stacked">
         <?php foreach ($champions as $champion) : ?>
             <?php if ($champion instanceof \Ololz\Entity\Champion) : ?>
-                <li><a href="<?php echo $this->url('ololz/champion', array('champion' => $champion->getCode()))?>"><img src="<?php echo $this->championPictureUrl($champion)?>" alt="champion icon" /> <?php echo $champion->getName() ?></a></li>
+                <li><a href="<?php echo $this->url('ololz/champion', array('champion' => $champion->getCode()))?>"><?php echo $this->partial('ololz/p/champion/line', array('champion' => $champion)) ?></a></li>
             <?php endif; ?>
         <?php endforeach; ?>
     </ul>
