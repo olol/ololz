@@ -6,7 +6,7 @@
     <ul class="nav nav-tabs nav-stacked">
         <?php foreach ($summoners as $summoner) : ?>
             <?php if ($summoner instanceof \Ololz\Entity\Summoner) : ?>
-                <li><a href="<?php echo $this->url('ololz/summoner', array('summoner' => $summoner->getId()))?>"><?php echo $summoner->getName() ?></a></li>
+                <li><a href="<?php echo $this->url('ololz/summoner', array('summoner' => $summoner->getId()))?>"><?php echo $summoner ?></a></li>
             <?php endif; ?>
         <?php endforeach; ?>
     </ul>
