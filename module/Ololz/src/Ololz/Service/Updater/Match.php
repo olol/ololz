@@ -354,11 +354,13 @@ class Match extends Updater
 
                         case 1: // Type
                             { // Match type
-                                $lolKingMatchType = $details['div div:eq(0)']->text();
+                                $lolKingMatchType = trim($details['div div:eq(0)']->text());
                                 $matchType = $this->getService('Mapping')->getMapper()->findOneOurs($this->getSource(), Entity\Mapping::TYPE_MATCH_TYPE, Entity\Mapping::COLUMN_CODE, $lolKingMatchType);
                                 if ($matchType) {
 //                                    $match->setMatchType($matchType);
                                     $match['matchType'] = $matchType;
+                                } else {
+                                    throw new \Exception('Can not find " ' . $lolKingMatchType . '" match type from LoL King.');
                                 }
                             }
                             { // Result loser / winner
