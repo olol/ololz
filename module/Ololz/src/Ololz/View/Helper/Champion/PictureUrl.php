@@ -13,6 +13,7 @@ class PictureUrl extends AbstractHelper
 {
     const TYPE_ICON     = 'icon';
     const TYPE_SMALL    = 'small';
+    const TYPE_NORMAL   = 'normal';
 
     /**
      * @var \Ololz\Entity\Source
@@ -54,6 +55,10 @@ class PictureUrl extends AbstractHelper
 
                     case self::TYPE_SMALL:
                         $url = 'http://img.lolking.net/shared/riot/images/champions/' . $lolKingId . '_92.png';
+                        break;
+
+                    case self::TYPE_NORMAL:
+                        $url = 'http://img.lolking.net/shared/riot/images/champions/' . $lolKingId . '.png';
                         break;
 
                     default:
