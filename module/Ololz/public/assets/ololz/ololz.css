@@ -67,6 +67,13 @@ div.container a.brand {
     background-position: center center !important;
 }
 
+.nav .icon-100 {
+    width:  100px;
+    height: 100px;
+    background-size: 110px !important;
+    background-position: center center !important;
+}
+
 
 .summoner-champion > *,
 .summoner-invocation-details > *,

@@ -6,6 +6,9 @@ use Ololz\Entity;
 /**
  * Match updater
  *
+ * I know it's very poorly coded, but i got tired of the doctrine entity "merge"
+ * problem...
+ *
  * @since   0.1
  * @author  Jérémy Huet <jeremy.huet+olol@gmail.com>
  * @link    https://github.com/olol/oLolZ
@@ -13,42 +16,218 @@ use Ololz\Entity;
  */
 class Match extends Updater
 {
+    /**
+     * Default source to LoL King
+     *
+     * @return \Ololz\Entity\Source
+     */
+    public function getSource()
+    {
+        if (is_null($this->source)) {
+            $this->setSource($this->getService('Source')->getMapper()->findOneByCode(Entity\Source::CODE_LOLKING));
+        }
+
+        return $this->source;
+    }
+
+    /**
+     * @param array                     $array
+     * @param \Ololz\Entity\Summoner    $summoner
+     *
+     * @return \Ololz\Entity\Summoner
+     */
+    protected function arraySummonerToEntity(array $array, Entity\Summoner $summoner = null)
+    {
+        if (is_null($summoner)) {
+            $summoner = new Entity\Summoner;
+        }
+
+        $summoner->setName($array['name'])
+                 ->setRealm($array['realm'])
+                 ->setActive(false);
+
+        return $summoner;
+    }
+
+    /**
+     * @param array                     $array
+     * @param string                    $realm
+     * @param \Ololz\Entity\Invocation  $invocation
+     *
+     * @return \Ololz\Entity\Invocation
+     */
+    protected function arrayInvocationToEntity(array $array, $realm, Entity\Invocation $invocation = null)
+    {
+        if (is_null($invocation)) {
+            $invocation = new Entity\Invocation;
+        }
+
+        $summoner = $array['summoner'] instanceof Entity\Summoner ? $array['summoner'] : $this->getService('Summoner')->getMapper()->findOneBy(array('name' => $array['summoner']['name'], 'realm' => $realm));
+        if (! $summoner) {
+            $array['summoner']['realm'] = $realm;
+            $summoner = $this->arraySummonerToEntity($array['summoner']);
+        }
+
+        $invocation->setSummoner($summoner)
+                   ->setChampion($array['champion']);
+
+        if (array_key_exists('kills', $array)) {
+            $invocation->setAssists($array['assists'])
+                       ->setDamageDealt($array['damageDealt'])
+                       ->setDamageReceived($array['damageReceived'])
+                       ->setDeaths($array['deaths'])
+                       ->setGold($array['gold'])
+                       ->setHealingDone($array['healingDone'])
+                       ->setKills($array['kills'])
+                       ->setLargestMultiKill($array['largestMultiKill'])
+                       ->setMinions($array['minions'])
+                       ->setPosition($array['position'])
+                       ->setItems($array['items'])
+                       ->setSpells($array['spells']);
+        }
+
+        return $invocation;
+    }
+
+    /**
+     * @param array     $array
+     * @param string    $realm
+     *
+     * @return \Ololz\Entity\Match
+     */
+    protected function arrayMatchToEntity(array $array, $realm)
+    {
+        $match = new Entity\Match;
+        $match->setDate($array['date'])
+              ->setLength($array['length'])
+              ->setMatchType($array['matchType']);
+        if (array_key_exists('map', $array)) {
+            $match->setMap($array['map']);
+        }
+
+        $winners = new Entity\MatchTeam;
+        $winners->setMatch($match);
+        foreach ($array['winner'] as $arrayInvo) {
+            $invocation = $this->arrayInvocationToEntity($arrayInvo, $realm);
+            $invocation->setMatchTeam($winners);
+        }
+        $match->setWinner($winners);
+
+        $losers = new Entity\MatchTeam;
+        $losers->setMatch($match);
+        foreach ($array['loser'] as $arrayInvo) {
+            $invocation = $this->arrayInvocationToEntity($arrayInvo, $realm);
+            $invocation->setMatchTeam($losers);
+        }
+        $match->setLoser($losers);
+
+        return $match;
+    }
+
+    /**
+     * @param string                    $name
+     * @param \Ololz\Entity\MatchTeam   $matchTeam
+     *
+     * @return \Ololz\Entity\Invocation
+     */
+    protected function findInvocationFromSummonerName($name, Entity\MatchTeam $matchTeam)
+    {
+        foreach ($matchTeam->getInvocations() as $invocation) {
+            if ($invocation->getSummoner()->getName() == $name) {
+                return $invocation;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Merging a match consists mostly of finding new invocations that have more
+     * data than those that already exists in the entity. All other data should
+     * be the same already.
+     *
+     * @param array                 $array
+     * @param \Ololz\Entity\Match   $match
+     * @param string                $realm
+     *
+     * @return \Ololz\Entity\Match
+     */
+    protected function mergeMatchFromArray($array, $match, $realm)
+    {
+        foreach ($array['winner'] as $arrayInvo) {
+            $name = $arrayInvo['summoner'] instanceof Entity\Summoner ? $arrayInvo['summoner']->getName() : $arrayInvo['summoner']['name'];
+            $invocation = $this->findInvocationFromSummonerName($name, $match->getWinner());
+            if (is_null($invocation->getKills()) && array_key_exists('kills', $arrayInvo)) {
+                $invocation = $this->arrayInvocationToEntity($arrayInvo, $realm, $invocation);
+            }
+        }
+
+        foreach ($array['loser'] as $arrayInvo) {
+            $name = $arrayInvo['summoner'] instanceof Entity\Summoner ? $arrayInvo['summoner']->getName() : $arrayInvo['summoner']['name'];
+            $invocation = $this->findInvocationFromSummonerName($name, $match->getLoser());
+            if (is_null($invocation->getKills()) && array_key_exists('kills', $arrayInvo)) {
+                $invocation = $this->arrayInvocationToEntity($arrayInvo, $realm, $invocation);
+            }
+        }
+
+        return $match;
+    }
+
+    /**
+     * @param array $match
+     *
+     * @return string
+     */
+    protected function calculateHashFromArray($match)
+    {
+        $string = '';
+
+        $invocations = array_merge($match['teammates'], $match['ennemies']);
+
+        // Sort all invocations with same order
+        usort($invocations, function($a, $b) {
+            $aName = $a['summoner'] instanceof Entity\Summoner ? $a['summoner']->getName() : $a['summoner']['name'];
+            $bName = $b['summoner'] instanceof Entity\Summoner ? $b['summoner']->getName() : $b['summoner']['name'];
+            return strcasecmp($aName, $bName);
+        } );
+
+        foreach ($invocations as $summonerName => $invocation) {
+            $string .= ($invocation['summoner'] instanceof Entity\Summoner ? $invocation['summoner']->getName() : $invocation['summoner']['name']) .
+                       $invocation['champion']->getCode();
+        }
+
+        $string .= $match['matchType']->getCode();
+        $string .= $match['length'];
+        $string .= $match['date']->format('Y-m-d\TH:i');
+
+        $hash = hash('md5', $string);
+
+        return $hash;
+    }
+
+    /**
+     * Can't directly use entities because of weird Doctrine behavior while
+     * merging with existing matches (or more likely because of my poor
+     * knowledge of Doctrine), so we're passing by arrays 1st.
+     */
     public function update()
     {
-                $em = $this->getServiceManager()->get('doctrine.entitymanager.orm_default');
+        $em = $this->getServiceManager()->get('doctrine.entitymanager.orm_default');
 
-
-
-        /* @var $championService \Ololz\Service\Persist\Champion */
-        $championService    = $this->getServiceManager()->get('Ololz\Service\Persist\Champion');
-        /* @var $matchService \Ololz\Service\Persist\Match */
-        $matchService       = $this->getServiceManager()->get('Ololz\Service\Persist\Match');
-        /* @var $matchTeamService \Ololz\Service\Persist\MatchTeam */
-        $matchTeamService   = $this->getServiceManager()->get('Ololz\Service\Persist\MatchTeam');
-        /* @var $matchTypeService \Ololz\Service\Persist\MatchType */
-        $matchTypeService   = $this->getServiceManager()->get('Ololz\Service\Persist\MatchType');
-        /* @var $summonerService \Ololz\Service\Persist\Summoner */
-        $summonerService    = $this->getServiceManager()->get('Ololz\Service\Persist\Summoner');
-        /* @var $mappingService \Ololz\Service\Persist\Mapping */
-        $mappingService     = $this->getServiceManager()->get('Ololz\Service\Persist\Mapping');
-        /* @var $mapService \Ololz\Service\Persist\Map */
-        $mapService         = $this->getServiceManager()->get('Ololz\Service\Persist\Map');
-
-        /* @var $lolKingSource \Ololz\Entity\Source */
-        $lolKingSource      = $this->getServiceManager()->get('Ololz\Mapper\Source')->findOneByCode(Entity\Source::CODE_LOLKING);
         /* @var $smiteSpell \Ololz\Entity\Spell */
-        $smiteSpell         = $this->getServiceManager()->get('Ololz\Mapper\Spell')->findOneByCode('smite');
+        $smiteSpell         = $this->getService('Spell')->getMapper()->findOneByCode('smite');
         /* @var $junglerPosition \Ololz\Entity\Position */
-        $junglerPosition    = $this->getServiceManager()->get('Ololz\Mapper\Position')->findOneByCode('jungle');
+        $junglerPosition    = $this->getService('Position')->getMapper()->findOneByCode('jungle');
 
         /* @var $summoner \Ololz\Entity\Summoner */
-        foreach ($summonerService->getMapper()->findByActive(true) as $summoner) {
+        foreach ($this->getService('Summoner')->getMapper()->findByActive(true) as $summoner) {
 
-            if (! $summoner->getMappingBySource($lolKingSource, 'id')) {
+            // Skip summoners for whom we don't have a LolKing ID
+            if (! $summonerMapping = $summoner->getMappingBySource($this->getSource(), 'id')) {
                 continue;
             }
 
-            $html = file_get_contents('http://www.lolking.net/summoner/euw/' . $summoner->getMappingBySource($lolKingSource)->getTheirs());
+            $html = file_get_contents('http://www.lolking.net/summoner/' . $summoner->getRealm() . '/' . $summonerMapping->getTheirs());
 
             $doc = \phpQuery::newDocumentHTML($html);
             \phpQuery::selectDocument($doc);
@@ -61,17 +240,19 @@ class Match extends Updater
             $actualInvocation = null;
 
             foreach ($history['> div'] as $cptMatch => $htmlMatch) {
-//                if ($cptMatch != 3) {
-//                    continue;
-//                }
 
                 $htmlMatch = pq($htmlMatch);
 
-                $match      = new Entity\Match;
-                $teammates  = new Entity\MatchTeam;
-                $teammates->setMatch($match);
-                $ennemies   = new Entity\MatchTeam;
-                $ennemies->setMatch($match);
+//                $match      = new Entity\Match;
+                $match      = array();
+//                $teammates  = new Entity\MatchTeam;
+//                $teammates->setMatch($match);
+                $teammates = array();
+                $match['teammates'] = &$teammates;
+//                $ennemies   = new Entity\MatchTeam;
+//                $ennemies->setMatch($match);
+                $ennemies = array();
+                $match['ennemies'] = &$ennemies;
 
                 foreach ($htmlMatch['.match_details_extended table table:eq(0) tr'] as $keyTeammate => $htmlTeammate) {
                     if ($keyTeammate == 0) {
@@ -79,32 +260,46 @@ class Match extends Updater
                     }
                     $htmlTeammate = pq($htmlTeammate);
 
-                    $teammateSummoner = new Entity\Summoner;
-                    $teammateSummoner->setName($htmlTeammate['td:eq(1)']->text())
-                                     ->setRealm($summoner->getRealm())
-                                     ->setActive(false);
+//                    $teammateSummoner = new Entity\Summoner;
+//                    $teammateSummoner->setName($htmlTeammate['td:eq(1)']->text())
+//                                     ->setRealm($summoner->getRealm())
+//                                     ->setActive(false);
+                    $teammateSummoner = array(
+                        'name'      => $htmlTeammate['td:eq(1)']->text(),
+                        'realm'     => $summoner->getRealm(),
+                        'active'    => false
+                    );
 
-                    if ($teammateSummonerExists = $summonerService->exists($teammateSummoner)) {
-                        $teammateSummoner = $teammateSummonerExists;
-                    }
+//                    if ($teammateSummonerExists = $this->getService('Summoner')->exists($teammateSummoner)) {
+//                        $teammateSummoner = $teammateSummonerExists;
+//                    }
 
-                    $teammate = new Entity\Invocation;
-                    $teammate->setSummoner($teammateSummoner);
+//                    $teammate = new Entity\Invocation;
+//                    $teammate->setSummoner($teammateSummoner);
+                    $teammate = array(
+                        'summoner'  => $teammateSummoner
+                    );
 
                     $lolKingChampion = str_replace('/champions/', '', $htmlTeammate['td:eq(0) a']->attr('href'));
-                    $champion = $mappingService->getMapper()->findOneOurs($lolKingSource, Entity\Mapping::TYPE_CHAMPION, Entity\Mapping::COLUMN_CODE, $lolKingChampion);
+                    $champion = $this->getService('Mapping')->getMapper()->findOneOurs($this->getSource(), Entity\Mapping::TYPE_CHAMPION, Entity\Mapping::COLUMN_CODE, $lolKingChampion);
 
-                    if (!$champion) {
+                    if (! $champion) {
                         continue;
                     }
 
-                    $teammate->setChampion($champion);
+//                    $teammate->setChampion($champion);
+                    $teammate['champion'] = $champion;
 
-                    $teammate->setMatchTeam($teammates);
+//                    $teammate->setMatchTeam($teammates);
+                    $teammates[] = $teammate;
 
-                    if ($teammateSummoner->getName() == $summonerName) {
-                        $actualInvocation = $teammate;
-                        $actualInvocation->setSummoner($summoner);
+//                    if ($teammateSummoner->getName() == $summonerName) {
+//                        $actualInvocation = $teammate;
+//                        $actualInvocation->setSummoner($summoner);
+//                    }
+                    if ($teammateSummoner['name'] == $summonerName) {
+                        $actualInvocation = &$teammates[0];
+                        $actualInvocation['summoner'] = $summoner;
                     }
                 }
 
@@ -114,28 +309,38 @@ class Match extends Updater
                     }
                     $htmlEnnemy = pq($htmlEnnemy);
 
-                    $ennemySummoner = new Entity\Summoner;
-                    $ennemySummoner->setName($htmlEnnemy['td:eq(1)']->text())
-                                   ->setRealm($summoner->getRealm())
-                                   ->setActive(false);
+//                    $ennemySummoner = new Entity\Summoner;
+//                    $ennemySummoner->setName($htmlEnnemy['td:eq(1)']->text())
+//                                   ->setRealm($summoner->getRealm())
+//                                   ->setActive(false);
+                    $ennemySummoner = array(
+                        'name'      => $htmlEnnemy['td:eq(1)']->text(),
+                        'realm'     => $summoner->getRealm(),
+                        'active'    => false
+                    );
 
-                    if ($ennemySummonerExists = $summonerService->exists($ennemySummoner)) {
-                        $ennemySummoner = $ennemySummonerExists;
-                    }
+//                    if ($ennemySummonerExists = $this->getService('Summoner')->exists($ennemySummoner)) {
+//                        $ennemySummoner = $ennemySummonerExists;
+//                    }
 
-                    $ennemy = new Entity\Invocation;
-                    $ennemy->setSummoner($ennemySummoner);
+//                    $ennemy = new Entity\Invocation;
+//                    $ennemy->setSummoner($ennemySummoner);
+                    $ennemy = array(
+                        'summoner'  => $ennemySummoner
+                    );
 
                     $lolKingChampion = str_replace('/champions/', '', $htmlEnnemy['td:eq(0) a']->attr('href'));
-                    $champion = $mappingService->getMapper()->findOneOurs($lolKingSource, Entity\Mapping::TYPE_CHAMPION, Entity\Mapping::COLUMN_CODE, $lolKingChampion);
+                    $champion = $this->getService('Mapping')->getMapper()->findOneOurs($this->getSource(), Entity\Mapping::TYPE_CHAMPION, Entity\Mapping::COLUMN_CODE, $lolKingChampion);
 
-                    if (!$champion) {
+                    if (! $champion) {
                         continue;
                     }
 
-                    $ennemy->setChampion($champion);
+//                    $ennemy->setChampion($champion);
+                    $ennemy['champion'] = $champion;
 
-                    $ennemy->setMatchTeam($ennemies);
+//                    $ennemy->setMatchTeam($ennemies);
+                    $ennemies[] = $ennemy;
                 }
 
                 foreach ($htmlMatch['.match_details_cell'] as $keyDetails => $details) {
@@ -149,52 +354,67 @@ class Match extends Updater
 
                         case 1: // Type
                             { // Match type
-                                $lolKingMatchType = $details['div div:eq(0)']->text();
-                                $matchType = $mappingService->getMapper()->findOneOurs($lolKingSource, Entity\Mapping::TYPE_MATCH_TYPE, Entity\Mapping::COLUMN_CODE, $lolKingMatchType);
+                                $lolKingMatchType = trim($details['div div:eq(0)']->text());
+                                $matchType = $this->getService('Mapping')->getMapper()->findOneOurs($this->getSource(), Entity\Mapping::TYPE_MATCH_TYPE, Entity\Mapping::COLUMN_CODE, $lolKingMatchType);
                                 if ($matchType) {
-                                    $match->setMatchType($matchType);
+//                                    $match->setMatchType($matchType);
+                                    $match['matchType'] = $matchType;
+                                } else {
+                                    throw new \Exception('Can not find " ' . $lolKingMatchType . '" match type from LoL King.');
                                 }
                             }
                             { // Result loser / winner
                                 if ($details['div div:eq(1)']->text() == 'Loss') {
-                                    $match->setWinner($ennemies);
-                                    $match->setLoser($teammates);
+//                                    $match->setWinner($ennemies);
+//                                    $match->setLoser($teammates);
+                                    $match['winner'] = &$ennemies;
+                                    $match['loser'] = &$teammates;
                                 } else {
-                                    $match->setWinner($teammates);
-                                    $match->setLoser($ennemies);
+//                                    $match->setWinner($teammates);
+//                                    $match->setLoser($ennemies);
+                                    $match['winner'] = &$teammates;
+                                    $match['loser'] = &$ennemies;
                                 }
                             }
                             { // Date
-                                $match->setDate(new \DateTime($details['div div:eq(2) span']->attr('data-hoverswitch')));
+//                                $match->setDate(new \DateTime($details['div div:eq(2) span']->attr('data-hoverswitch')));
+                                $match['date'] = new \DateTime($details['div div:eq(2) span']->attr('data-hoverswitch'));
                             }
                         break;
 
                         case 2: // Length
                             $length = (int) str_replace(' mins', '', $details['div strong']->text());
-                            $match->setLength($length);
+//                            $match->setLength($length);
+                            $match['length'] = $length;
                         break;
 
                         case 3: // KDA
-                            $actualInvocation->setKills((int) $details['strong:eq(0)']->text());
-                            $actualInvocation->setDeaths((int) $details['strong:eq(1)']->text());
-                            $actualInvocation->setAssists((int) $details['strong:eq(2)']->text());
+//                            $actualInvocation->setKills((int) $details['strong:eq(0)']->text());
+//                            $actualInvocation->setDeaths((int) $details['strong:eq(1)']->text());
+//                            $actualInvocation->setAssists((int) $details['strong:eq(2)']->text());
+                            $actualInvocation['kills'] = (int) $details['strong:eq(0)']->text();
+                            $actualInvocation['deaths'] = (int) $details['strong:eq(1)']->text();
+                            $actualInvocation['assists'] = (int) $details['strong:eq(2)']->text();
                         break;
 
                         case 4: // Gold
-                            $actualInvocation->setGold((float) $details['strong']->text());
+//                            $actualInvocation->setGold((float) $details['strong']->text());
+                            $actualInvocation['gold'] = (float) $details['strong']->text();
                         break;
 
                         case 5: // Minions
-                            $actualInvocation->setMinions((int) $details['strong']->text());
+//                            $actualInvocation->setMinions((int) $details['strong']->text());
+                            $actualInvocation['minions'] = (int) $details['strong']->text();
                         break;
 
                         case 6: // Spells
                             foreach ($details['div.icon_36'] as $htmlSpell) {
                                 $htmlSpell = pq($htmlSpell)->attr('style');
                                 $lolKingSpell = substr($htmlSpell, strrpos($htmlSpell, '/') + 1, strrpos($htmlSpell, '.') - 1 - strrpos($htmlSpell, '/'));
-                                $spell = $mappingService->getMapper()->findOneOurs($lolKingSource, Entity\Mapping::TYPE_SPELL, Entity\Mapping::COLUMN_ID, $lolKingSpell);
+                                $spell = $this->getService('Mapping')->getMapper()->findOneOurs($this->getSource(), Entity\Mapping::TYPE_SPELL, Entity\Mapping::COLUMN_ID, $lolKingSpell);
                                 if ($spell) {
-                                    $actualInvocation->addSpell($spell);
+//                                    $actualInvocation->addSpell($spell);
+                                    $actualInvocation['spells'][] = $spell;
                                 }
                             }
                         break;
@@ -203,9 +423,10 @@ class Match extends Updater
                             foreach ($details['div.icon_32 a'] as $htmlItem) {
                                 $htmlItem = pq($htmlItem);
                                 $lolKingItem = str_replace('/items/', '', $htmlItem->attr('href'));
-                                $item = $mappingService->getMapper()->findOneOurs($lolKingSource, Entity\Mapping::TYPE_ITEM, Entity\Mapping::COLUMN_ID, $lolKingItem);
+                                $item = $this->getService('Mapping')->getMapper()->findOneOurs($this->getSource(), Entity\Mapping::TYPE_ITEM, Entity\Mapping::COLUMN_ID, $lolKingItem);
                                 if ($item) {
-                                    $actualInvocation->addItem($item);
+//                                    $actualInvocation->addItem($item);
+                                    $actualInvocation['items'][] = $item;
                                 }
                             }
                         break;
@@ -220,42 +441,78 @@ class Match extends Updater
                     switch ($keyStats)
                     {
                         case 0: // Damage dealt
-                            $actualInvocation->setDamageDealt((float) str_replace(',', '.', $summonerStats->text()));
+//                            $actualInvocation->setDamageDealt((float) str_replace(',', '.', $summonerStats->text()));
+                            $actualInvocation['damageDealt'] = (float) str_replace(',', '.', $summonerStats->text());
                         break;
                         case 1: // Damage received
-                            $actualInvocation->setDamageReceived((float) str_replace(',', '.', $summonerStats->text()));
+//                            $actualInvocation->setDamageReceived((float) str_replace(',', '.', $summonerStats->text()));
+                            $actualInvocation['damageReceived'] = (float) str_replace(',', '.', $summonerStats->text());
                         break;
                         case 2: // Healing done
-                            $actualInvocation->setHealingDone((float) str_replace(',', '.', $summonerStats->text()));
+//                            $actualInvocation->setHealingDone((float) str_replace(',', '.', $summonerStats->text()));
+                            $actualInvocation['healingDone'] = (float) str_replace(',', '.', $summonerStats->text());
                         break;
                         case 3: // Largest multi-kill
-                            $actualInvocation->setLargestMultiKill((int) $summonerStats->text());
+//                            $actualInvocation->setLargestMultiKill((int) $summonerStats->text());
+                            $actualInvocation['largestMultiKill'] = (int) $summonerStats->text();
                         break;
                         case 4: // Time spent dead
-                            $actualInvocation->setTimeSpentDead((int) $summonerStats->text());
+//                            $actualInvocation->setTimeSpentDead((int) $summonerStats->text());
+                            $actualInvocation['timeSpentDead'] = (int) $summonerStats->text();
                         break;
                         case 5: // Turrets destroyed
-                            $actualInvocation->setTurretsDestroyed((int) $summonerStats->text());
+//                            $actualInvocation->setTurretsDestroyed((int) $summonerStats->text());
+                            $actualInvocation['turretsDestroyed'] = (int) $summonerStats->text();
                         break;
                     }
                 }
 
-                $actualInvocation->setPosition($actualInvocation->hasSpell($smiteSpell) ? $junglerPosition : $actualInvocation->getChampion()->getPosition());
-
-                if ($map = $match->getMatchType()->getMap()) {
-                    $match->setMap($map);
-                } else {
-                    if (count($match->getWinner()->getInvocations()) == 3) {
-                        $match->setMap($mapService->getMapper()->findOneByCode('twisted-treeline'));
+//                $actualInvocation->setPosition($actualInvocation->hasSpell($smiteSpell) ? $junglerPosition : $actualInvocation->getChampion()->getPosition());
+                $hasSmiteSpell = false;
+                foreach ($actualInvocation['spells'] as $invocationSpell) {
+                    if ($invocationSpell == $smiteSpell) {
+                        $hasSmiteSpell = true;
                     }
                 }
 
-                $em->persist($match);
+                $actualInvocation['position'] = $hasSmiteSpell ? $junglerPosition : $actualInvocation['champion']->getPosition();
 
-                $matchService->save($match, true);
-                $this->getLogger()->info('Match : ' . (string) $match . ' saved.');
+//                if ($map = $match->getMatchType()->getMap()) {
+//                    $match->setMap($map);
+//                } else {
+//                    if (count($match->getWinner()->getInvocations()) == 3) {
+//                        $match->setMap($this->getService('Map')->getMapper()->findOneByCode('twisted-treeline'));
+//                    }
+//                }
+                if ($map = $match['matchType']->getMap()) {
+//                    $match->setMap($map);
+                    $match['map'] = $map;
+                } else {
+//                    if (count($match->getWinner()->getInvocations()) == 3) {
+//                        $match->setMap($this->getService('Map')->getMapper()->findOneByCode('twisted-treeline'));
+//                    }
+                    if (count($match['winner']) == 3) {
+//                        $match->setMap($this->getService('Map')->getMapper()->findOneByCode('twisted-treeline'));
+                        $match['map'] = $this->getService('Map')->getMapper()->findOneByCode('twisted-treeline');
+                    }
+                }
 
-                break 2;
+                $hash = $this->calculateHashFromArray($match);
+
+                $action = '';
+                if ($existing = $this->getService('Match')->getMapper()->findOneByHash($hash)) {
+                    $match = $this->mergeMatchFromArray($match, $existing, $summoner->getRealm());
+                    $action = 'updated';
+                } else {
+                    $match = $this->arrayMatchToEntity($match, $summoner->getRealm());
+                    $match->setHash($this->getService('Match')->calculateHash($match));
+                    $em->persist($match);
+                    $action = 'saved';
+                }
+
+                $em->flush();
+
+                $this->getLogger()->info('Match : ' . (string) $match . ' ' . $action . '.');
             }
         }
     }

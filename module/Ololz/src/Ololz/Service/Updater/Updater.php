@@ -2,6 +2,8 @@
 
 namespace Ololz\Service\Updater;
 
+use Ololz\Entity;
+
 use Zend\ServiceManager\ServiceManager;
 use Zend\ServiceManager\ServiceManagerAwareInterface;
 use Zend\Log\Logger;
@@ -25,6 +27,11 @@ class Updater implements ServiceManagerAwareInterface
      * @var \Zend\Log\Logger
      */
     protected $logger;
+
+    /**
+     * @var \Ololz\Entity\Source
+     */
+    protected $source;
 
     /**
      *
@@ -66,4 +73,33 @@ class Updater implements ServiceManagerAwareInterface
         return $this->logger;
     }
 
+    /**
+     * @param \Ololz\Entity\Source $source
+     *
+     * @return \Ololz\Service\Updater\Updater
+     */
+    public function setSource(Entity\Source $source)
+    {
+        $this->source = $source;
+
+        return $this;
+    }
+
+    /**
+     * @return \Ololz\Entity\Source
+     */
+    public function getSource()
+    {
+        return $this->source;
+    }
+
+    /**
+     * @param string $serviceName
+     *
+     * @return \Ololz\Service\Persist\Base
+     */
+    public function getService($serviceName)
+    {
+        return $this->getServiceManager()->get('Ololz\Service\Persist' . ucfirst($serviceName));
+    }
 }
