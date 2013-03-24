@@ -72,18 +72,18 @@ class Match extends Updater
                    ->setChampion($array['champion']);
 
         if (array_key_exists('kills', $array)) {
-            $invocation->setAssists($array['assists'])
-                       ->setDamageDealt($array['damageDealt'])
-                       ->setDamageReceived($array['damageReceived'])
-                       ->setDeaths($array['deaths'])
-                       ->setGold($array['gold'])
-                       ->setHealingDone($array['healingDone'])
-                       ->setKills($array['kills'])
-                       ->setLargestMultiKill($array['largestMultiKill'])
-                       ->setMinions($array['minions'])
-                       ->setPosition($array['position'])
-                       ->setItems($array['items'])
-                       ->setSpells($array['spells']);
+            $invocation->setAssists(array_key_exists('assists', $array) ? $array['assists'] : null)
+                       ->setDamageDealt(array_key_exists('damageDealt', $array) ? $array['damageDealt'] : null)
+                       ->setDamageReceived(array_key_exists('damageReceived', $array) ? $array['damageReceived'] : null)
+                       ->setDeaths(array_key_exists('deaths', $array) ? $array['deaths'] : null)
+                       ->setGold(array_key_exists('gold', $array) ? $array['gold'] : null)
+                       ->setHealingDone(array_key_exists('healingDone', $array) ? $array['healingDone'] : null)
+                       ->setKills(array_key_exists('kills', $array) ? $array['kills'] : null)
+                       ->setLargestMultiKill(array_key_exists('largestMultiKill', $array) ? $array['largestMultiKill'] : null)
+                       ->setMinions(array_key_exists('minions', $array) ? $array['minions'] : null)
+                       ->setPosition(array_key_exists('position', $array) ? $array['position'] : null)
+                       ->setItems(array_key_exists('items', $array) ? $array['items'] : null)
+                       ->setSpells(array_key_exists('spells', $array) ? $array['spells'] : null);
         }
 
         return $invocation;
@@ -214,10 +214,10 @@ class Match extends Updater
     {
         $em = $this->getServiceManager()->get('doctrine.entitymanager.orm_default');
 
+        $positionsByKey     = $this->getService('Position')->getMapper()->findWithKey('code', null);
+        $supportSpells      = $this->getService('Spell')->getMapper()->findBy(array('code' => array('clairvoyance', 'exhaust', 'heal')));
         /* @var $smiteSpell \Ololz\Entity\Spell */
         $smiteSpell         = $this->getService('Spell')->getMapper()->findOneByCode('smite');
-        /* @var $junglerPosition \Ololz\Entity\Position */
-        $junglerPosition    = $this->getService('Position')->getMapper()->findOneByCode('jungle');
 
         /* @var $summoner \Ololz\Entity\Summoner */
         foreach ($this->getService('Summoner')->getMapper()->findByActive(true) as $summoner) {
@@ -468,14 +468,14 @@ class Match extends Updater
                 }
 
 //                $actualInvocation->setPosition($actualInvocation->hasSpell($smiteSpell) ? $junglerPosition : $actualInvocation->getChampion()->getPosition());
-                $hasSmiteSpell = false;
-                foreach ($actualInvocation['spells'] as $invocationSpell) {
-                    if ($invocationSpell == $smiteSpell) {
-                        $hasSmiteSpell = true;
-                    }
-                }
-
-                $actualInvocation['position'] = $hasSmiteSpell ? $junglerPosition : $actualInvocation['champion']->getPosition();
+//                $hasSmiteSpell = false;
+//                foreach ($actualInvocation['spells'] as $invocationSpell) {
+//                    if ($invocationSpell == $smiteSpell) {
+//                        $hasSmiteSpell = true;
+//                    }
+//                }
+//
+//                $actualInvocation['position'] = $hasSmiteSpell ? $junglerPosition : $actualInvocation['champion']->getPosition();
 
 //                if ($map = $match->getMatchType()->getMap()) {
 //                    $match->setMap($map);
@@ -508,6 +508,14 @@ class Match extends Updater
                     $match->setHash($this->getService('Match')->calculateHash($match));
                     $em->persist($match);
                     $action = 'saved';
+                }
+
+                // Let's try to guess real positions of the players
+                if ($match->getWinner()) {
+                    $this->getService('MatchTeam')->guessTeamPositions($match->getWinner(), $smiteSpell, $supportSpells, $positionsByKey);
+                }
+                if ($match->getLoser()) {
+                    $this->getService('MatchTeam')->guessTeamPositions($match->getLoser(),  $smiteSpell, $supportSpells, $positionsByKey);
                 }
 
                 $em->flush();
