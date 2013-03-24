@@ -3,19 +3,19 @@ body {
     padding-bottom: 40px;
 }
 
-.zf-green {
-    color: #68b604;
+.ololz-color {
+    color: #d7ba38;
 }
 
 .btn-success {
-  background-color: #57a900;
-  background-image: -moz-linear-gradient(top, #70d900, #57a900);
-  background-image: -ms-linear-gradient(top, #70d900, #57a900);
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#70d900), to(#57a900));
-  background-image: -webkit-linear-gradient(top, #70d900, #57a900);
-  background-image: -o-linear-gradient(top, #70d900, #57a900);
-  background-image: linear-gradient(top, #70d900, #57a900);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#70d900', endColorstr='#57a900', GradientType=0);
+  background-color: #d7ba38;
+  background-image: -moz-linear-gradient(top, #ae7727, #d7ba38);
+  background-image: -ms-linear-gradient(top, #ae7727, #d7ba38);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ae7727), to(#d7ba38));
+  background-image: -webkit-linear-gradient(top, #ae7727, #d7ba38);
+  background-image: -o-linear-gradient(top, #ae7727, #d7ba38);
+  background-image: linear-gradient(top, #ae7727, #d7ba38);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ae7727', endColorstr='#d7ba38', GradientType=0);
 }
 
 .btn-success:hover,
@@ -23,15 +23,16 @@ body {
 .btn-success.active,
 .btn-success.disabled,
 .btn-success[disabled] {
-  background-color: #57a900;
+  background-color: #d7ba38;
 }
 
 .btn-success:active, .btn-success.active {
-  background-color: #57a900;
+  background-color: #d7ba38;
 }
 
 div.container a.brand {
-    background: url("../../images/zf2-logo.png") no-repeat scroll 0 10px transparent;
+    color: #d7ba38;
+    background: url("../../images/lolz-logo-32.png") no-repeat scroll 0 4px transparent;
     margin-left: 0;
     padding: 8px 20px 12px 40px;
 }

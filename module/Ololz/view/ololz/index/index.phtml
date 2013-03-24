@@ -1,26 +1,23 @@
 <div class="hero-unit">
-    <h1><?php echo sprintf($this->translate('Welcome to %sZend Framework 2%s'), '<span class="zf-green">', '</span>') ?></h1>
-    <p><?php echo sprintf($this->translate('Congratulations! You have successfully installed the %sZF2 Skeleton Application%s. You are currently running Zend Framework version %s. This skeleton can serve as a simple starting point for you to begin building your application on ZF2.'), '<a href="https://github.com/zendframework/ZendSkeletonApplication" target="_blank">', '</a>', \Zend\Version\Version::VERSION) ?></p>
-    <p><a class="btn btn-success btn-large" href="https://github.com/zendframework/zf2" target="_blank"><?php echo $this->translate('Fork Zend Framework 2 on GitHub') ?> &raquo;</a></p>
+    <h1><?php echo sprintf($this->translate('Welcome to %sOpen LoL Ztatistics%s'), '<span class="ololz-color">', '</span>') ?></h1>
+    <p><?php echo sprintf($this->translate('Congratulations! You have successfully installed the %sOpen LoL Ztatistics%s. You are currently running oLolz version %s.'), '<a href="https://github.com/olol/ololz" target="_blank">', '</a>', '0.1.0') ?></p>
+    <p><a class="btn btn-success btn-large" href="https://github.com/olol/ololz/wiki/Get-matches-data-of-a-summoner" target="_blank"><?php echo $this->translate('Learn how to add summoners') ?> &raquo;</a></p>
 </div>
 
 <div class="row">
 
-    <div class="span4">
-        <h2><?php echo $this->translate('Follow Development') ?></h2>
-        <p><?php echo sprintf($this->translate('Zend Framework 2 is under active development. If you are interested in following the development of ZF2, there is a special ZF2 portal on the official Zend Framework website which provides links to the ZF2 %swiki%s, %sdev blog%s, %sissue tracker%s, and much more. This is a great resource for staying up to date with the latest developments!'), '<a href="http://framework.zend.com/wiki/display/ZFDEV2/Home">', '</a>', '<a href="http://framework.zend.com/zf2/blog">', '</a>', '<a href="http://framework.zend.com/issues/browse/ZF2">', '</a>') ?></p>
-        <p><a class="btn btn-success" href="http://framework.zend.com/zf2" target="_blank"><?php echo $this->translate('ZF2 Development Portal') ?> &raquo;</a></p>
+    <div class="span6">
+        <h2><?php echo $this->translate('Just the beginning') ?></h2>
+        <p><?php echo sprintf($this->translate('Once you have %sadded one or more summoners%s into the database and %sretrieved matches data%s, you will be able to see a list of thoses matches by clicking "%sMatches%s" in the top menu.'), '<a href="https://github.com/olol/ololz/wiki/Get-matches-data-of-a-summoner#add-the-summoner-into-ololz" target="_blank">', '</a>', '<a href="https://github.com/olol/ololz/wiki/Get-matches-data-of-a-summoner#retrieve-matches-data-from-lol-king" target="_blank">', '</a>', '<a href="' . $this->url('ololz/matches')  . '">', '</a>') ?></p>
+        <p><?php echo sprintf($this->translate('You will also be able %sto list those summoners%s and get more detailed data about them on there specific pages.'), '<a href="' . $this->url('ololz/summoners')  . '">', '</a>') ?></p>
+        <p><?php echo sprintf($this->translate('Sounds not like a lot ? Yeah you are right ! But more is coming soon, promise !')) ?></p>
+        <p><a class="btn btn-success" href="https://github.com/olol/ololz" target="_blank"><?php echo $this->translate('Follow oLolz development') ?> &raquo;</a></p>
     </div>
 
-    <div class="span4">
-        <h2><?php echo $this->translate('Discover Modules') ?></h2>
-        <p><?php echo sprintf($this->translate('The community is working on developing a community site to serve as a repository and gallery for ZF2 modules. The project is available %son GitHub%s. The site is currently live and currently contains a list of some of the modules already available for ZF2.'), '<a href="https://github.com/zendframework/modules.zendframework.com">', '</a>') ?></p>
-        <p><a class="btn btn-success" href="http://modules.zendframework.com/" target="_blank"><?php echo $this->translate('Explore ZF2 Modules') ?> &raquo;</a></p>
-   </div>
-
-   <div class="span4">
-       <h2><?php echo $this->translate('Help &amp; Support') ?></h2>
-       <p><?php echo sprintf($this->translate('If you need any help or support while developing with ZF2, you may reach us via IRC: %s#zftalk on Freenode%s. We\'d love to hear any questions or feedback you may have regarding the beta releases. Alternatively, you may subscribe and post questions to the %smailing lists%s.'), '<a href="irc://irc.freenode.net/zftalk">', '</a>', '<a href="http://framework.zend.com/wiki/display/ZFDEV/Mailing+Lists">', '</a>') ?></p>
-       <p><a class="btn btn-success" href="http://webchat.freenode.net?channels=zftalk" target="_blank"><?php echo $this->translate('Ping us on IRC') ?> &raquo;</a></p>
+    <div class="span6">
+        <h2><?php echo $this->translate('Wanna be part of it ?') ?></h2>
+        <p><?php echo sprintf($this->translate('oLolz is an open source software, thus meaning that any one can participate, no matter what his skills are. We just need good will as there is plenty of stuff to do (you bet!).')) ?></p>
+        <p><?php echo sprintf($this->translate('Do you have any ideas of some cool stats we could add ? Do you speak a language not supported yet ? Maybe you think our design sucks and you can give us a hand there ? Or you know some PHP coding ?')) ?></p>
+        <p><a class="btn btn-success" href="https://github.com/olol/ololz" target="_blank"><?php echo $this->translate('Get your hands dirty') ?> &raquo;</a></p>
    </div>
 </div>
