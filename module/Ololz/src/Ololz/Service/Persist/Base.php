@@ -99,7 +99,17 @@ abstract class Base
     }
 
     /**
-     * Has to be called in the factory after all depencies have been injected.
+     * @param string $serviceName
+     *
+     * @return \Ololz\Service\Persist\Base
+     */
+    public function getService($serviceName)
+    {
+        return $this->getServiceManager()->get('Ololz\Service\Persist' . ucfirst($serviceName));
+    }
+
+    /**
+     * Has to be called in the factory after all dependencies have been injected.
      */
     public function init() {}
 
