@@ -1,0 +1,20 @@
+<VirtualHost *:80>
+        ServerName ololz.olol
+
+	DocumentRoot /var/www/olol/ololz/public
+
+	<Directory /var/www/olol/ololz/public/>
+		Options Indexes FollowSymLinks MultiViews
+		AllowOverride All
+		Order allow,deny
+		allow from all
+	</Directory>
+
+	ErrorLog ${APACHE_LOG_DIR}/olol.ololz.error.log
+
+	# Possible values include: debug, info, notice, warn, error, crit,
+	# alert, emerg.
+	LogLevel debug
+
+	CustomLog ${APACHE_LOG_DIR}/olol.ololz.access.log combined
+</VirtualHost>
