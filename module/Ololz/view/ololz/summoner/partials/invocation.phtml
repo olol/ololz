@@ -1,5 +1,5 @@
         <li>
-            <a class="<?= $invocation->getMatchTeam()->hasWon() ? 'win' : 'loss' ?>" href="<?php echo $this->url('ololz/match', array('match' => $match->getId()))?>">
+            <a class="<?php echo $invocation->getMatchTeam()->hasWon() ? 'win' : 'loss' ?>" href="<?php echo $this->url('ololz/match', array('match' => $match->getId()))?>" data-match="<?php echo $match->getId() ?>">
                 <?php echo $this->partial('ololz/p/invocation/line', array(
                                     'details' => array('champion', 'result', 'length', 'kda', 'gold', 'minions', 'spells', 'items'),
                                     'summoner' => $summoner,
