@@ -16,6 +16,11 @@ use Ololz\Entity;
  */
 class Match extends Updater
 {
+    public function __construct()
+    {
+        set_time_limit(0);
+    }
+
     /**
      * Default source to LoL King
      *
@@ -142,6 +147,57 @@ class Match extends Updater
     }
 
     /**
+     * @param string                    $lolKingId
+     * @param \Ololz\Entity\MatchTeam   $matchTeam
+     *
+     * @return \Ololz\Entity\Invocation
+     */
+    protected function findInvocationFromSummonerLolKingId($lolKingId, Entity\MatchTeam $matchTeam)
+    {
+        $mappingMapper = $this->getService('Mapping')->getMapper();
+        foreach ($matchTeam->getInvocations() as $invocation) {
+            $mappedLolKingId = $mappingMapper->findOneTheirs($this->getSource(), Entity\Mapping::TYPE_SUMMONER, Entity\Mapping::COLUMN_ID, $invocation->getSummoner());
+            if ($mappedLolKingId == $lolKingId) {
+                return $invocation;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @param array                     $array
+     * @param \Ololz\Entity\MatchTeam   $matchTeam
+     * @param string                    $realm
+     *
+     * @return \Ololz\Entity\MatchTeam
+     */
+    protected function mergeMatchTeamFromArray($array, Entity\MatchTeam $matchTeam, $realm)
+    {
+        foreach ($array as $arrayInvo) {
+            // 1st look if we can find the invocation thanks to its summoner LolKing ID
+            if ($arrayInvo['summoner'] instanceof Entity\Summoner) {
+                $lolKingId = $this->getService('Mapping')->getMapper()->findOneTheirs($this->getSource(), Entity\Mapping::TYPE_SUMMONER, Entity\Mapping::COLUMN_ID, $arrayInvo['summoner']);
+            } else {
+                $lolKingId = $arrayInvo['summoner']['lolKingId'];
+            }
+            $invocation = $this->findInvocationFromSummonerLolKingId($lolKingId, $matchTeam);
+
+            // If not, try by its name
+//            if (! $invocation instanceof Entity\Invocation) {
+                $name = $arrayInvo['summoner'] instanceof Entity\Summoner ? $arrayInvo['summoner']->getName() : $arrayInvo['summoner']['name'];
+                $invocation = $this->findInvocationFromSummonerName($name, $matchTeam);
+//            }
+
+            if ($invocation instanceof Entity\Invocation && is_null($invocation->getKills()) && array_key_exists('kills', $arrayInvo)) {
+                $invocation = $this->arrayInvocationToEntity($arrayInvo, $realm, $invocation);
+            }
+        }
+
+        return $matchTeam;
+    }
+
+    /**
      * Merging a match consists mostly of finding new invocations that have more
      * data than those that already exists in the entity. All other data should
      * be the same already.
@@ -152,23 +208,10 @@ class Match extends Updater
      *
      * @return \Ololz\Entity\Match
      */
-    protected function mergeMatchFromArray($array, $match, $realm)
+    protected function mergeMatchFromArray($array, Entity\Match $match, $realm)
     {
-        foreach ($array['winner'] as $arrayInvo) {
-            $name = $arrayInvo['summoner'] instanceof Entity\Summoner ? $arrayInvo['summoner']->getName() : $arrayInvo['summoner']['name'];
-            $invocation = $this->findInvocationFromSummonerName($name, $match->getWinner());
-            if ($invocation instanceof Entity\Invocation && is_null($invocation->getKills()) && array_key_exists('kills', $arrayInvo)) {
-                $invocation = $this->arrayInvocationToEntity($arrayInvo, $realm, $invocation);
-            }
-        }
-
-        foreach ($array['loser'] as $arrayInvo) {
-            $name = $arrayInvo['summoner'] instanceof Entity\Summoner ? $arrayInvo['summoner']->getName() : $arrayInvo['summoner']['name'];
-            $invocation = $this->findInvocationFromSummonerName($name, $match->getLoser());
-            if ($invocation instanceof Entity\Invocation && is_null($invocation->getKills()) && array_key_exists('kills', $arrayInvo)) {
-                $invocation = $this->arrayInvocationToEntity($arrayInvo, $realm, $invocation);
-            }
-        }
+        $match->setWinner($this->mergeMatchTeamFromArray($array['winner'], $match->getWinner(), $realm));
+        $match->setLoser( $this->mergeMatchTeamFromArray($array['loser'],  $match->getLoser(),  $realm));
 
         return $match;
     }
@@ -264,10 +307,12 @@ class Match extends Updater
 //                    $teammateSummoner->setName($htmlTeammate['td:eq(1)']->text())
 //                                     ->setRealm($summoner->getRealm())
 //                                     ->setActive(false);
+
                     $teammateSummoner = array(
                         'name'      => $htmlTeammate['td:eq(1)']->text(),
                         'realm'     => $summoner->getRealm(),
-                        'active'    => false
+                        'active'    => false,
+                        'lolKingId' => str_replace('/summoner/' . $summoner->getRealm() . '/', '', $htmlTeammate['td:eq(1) a']->attr('href')) // Doesn't exist for actual summoner
                     );
 
 //                    if ($teammateSummonerExists = $this->getService('Summoner')->exists($teammateSummoner)) {
@@ -297,7 +342,7 @@ class Match extends Updater
 //                        $actualInvocation = $teammate;
 //                        $actualInvocation->setSummoner($summoner);
 //                    }
-                    if ($teammateSummoner['name'] == $summonerName) {
+                    if (empty($teammateSummoner['lolKingId'])) { // If empty, it's the actual summoner
                         $actualInvocation = &$teammates[0];
                         $actualInvocation['summoner'] = $summoner;
                     }
@@ -316,7 +361,8 @@ class Match extends Updater
                     $ennemySummoner = array(
                         'name'      => $htmlEnnemy['td:eq(1)']->text(),
                         'realm'     => $summoner->getRealm(),
-                        'active'    => false
+                        'active'    => false,
+                        'lolKingId' => str_replace('/summoner/' . $summoner->getRealm() . '/', '', $htmlTeammate['td:eq(1) a']->attr('href'))
                     );
 
 //                    if ($ennemySummonerExists = $this->getService('Summoner')->exists($ennemySummoner)) {
