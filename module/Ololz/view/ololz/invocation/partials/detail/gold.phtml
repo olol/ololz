@@ -1,7 +1,7 @@
                     <div class="summoner-invocation-details-gold">
                         <?php if (! is_null($invocation->getGold())) : ?>
                             <p>
-                                <?php echo sprintf($this->translate('%d k'), $invocation->getGold()) ?><br />
+                                <?php echo sprintf($this->translate('%s k'), number_format($invocation->getGold(), 1)) ?><br />
                                 <?php echo $this->translate('Gold') ?>
                             </p>
                         <?php endif; ?>
