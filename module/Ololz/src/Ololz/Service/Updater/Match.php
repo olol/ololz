@@ -18,7 +18,7 @@ class Match extends Updater
 {
     public function __construct()
     {
-        set_time_limit(60);
+        set_time_limit(0);
     }
 
     /**
