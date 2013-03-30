@@ -133,8 +133,6 @@ class Match extends Updater
      * @param string                    $name
      * @param \Ololz\Entity\MatchTeam   $matchTeam
      *
-     * @deprecated
-     *
      * @return \Ololz\Entity\Invocation
      */
     protected function findInvocationFromSummonerName($name, Entity\MatchTeam $matchTeam)
