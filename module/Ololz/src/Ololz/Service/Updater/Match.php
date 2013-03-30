@@ -16,6 +16,11 @@ use Ololz\Entity;
  */
 class Match extends Updater
 {
+    public function __construct()
+    {
+        set_time_limit(60);
+    }
+
     /**
      * Default source to LoL King
      *
