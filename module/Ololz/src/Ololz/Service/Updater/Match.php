@@ -157,7 +157,7 @@ class Match extends Updater
         foreach ($array['winner'] as $arrayInvo) {
             $name = $arrayInvo['summoner'] instanceof Entity\Summoner ? $arrayInvo['summoner']->getName() : $arrayInvo['summoner']['name'];
             $invocation = $this->findInvocationFromSummonerName($name, $match->getWinner());
-            if (is_null($invocation->getKills()) && array_key_exists('kills', $arrayInvo)) {
+            if ($invocation instanceof Entity\Invocation && is_null($invocation->getKills()) && array_key_exists('kills', $arrayInvo)) {
                 $invocation = $this->arrayInvocationToEntity($arrayInvo, $realm, $invocation);
             }
         }
@@ -165,7 +165,7 @@ class Match extends Updater
         foreach ($array['loser'] as $arrayInvo) {
             $name = $arrayInvo['summoner'] instanceof Entity\Summoner ? $arrayInvo['summoner']->getName() : $arrayInvo['summoner']['name'];
             $invocation = $this->findInvocationFromSummonerName($name, $match->getLoser());
-            if (is_null($invocation->getKills()) && array_key_exists('kills', $arrayInvo)) {
+            if ($invocation instanceof Entity\Invocation && is_null($invocation->getKills()) && array_key_exists('kills', $arrayInvo)) {
                 $invocation = $this->arrayInvocationToEntity($arrayInvo, $realm, $invocation);
             }
         }
