@@ -4,7 +4,7 @@
 <div id="summoner" style="margin-left: 160px;">
     <ul class="nav nav-tabs">
         <li class="active"><a href="#profile" data-toggle="tab"><h3>Profile</h3></a></li>
-        <li><a href="#invocations" data-toggle="tab"><h3>Last matches</h3></a></li>
+        <li><a href="#matches" data-toggle="tab"><h3>Matches</h3></a></li>
     </ul>
 
     <div class="tab-content">
@@ -20,15 +20,10 @@
                 </ul>
             </div>
         </div>
-        <div id="invocations" class="tab-pane">
-            <ul class="summoner-invocations-list nav nav-tabs nav-stacked">
-            <?php foreach ($invocations as $invocation) : ?>
-                <?php if ($invocation instanceof \Ololz\Entity\Invocation) : ?>
-                    <?php echo $this->partial('ololz/p/summoner/invocation', array('summoner' => $summoner, 'invocation' => $invocation, 'match' => $invocation->getMatchTeam()->getMatch())) ?>
-                <?php endif; ?>
-            <?php endforeach; ?>
-            </ul>
+        <div id="matches" class="tab-pane loader">
+            <ul class="summoner-invocations-list nav nav-tabs nav-stacked"></ul>
         </div>
     </div>
 </div>
+<script type="text/javascript">ololz.summoner = {id: <?php echo $summoner->getId() ?>};</script>
 <div style="clear:both;"></div>

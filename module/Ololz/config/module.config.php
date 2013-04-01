@@ -107,6 +107,15 @@ return array(
                                     ),
                                 ),
                             ),
+                            'invocations' => array(
+                                'type'    => 'Segment',
+                                'options' => array(
+                                    'route'    => '/invocations',
+                                    'defaults' => array(
+                                        'action' => 'invocations',
+                                    ),
+                                ),
+                            ),
                         ),
                     ),
 

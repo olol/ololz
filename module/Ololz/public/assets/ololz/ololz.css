@@ -37,6 +37,12 @@ div.container a.brand {
     padding: 8px 20px 12px 40px;
 }
 
+.loader {
+    text-align: center;
+    height: 32px;
+    background: url("../../images/ajax-loader.gif") no-repeat transparent center center;
+}
+
 #champions .nav-tabs > li {
     min-width: 200px;
 }

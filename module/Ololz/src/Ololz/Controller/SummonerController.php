@@ -25,15 +25,15 @@ class SummonerController extends BaseController
      */
     public function indexAction()
     {
-        $summoner           = $this->getService()->getMapper()->find($this->params('summoner'));
-        $last10Invocations  = $this->getServiceLocator()->get('Ololz\Service\Persist\Invocation')->getMapper()->findBySummoner($summoner, null, 10);
+        $this->getViewHelper('HeadScript')->appendFile($this->getRequest()->getBasePath() . '/assets/ololz/summoner/index.js');
+
+        $summoner = $this->getService()->getMapper()->find($this->params('summoner'));
         $lastWeek = new \DateTime;
         $lastWeek->sub(new \DateInterval('P7D'));
         $championsPlayedThisWeek = $this->getServiceLocator()->get('Ololz\Service\Persist\Champion')->getMapper()->findDistinctBySummonerAndMatchDate($summoner, $lastWeek);
 
         return new ViewModel(array(
             'summoner'      => $summoner,
-            'invocations'   => $last10Invocations,
             'champions'     => $championsPlayedThisWeek
         ) );
     }
@@ -49,6 +49,19 @@ class SummonerController extends BaseController
         return new ViewModel(array(
             'summoners' => $summoners
         ) );
+    }
+
+    public function invocationsAction()
+    {
+        $summoner       = $this->getService()->getMapper()->find($this->params('summoner'));
+        $invocations    = $this->getServiceLocator()->get('Ololz\Service\Persist\Invocation')->getMapper()->findBySummoner($summoner, null, 10);
+
+        $viewModel = new ViewModel(array(
+            'summoner'      => $summoner,
+            'invocations'   => $invocations
+        ) );
+        $viewModel->setTerminal(true);
+        return $viewModel;
     }
 
     public function championAction()
