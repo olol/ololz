@@ -3,7 +3,6 @@ namespace Ololz\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Criteria;
-use JMS\Serializer\Annotation as JMS;
 
 /**
  * Summoner entity class
@@ -22,7 +21,6 @@ class Summoner extends Base
 {
     /**
      * @ORM\Column(type="string", name="name", length=32, nullable=false)
-     * @JMS\Type("string")
      */
     protected $name;
 
@@ -34,25 +32,21 @@ class Summoner extends Base
 
     /**
      * @ORM\Column(type="string", name="realm", length=10)
-     * @JMS\Type("string")
      */
     protected $realm;
 
     /**
      * @ORM\OneToMany(targetEntity="Invocation", cascade={"persist"}, fetch="LAZY", mappedBy="summoner")
-     * @JMS\Type("ArrayCollection<Ololz\Entity\Invocation>")
      */
     protected $invocations;
 
     /**
      * @ORM\OneToMany(targetEntity="Mapping", cascade={"persist"}, fetch="LAZY", mappedBy="ours")
-     * @JMS\Type("ArrayCollection<Ololz\Entity\Mapping\Summoner>")
      */
     protected $mappings;
 
     /**
      * @ORM\Column(type="boolean", name="active")
-     * @JMS\Type("boolean")
      */
     protected $active;
 

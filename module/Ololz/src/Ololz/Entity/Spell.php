@@ -3,7 +3,6 @@ namespace Ololz\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use JMS\Serializer\Annotation as JMS;
 
 /**
  * Spell entity class
@@ -22,13 +21,11 @@ class Spell extends Base
 {
     /**
      * @ORM\Column(type="string", name="name", length=32, nullable=false)
-     * @JMS\Type("string")
      */
     protected $name;
 
     /**
      * @ORM\Column(type="string", name="code", length=32, nullable=false, unique=true)
-     * @JMS\Type("string")
      * @Gedmo\Slug(fields={"name"}, unique=true)
      */
     protected $code;

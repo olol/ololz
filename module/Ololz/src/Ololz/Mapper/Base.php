@@ -3,7 +3,7 @@ namespace Ololz\Mapper;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
-use JMS\Serializer;
+use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 use Ololz\Entity;
 
 use Zend\ServiceManager\ServiceManager;
@@ -42,9 +42,9 @@ abstract class Base
     protected $entityName;
 
     /**
-     * @var \JMS\Serializer\Serializer
+     * @var \DoctrineModule\Stdlib\Hydrator\DoctrineObject
      */
-    protected $serializer;
+    protected $hydrator;
 
     /**
      * Constructor
@@ -167,25 +167,25 @@ abstract class Base
     }
 
     /**
-     * @return \JMS\Serializer\Serializer
+     * @return \DoctrineModule\Stdlib\Hydrator\DoctrineObject
      */
-    public function getSerializer()
+    public function getHydrator()
     {
-        if (is_null($this->serializer)) {
-            $this->setSerializer(Serializer\SerializerBuilder::create()->build());
+        if (is_null($this->hydrator)) {
+            $this->setHydrator(new DoctrineHydrator($this->getEntityManager(), $this->getEntityName()));
         }
 
-        return $this->serializer;
+        return $this->hydrator;
     }
 
     /**
-     * @param \JMS\Serializer\Serializer    $serializer
+     * @param \DoctrineModule\Stdlib\Hydrator\DoctrineObject    $hydrator
      *
      * @return \Ololz\Mapper\Base
      */
-    public function setSerializer(Serializer\Serializer $serializer)
+    public function setHydrator(DoctrineHydrator $hydrator)
     {
-        $this->serializer = $serializer;
+        $this->hydrator = $hydrator;
     }
 
     /**
@@ -242,6 +242,7 @@ abstract class Base
 
     /**
      * Returns the getter method for the given column name.
+     *
      * @param string                    $fieldName
      * @param \Ololz\Entity\Base|string $entity
      *
@@ -299,11 +300,7 @@ abstract class Base
      * @param array                     $data
      * @param \Ololz\Entity\Base|string $entity
      *
-     * @todo create a another class for hydration ?
-     * @todo or wait for the serializer to handle from/to array
-     * @see https://github.com/schmittjoh/serializer/pull/20
-     *
-     * @return Base
+     * @return \Ololz\Entity\Base
      */
     public function hydrate($data, $entity = null)
     {
@@ -313,123 +310,17 @@ abstract class Base
             $entity = $this->createEntity($entity);
         }
 
-        $classMetadata = $this->getEntityManager()->getClassMetadata(get_class($entity));
-        $associationsMetadata = $classMetadata->getAssociationMappings();
-
-        foreach ($data as $fieldName => $val) {
-            $fieldName = $this->getFieldName($fieldName, $entity);
-
-            if (is_null($fieldName)) {
-                continue;
-            }
-
-            $setterName = $this->setterForField($fieldName, $entity);
-
-            // Is it a to ONE relation ?
-            if (
-                array_key_exists($fieldName, $associationsMetadata) &&
-                ($associationsMetadata[$fieldName]['type'] == \Doctrine\ORM\Mapping\ClassMetadataInfo::MANY_TO_ONE ||
-                 $associationsMetadata[$fieldName]['type'] == \Doctrine\ORM\Mapping\ClassMetadataInfo::ONE_TO_ONE)
-            ) {
-                // Do we just have the id of the entity ?
-                if (is_numeric($val)) {
-                    // If so we get the reference to the id so we don't have to make a database query to retrieve it
-                    $val = $this->getReference($entity, $fieldName, $val);
-                }
-                // Or is it an array of values of an entity ?
-                else if (is_array($val)) {
-                    // If we have an id in this array of values, it's an existing entity
-                    if (array_key_exists('id', $val) && is_numeric($val['id'])) {
-                        $refEntity = $this->getReference($entity, $fieldName, $val['id']);
-                    } else {
-                        $refEntity = $this->createEntity($associationsMetadata[$fieldName]['targetEntity']);
-                    }
-                    // If so we hydrate this entity
-                    $val = $this->hydrate($val, $refEntity);
-                }
-            }
-            // Is it a to MANY relation ?
-            else if (
-                array_key_exists($fieldName, $associationsMetadata) &&
-                is_array($val) &&
-                ($associationsMetadata[$fieldName]['type'] == \Doctrine\ORM\Mapping\ClassMetadataInfo::ONE_TO_MANY ||
-                 $associationsMetadata[$fieldName]['type'] == \Doctrine\ORM\Mapping\ClassMetadataInfo::MANY_TO_MANY)
-            ) {
-                $newVal = array();
-                foreach ($val as $values) {
-                    // Do we just have the id of the entity ?
-                    if (is_numeric($values)) {
-                        // If so we get the references to the ids so we don't have to make a database query to retrieve them
-                        $newVal[] = $this->getReference($entity, $fieldName, $values);
-                    }
-                    // Or is it an array of values of an entity ?
-                    else if (is_array($values)) {
-                        // If we have an id in this array of values, it's an existing entity
-                        if (array_key_exists('id', $values) && is_numeric($values['id'])) {
-                            $refEntity = $this->getReference($entity, $fieldName, $values['id']);
-                        } else {
-                            $refEntity = $this->createEntity($associationsMetadata[$fieldName]['targetEntity']);
-                        }
-                        $newVal[] = $this->hydrate($values, $refEntity);
-                    }
-                }
-                $val = $newVal;
-            }
-
-            // Handling dates
-            if (
-                array_key_exists($fieldName, $classMetadata->fieldMappings) &&
-                $classMetadata->fieldMappings[$fieldName]['type'] == 'date'
-            ) {
-                $val = $val ? new \DateTime($val) : null;
-            }
-
-            if (method_exists($entity, $setterName)) {
-                $entity->$setterName($val);
-            } else if (property_exists($entity, $fieldName)) {
-                $entity->$fieldName = $val;
-            }
-        }
-
-        return $entity;
+        return $this->getHydrator()->hydrate($data, $entity);
     }
 
     /**
-     * @param array|\Ololz\Entity\Base  $entity
-     * @param string                    $format
+     * @param \Ololz\Entity\Base    $entity
      *
-     * @throws \InvalidArgumentException
-     *
-     * @return mixed
+     * @return array
      */
-    public function serialize($entity, $format = 'json')
+    public function extract($entity)
     {
-        return $this->getSerializer()->serialize($entity, $format);
-    }
-
-    /**
-     * For now, doesn't handle array of object. They will be serialized as
-     * array of array.
-     *
-     * @param mixed  $data
-     * @param string $format
-     * @param string $type
-     *
-     * @return array|\Ololz\Entity\Base
-     */
-    public function deserialize($data, $format = 'json', $type = null)
-    {
-        $isArray = false;
-        // Beurk !
-        if ($format == 'json' && $data{0} == '[') {
-            $isArray = true;
-        }
-
-        if ($isArray == true) {
-            return $this->getSerializer()->deserialize($data, $type ? $type : 'ArrayCollection', $format);
-        } else {
-            return $this->getSerializer()->deserialize($data, $type ? $type : $this->getEntityName(), $format);
-        }
+        return $this->getHydrator()->extract($entity);
     }
 
     /**
@@ -531,6 +422,7 @@ abstract class Base
      *
      * note : references don't make connection to retrieve the entity from the
      * database. It's just a ... reference !
+     *
      * @param \Ololz\Entity\Base    $entity
      * @param string                $columnName
      * @param int                   $id
@@ -639,7 +531,7 @@ abstract class Base
     }
 
     /**
-     * Hydrate entity in order to save it
+     * Hydrate entity in order to save it.
      *
      * @param array|\Ololz\Entity\Base  $entity
      *
@@ -698,21 +590,15 @@ abstract class Base
     }
 
     /**
-     * Delete entity
+     * Hydrate entity in order to delete it.
      *
-     * @param string|array|\Ololz\Entity\Base   $entity
-     * @param bool                              $flush
+     * @param array|int|\Ololz\Entity\Base  $entity
      *
      * @return \Ololz\Entity\Base
      */
-    public function delete($entity, $flush = false)
+    protected function hydrateEntityForDelete($entity)
     {
-        // Gives the possibility to change $argv in listeners
-        $argv = array('entity' => &$entity, 'flush' => &$flush);
-        $this->getEventManager()->trigger('delete', $this, $argv);
-        extract($argv);
-
-        if (!is_object($entity) && is_numeric((string) $entity)) {
+        if (! is_object($entity) && is_numeric((string) $entity)) {
             // Means we only have the id of the entity
             $id = $entity;
             $entity = $this->find($id);
@@ -727,6 +613,26 @@ abstract class Base
                 throw new \Exception('Unable to find entity ' . $this->getEntityName() . ' with criteria ' . print_r($criteria, true));
             }
         }
+
+        return $entity;
+    }
+
+    /**
+     * Delete entity
+     *
+     * @param string|array|\Ololz\Entity\Base   $entity
+     * @param bool                              $flush
+     *
+     * @return \Ololz\Entity\Base
+     */
+    public function delete($entity, $flush = false)
+    {
+        // Gives the possibility to change $argv in listeners
+        $argv = array('entity' => &$entity, 'flush' => &$flush);
+        $this->getEventManager()->trigger('delete', $this, $argv);
+        extract($argv);
+
+        $entity = $this->hydrateEntityForDelete($entity);
 
         $argv = array('entity' => &$entity, 'flush' => &$flush);
         $this->getEventManager()->trigger('delete.hydrated', $this, $argv);

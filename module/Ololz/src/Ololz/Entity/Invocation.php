@@ -2,7 +2,6 @@
 namespace Ololz\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use JMS\Serializer\Annotation as JMS;
 
 /**
  * Invocation entity class
@@ -22,21 +21,18 @@ class Invocation extends Base
     /**
      * @ORM\ManyToOne(targetEntity="Summoner", fetch="LAZY", cascade={"persist", "detach"}, inversedBy="invocations")
      * @ORM\JoinColumn(name="summoner_id", referencedColumnName="id")
-     * @JMS\Type("Ololz\Entity\Summoner")
      */
     protected $summoner;
 
     /**
      * @ORM\ManyToOne(targetEntity="Champion", fetch="LAZY", cascade={"detach"})
      * @ORM\JoinColumn(name="champion_id", referencedColumnName="id")
-     * @JMS\Type("Ololz\Entity\Champion")
      */
     protected $champion;
 
     /**
      * @ORM\ManyToOne(targetEntity="MatchTeam", fetch="LAZY", cascade={"persist", "detach"}, inversedBy="invocations")
      * @ORM\JoinColumn(name="match_team_id", referencedColumnName="id")
-     * @JMS\Type("Ololz\Entity\MatchTeam")
      */
     protected $matchTeam;
 
@@ -47,7 +43,6 @@ class Invocation extends Base
      *      joinColumns={@ORM\JoinColumn(name="invocation_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="item_id", referencedColumnName="id")}
      * )
-     * @JMS\Type("ArrayCollection<Application\Entity\Item>")
      */
     protected $items;
 
@@ -58,80 +53,67 @@ class Invocation extends Base
      *      joinColumns={@ORM\JoinColumn(name="invocation_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="spell_id", referencedColumnName="id")}
      * )
-     * @JMS\Type("ArrayCollection<Application\Entity\Spell>")
      */
     protected $spells;
 
     /**
      * @ORM\ManyToOne(targetEntity="Position", fetch="LAZY")
      * @ORM\JoinColumn(name="position_id", referencedColumnName="id")
-     * @JMS\Type("Ololz\Entity\Position")
      */
     protected $position;
 
     /**
      * @ORM\Column(type="integer", name="kills", length=5)
-     * @JMS\Type("integer")
      */
     protected $kills;
 
     /**
      * @ORM\Column(type="integer", name="deaths", length=5)
-     * @JMS\Type("integer")
      */
     protected $deaths;
 
     /**
      * @ORM\Column(type="integer", name="assists", length=5)
-     * @JMS\Type("integer")
      */
     protected $assists;
 
     /**
      * @ORM\Column(type="float", name="gold")
-     * @JMS\Type("float")
      */
     protected $gold;
 
     /**
      * @ORM\Column(type="integer", name="minions", length=5)
-     * @JMS\Type("integer")
      */
     protected $minions;
 
     /**
      * @ORM\Column(type="float", name="damage_dealt")
-     * @JMS\Type("float")
      */
     protected $damageDealt;
 
     /**
      * @ORM\Column(type="float", name="damage_received")
-     * @JMS\Type("float")
      */
     protected $damageReceived;
 
     /**
      * @ORM\Column(type="float", name="healing_done")
-     * @JMS\Type("float")
      */
     protected $healingDone;
 
     /**
      * @ORM\Column(type="integer", name="largest_multi_kill", length=3)
-     * @JMS\Type("integer")
      */
     protected $largestMultiKill;
 
     /**
      * @ORM\Column(type="integer", name="time_spent_dead", length=5)
-     * @JMS\Type("integer")
      */
     protected $timeSpentDead;
 
     /**
      * @ORM\Column(type="integer", name="turrets_destroyed", length=3)
-     * @JMS\Type("integer")
      */
     protected $turretsDestroyed;
 

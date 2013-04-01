@@ -2,7 +2,6 @@
 namespace Ololz\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use JMS\Serializer\Annotation as JMS;
 
 /**
  * MatchTeam entity class
@@ -22,13 +21,11 @@ class MatchTeam extends Base
     /**
      * @ORM\ManyToOne(targetEntity="Match", fetch="LAZY", cascade={"persist", "detach"}, inversedBy="matchTeams")
      * @ORM\JoinColumn(name="match_id", referencedColumnName="id")
-     * @JMS\Type("Ololz\Entity\Match")
      */
     protected $match;
 
     /**
      * @ORM\OneToMany(targetEntity="Invocation", fetch="LAZY", cascade={"persist", "detach"}, mappedBy="matchTeam")
-     * @JMS\Type("ArrayCollection<Ololz\Entity\Invocation>")
      */
     protected $invocations;
 

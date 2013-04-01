@@ -2,7 +2,6 @@
 namespace Ololz\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use JMS\Serializer\Annotation as JMS;
 
 /**
  * Mapping entity class
@@ -22,7 +21,6 @@ class Mapping extends Base
     /**
      * @ORM\ManyToOne(targetEntity="Source", fetch="LAZY")
      * @ORM\JoinColumn(name="source_id", referencedColumnName="id")
-     * @JMS\Type("Ololz\Entity\Source")
      */
     protected $source;
 
@@ -36,7 +34,6 @@ class Mapping extends Base
 
     /**
      * @ORM\Column(type="string", name="type", length=16, nullable=false)
-     * @JMS\Type("string")
      */
     protected $type;
 
@@ -45,19 +42,16 @@ class Mapping extends Base
 
     /**
      * @ORM\Column(type="string", name="`column`", length=16, nullable=false)
-     * @JMS\Type("string")
      */
     protected $column;
 
     /**
      * @ORM\Column(type="integer", name="ours", length=10, nullable=false)
-     * @JMS\Type("integer")
      */
     protected $ours;
 
     /**
      * @ORM\Column(type="string", name="theirs", length=64, nullable=false)
-     * @JMS\Type("string")
      */
     protected $theirs;
 
