@@ -3,7 +3,6 @@ namespace Ololz\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use JMS\Serializer\Annotation as JMS;
 
 /**
  * Map entity class
@@ -22,20 +21,17 @@ class Map extends Base
 {
     /**
      * @ORM\Column(type="string", name="name", length=32, nullable=false)
-     * @JMS\Type("string")
      */
     protected $name;
 
     /**
      * @ORM\Column(type="string", name="code", length=32, nullable=false, unique=true)
-     * @JMS\Type("string")
      * @Gedmo\Slug(fields={"name"}, unique=true)
      */
     protected $code;
 
     /**
      * @ORM\OneToMany(targetEntity="MatchType", fetch="LAZY", mappedBy="map")
-     * @JMS\Type("ArrayCollection<Ololz\Entity\MatchType>")
      */
     protected $matchTypes;
 

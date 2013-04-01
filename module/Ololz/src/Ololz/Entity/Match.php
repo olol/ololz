@@ -2,7 +2,6 @@
 namespace Ololz\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use JMS\Serializer\Annotation as JMS;
 
 /**
  * Match entity class
@@ -22,52 +21,44 @@ class Match extends Base
     /**
      * @ORM\ManyToOne(targetEntity="Map", fetch="LAZY")
      * @ORM\JoinColumn(name="map_id", referencedColumnName="id")
-     * @JMS\Type("Ololz\Entity\Map")
      */
     protected $map;
 
     /**
      * @ORM\OneToOne(targetEntity="MatchTeam", fetch="LAZY", cascade={"persist", "detach"})
      * @ORM\JoinColumn(name="winner_id", referencedColumnName="id")
-     * @JMS\Type("Ololz\Entity\MatchTeam")
      */
     protected $winner;
 
     /**
      * @ORM\OneToOne(targetEntity="MatchTeam", fetch="LAZY", cascade={"persist", "detach"})
      * @ORM\JoinColumn(name="loser_id", referencedColumnName="id")
-     * @JMS\Type("Ololz\Entity\MatchTeam")
      */
     protected $loser;
 
     /**
      * @ORM\OneToMany(targetEntity="MatchTeam", cascade={"all"}, fetch="LAZY", mappedBy="match")
-     * @JMS\Type("ArrayCollection<Ololz\Entity\MatchTeam>")
      */
     protected $matchTeams;
 
     /**
      * @ORM\ManyToOne(targetEntity="MatchType", fetch="LAZY")
      * @ORM\JoinColumn(name="match_type_id", referencedColumnName="id")
-     * @JMS\Type("Ololz\Entity\MatchType")
      */
     protected $matchType;
 
     /**
      * @ORM\Column(type="string", name="hash", length=32, nullable=false, unique=true)
-     * @JMS\Type("string")
      */
     protected $hash;
 
     /**
      * @ORM\Column(type="datetime", name="date", length=32)
-     * @JMS\Type("DateTime")
      */
     protected $date;
 
     /**
      * @ORM\Column(type="integer", name="length", length=16)
-     * @JMS\Type("integer")
      */
     protected $length;
 

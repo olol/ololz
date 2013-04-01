@@ -5,7 +5,6 @@ return array(
         'ZendDeveloperTools',
         'DoctrineModule',
         'DoctrineORMModule',
-        'JMSSerializerModule',
         'AssetManager',
         'HighRoller',
         'TwbBundle',
