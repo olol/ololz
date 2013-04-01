@@ -2,7 +2,6 @@
 namespace Ololz\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use JMS\Serializer\Annotation as JMS;
 
 /**
  * Base entity class
@@ -19,7 +18,6 @@ abstract class Base
     /**
      * @ORM\Id @ORM\Column(type="integer", nullable=false)
      * @ORM\GeneratedValue
-     * @JMS\Type("integer")
      */
     protected $id;
 

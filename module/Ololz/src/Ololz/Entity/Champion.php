@@ -3,7 +3,6 @@ namespace Ololz\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use JMS\Serializer\Annotation as JMS;
 
 /**
  * Champion entity class
@@ -22,13 +21,11 @@ class Champion extends Base
 {
     /**
      * @ORM\Column(type="string", name="name", length=32, nullable=false)
-     * @JMS\Type("string")
      */
     protected $name;
 
     /**
      * @ORM\Column(type="string", name="code", length=32, nullable=false, unique=true)
-     * @JMS\Type("string")
      * @Gedmo\Slug(fields={"name"}, unique=true)
      */
     protected $code;
@@ -36,13 +33,11 @@ class Champion extends Base
     /**
      * @ORM\ManyToOne(targetEntity="Position", fetch="LAZY")
      * @ORM\JoinColumn(name="position_id", referencedColumnName="id")
-     * @JMS\Type("Ololz\Entity\Position")
      */
     protected $position;
 
     /**
      * @ORM\OneToMany(targetEntity="Invocation", cascade={"persist"}, fetch="LAZY", mappedBy="champion")
-     * @JMS\Type("ArrayCollection<Ololz\Entity\Invocation>")
      */
     protected $invocations;
 
