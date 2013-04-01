@@ -37,7 +37,7 @@ div.container a.brand {
     padding: 8px 20px 12px 40px;
 }
 
-.nav-tabs > li {
+#champions .nav-tabs > li {
     min-width: 200px;
 }
 
