@@ -59,7 +59,7 @@ class Champion extends Base
             ->setParameter('summoner', $summoner->getId())
         ;
 
-        return $this->restrictQuery($query, $orderBy, $limit, $offset);
+        return $this->restrictQuery($query, null, $orderBy, $limit, $offset);
     }
 
     /**
@@ -120,7 +120,7 @@ class Champion extends Base
      * @param int                       $limit
      * @param int                       $offset
      *
-     * @return QueryBuilder
+     * @return array
      */
     public function findBySummonerAndMatchDate(Entity\Summoner $summoner, \DateTime $dateStart, \DateTime $dateEnd = null, $orderBy = null, $limit = null, $offset = null)
     {
@@ -128,6 +128,7 @@ class Champion extends Base
 
         return $query->getQuery()->getResult();
     }
+
     /**
      * The query to find last played champions since the given date of the given
      * summoner.
@@ -161,7 +162,7 @@ class Champion extends Base
      * @param int                       $limit
      * @param int                       $offset
      *
-     * @return QueryBuilder
+     * @return array
      */
     public function findDistinctBySummonerAndMatchDate(Entity\Summoner $summoner, \DateTime $dateStart, \DateTime $dateEnd = null, $orderBy = null, $limit = null, $offset = null)
     {

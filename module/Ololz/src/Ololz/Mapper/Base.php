@@ -651,27 +651,40 @@ abstract class Base
 
     /**
      * @param $query        \Doctrine\ORM\QueryBuilder
+     * @param array         $criteria
      * @param string|array  $orderBy
      * @param int           $limit
      * @param int           $offset
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function restrictQuery(QueryBuilder $query, $orderBy = null, $limit = null, $offset = null)
+    public function restrictQuery(QueryBuilder $query, array $criteria = null, $orderBy = null, $limit = null, $offset = null)
     {
+        if (is_array($criteria)) {
+            foreach ($criteria as $criteriaColumn => $criteriaValue) {
+                $parameterKey = str_replace('.', '', $criteriaColumn);
+                $query->andWhere($criteriaColumn . ' = :' . $parameterKey);
+                $query->setParameter($parameterKey, $criteriaValue);
+            }
+        }
+
         if (! is_null($orderBy)) {
             if (is_string($orderBy)) {
-                $orderBy = array($orderBy, 'ASC');
+                $orderBy = array($orderBy => 'ASC');
             }
             if (is_array($orderBy)) {
-                $query->orderBy($orderBy[0], $orderBy[1]);
+                foreach ($orderBy as $orderByColumn => $orderByOrder) {
+                    $query->orderBy($orderByColumn, $orderByOrder);
+                }
             }
         }
+
         if (is_numeric($limit)) {
-            $query->setMaxResults($limit);
+            $query->setMaxResults((int) $limit);
         }
+
         if (is_numeric($offset)) {
-            $query->setFirstResult($offset);
+            $query->setFirstResult((int) $offset);
         }
 
         return $query;

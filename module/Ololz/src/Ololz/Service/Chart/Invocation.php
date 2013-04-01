@@ -64,7 +64,7 @@ class Invocation extends Base
             ->setParameter('champion', $champion->getId())
         ;
 
-        $query = $this->getMapper()->restrictQuery($query, array('i.id', 'DESC'), $limit, $offset);
+        $query = $this->getMapper()->restrictQuery($query, null, array('i.id', 'DESC'), $limit, $offset);
 
         $result = array_reverse($query->getQuery()->getArrayResult());
 
