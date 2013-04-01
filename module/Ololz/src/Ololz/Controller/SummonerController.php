@@ -9,6 +9,7 @@
 
 namespace Ololz\Controller;
 
+use Ololz\Entity;
 use Ololz\Service\Persist as ServicePersist;
 
 use Zend\View\Model\ViewModel;
@@ -32,6 +33,8 @@ class SummonerController extends BaseController
         $lastWeek->sub(new \DateInterval('P7D'));
         $championsPlayedThisWeek = $this->getServiceLocator()->get('Ololz\Service\Persist\Champion')->getMapper()->findDistinctBySummonerAndMatchDate($summoner, $lastWeek);
 
+        $this->getServiceLocator()->get('Ololz\Form\MatchSearch')->setData($this->params()->fromQuery());
+
         return new ViewModel(array(
             'summoner'      => $summoner,
             'champions'     => $championsPlayedThisWeek
@@ -53,14 +56,45 @@ class SummonerController extends BaseController
 
     public function invocationsAction()
     {
-        $summoner       = $this->getService()->getMapper()->find($this->params('summoner'));
-        $invocations    = $this->getServiceLocator()->get('Ololz\Service\Persist\Invocation')->getMapper()->findBySummoner($summoner, null, 10);
+        $summoner = $this->getService()->getMapper()->find($this->params('summoner'));
+
+        // @todo put somewhere else
+        $allowedCriteria = array('champion' => 'i.champion');
+        $allowedCriteriaKeys = array_keys($allowedCriteria);
+        $criteria = array();
+        foreach ($this->params()->fromPost() as $paramKey => $paramValue) {
+            if (in_array($paramKey, $allowedCriteriaKeys)) {
+                switch ($paramKey)
+                {
+                    case 'champion':
+                        if (! is_numeric($paramValue)) {
+                            $champion = $this->getService('Champion')->getMapper()->findOneByCode($paramValue);
+                            if ($champion instanceof Entity\Champion) {
+                                $paramValue = $champion->getId();
+                            }
+                        }
+                        break;
+                }
+                $criteria[$allowedCriteria[$paramKey]] = $paramValue;
+            }
+        }
+
+        $invocations = $this->getServiceLocator()->get('Ololz\Service\Persist\Invocation')->getMapper()->findBySummonerAndMatchDate(
+            $summoner,
+            ! is_null($this->params()->fromPost('date_min')) ? new \DateTime($this->params()->fromPost('date_min')) : null,
+            ! is_null($this->params()->fromPost('date_max')) ? new \DateTime($this->params()->fromPost('date_max')) : null,
+            $criteria,
+            $this->params()->fromPost('order_by'),
+            ! is_null($this->params()->fromPost('limit')) ? $this->params()->fromPost('limit') : 20,
+            $this->params()->fromPost('offset')
+        );
 
         $viewModel = new ViewModel(array(
             'summoner'      => $summoner,
             'invocations'   => $invocations
         ) );
         $viewModel->setTerminal(true);
+
         return $viewModel;
     }
 

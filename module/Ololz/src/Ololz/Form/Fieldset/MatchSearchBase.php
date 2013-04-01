@@ -31,7 +31,7 @@ abstract class MatchSearchBase extends SearchBase
         $value->sub(new \DateInterval('P7D'));
 
         $dateMin = new Element\Text;
-        $dateMin->setLabel('Match in between')
+        $dateMin->setLabel('Matches in between')
                 ->setName('date_min')
                 ->setValue($value->format('Y-m-d'));
 
