@@ -23,14 +23,14 @@ $(function() {
     function loadInvocations() {
         var $loader = $('#matches > div.loader');
         var $list = $('#matches > ul');
-        $loader.show();
-        $list.hide();
+        $loader.slideDown();
+        $list.slideUp();
 
         var criteria = getSearchCriteria();
 
         $list.load('/summoner/' + ololz.summoner.id + '/invocations', criteria, function() {
-            $list.show();
-            $('#matches > div.loader').hide('loader');
+            $list.slideDown();
+            $('#matches > div.loader').slideUp('loader');
         } );
     }
 
