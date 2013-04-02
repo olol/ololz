@@ -24,6 +24,7 @@ class MatchSearch extends MatchSearchBase
              ->add($this->getChampion())
              ->add($this->getPosition())
              ->add($this->getMap())
+             ->add($this->getMatchType())
 
              ->add($this->getLimit())
         ;

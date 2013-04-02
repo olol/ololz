@@ -11,7 +11,7 @@ $(function() {
         var $search = $('#search');
         var criteria = {};
 
-        $.each(['date_min', 'date_max', 'champion', 'limit'], function(idx, fieldName) {
+        $.each(['date_min', 'date_max', 'champion', 'position', 'map', 'match_type', 'limit'], function(idx, fieldName) {
             if ((value = $search.find('input[name=' + fieldName + ']').val()) != '') {
                 criteria[fieldName] = value;
             }

@@ -33,7 +33,8 @@ abstract class MatchSearchBase extends SearchBase
         $dateMin = new Element\Text;
         $dateMin->setLabel('Matches in between')
                 ->setName('date_min')
-                ->setValue($value->format('Y-m-d'));
+                ->setValue($value->format('Y-m-d'))
+                ->setAttribute('placeholder', $dateMin->getValue());
 
         return $dateMin;
     }
@@ -48,7 +49,8 @@ abstract class MatchSearchBase extends SearchBase
         $dateMax = new Element\Text;
         $dateMax->setLabel('and')
                 ->setName('date_max')
-                ->setValue($value->format('Y-m-d'));
+                ->setValue($value->format('Y-m-d'))
+                ->setAttribute('placeholder', $dateMax->getValue());
 
         return $dateMax;
     }
@@ -60,7 +62,8 @@ abstract class MatchSearchBase extends SearchBase
     {
         $champion = new Element\Text;
         $champion->setLabel('Champion')
-                 ->setName('champion');
+                 ->setName('champion')
+                 ->setAttribute('placeholder', 'graves, cho-gath, lee-sin...');
 
         return $champion;
     }
@@ -72,7 +75,8 @@ abstract class MatchSearchBase extends SearchBase
     {
         $position = new Element\Text;
         $position->setLabel('Position')
-                 ->setName('position');
+                 ->setName('position')
+                 ->setAttribute('placeholder', 'top, mid, adc, support, jungler');
 
         return $position;
     }
@@ -84,8 +88,22 @@ abstract class MatchSearchBase extends SearchBase
     {
         $map = new Element\Text;
         $map->setLabel('Map')
-            ->setName('map');
+            ->setName('map')
+            ->setAttribute('placeholder', 'summoner-s-rift, crystal-scar...');
 
         return $map;
+    }
+
+    /**
+     * @return \Zend\Form\Element\Text
+     */
+    public function getMatchType()
+    {
+        $matchType = new Element\Text;
+        $matchType->setLabel('Match type')
+                  ->setName('match_type')
+                  ->setAttribute('placeholder', 'normal-5v5, ranked-solo-5v5...');
+
+        return $matchType;
     }
 }

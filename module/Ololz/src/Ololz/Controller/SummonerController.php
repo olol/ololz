@@ -31,7 +31,7 @@ class SummonerController extends BaseController
         $summoner = $this->getService()->getMapper()->find($this->params('summoner'));
         $lastWeek = new \DateTime;
         $lastWeek->sub(new \DateInterval('P7D'));
-        $championsPlayedThisWeek = $this->getServiceLocator()->get('Ololz\Service\Persist\Champion')->getMapper()->findDistinctBySummonerAndMatchDate($summoner, $lastWeek);
+        $championsPlayedThisWeek = $this->getService('Champion')->getMapper()->findDistinctBySummonerAndMatchDate($summoner, $lastWeek);
 
         $this->getServiceLocator()->get('Ololz\Form\MatchSearch')->setData($this->params()->fromQuery());
 
@@ -59,7 +59,7 @@ class SummonerController extends BaseController
         $summoner = $this->getService()->getMapper()->find($this->params('summoner'));
 
         // @todo put somewhere else
-        $allowedCriteria = array('champion' => 'i.champion');
+        $allowedCriteria = array('champion' => 'i.champion', 'position' => 'i.position', 'map' => 'm.map', 'match_type' => 'm.matchType');
         $allowedCriteriaKeys = array_keys($allowedCriteria);
         $criteria = array();
         foreach ($this->params()->fromPost() as $paramKey => $paramValue) {
@@ -73,13 +73,37 @@ class SummonerController extends BaseController
                                 $paramValue = $champion->getId();
                             }
                         }
-                        break;
+                    break;
+                    case 'position':
+                        if (! is_numeric($paramValue)) {
+                            $position = $this->getService('Position')->getMapper()->findOneByCode($paramValue);
+                            if ($position instanceof Entity\Position) {
+                                $paramValue = $position->getId();
+                            }
+                        }
+                    break;
+                    case 'map':
+                        if (! is_numeric($paramValue)) {
+                            $map = $this->getService('Map')->getMapper()->findOneByCode($paramValue);
+                            if ($map instanceof Entity\Map) {
+                                $paramValue = $map->getId();
+                            }
+                        }
+                    break;
+                    case 'match_type':
+                        if (! is_numeric($paramValue)) {
+                            $match_type = $this->getService('MatchType')->getMapper()->findOneByCode($paramValue);
+                            if ($match_type instanceof Entity\MatchType) {
+                                $paramValue = $match_type->getId();
+                            }
+                        }
+                    break;
                 }
                 $criteria[$allowedCriteria[$paramKey]] = $paramValue;
             }
         }
 
-        $invocations = $this->getServiceLocator()->get('Ololz\Service\Persist\Invocation')->getMapper()->findBySummonerAndMatchDate(
+        $invocations = $this->getService('Invocation')->getMapper()->findBySummonerAndMatchDate(
             $summoner,
             ! is_null($this->params()->fromPost('date_min')) ? new \DateTime($this->params()->fromPost('date_min') . ' 00:00:00') : null,
             ! is_null($this->params()->fromPost('date_max')) ? new \DateTime($this->params()->fromPost('date_max') . ' 23:59:59') : null,
