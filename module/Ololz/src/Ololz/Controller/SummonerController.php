@@ -64,37 +64,47 @@ class SummonerController extends BaseController
         $criteria = array();
         foreach ($this->params()->fromPost() as $paramKey => $paramValue) {
             if (in_array($paramKey, $allowedCriteriaKeys)) {
+                $paramValues = explode(',', str_replace(' ', '', $paramValue));
+                $paramValue = array();
                 switch ($paramKey)
                 {
                     case 'champion':
-                        if (! is_numeric($paramValue)) {
-                            $champion = $this->getService('Champion')->getMapper()->findOneByCode($paramValue);
-                            if ($champion instanceof Entity\Champion) {
-                                $paramValue = $champion->getId();
+                        foreach ($paramValues as $pv) {
+                            if (! is_numeric($pv)) {
+                                $champion = $this->getService('Champion')->getMapper()->findOneByCode($pv);
+                                if ($champion instanceof Entity\Champion) {
+                                    $paramValue[] = $champion->getId();
+                                }
                             }
                         }
                     break;
                     case 'position':
-                        if (! is_numeric($paramValue)) {
-                            $position = $this->getService('Position')->getMapper()->findOneByCode($paramValue);
-                            if ($position instanceof Entity\Position) {
-                                $paramValue = $position->getId();
+                        foreach ($paramValues as $pv) {
+                            if (! is_numeric($pv)) {
+                                $position = $this->getService('Position')->getMapper()->findOneByCode($pv);
+                                if ($position instanceof Entity\Position) {
+                                    $paramValue[] = $position->getId();
+                                }
                             }
                         }
                     break;
                     case 'map':
-                        if (! is_numeric($paramValue)) {
-                            $map = $this->getService('Map')->getMapper()->findOneByCode($paramValue);
-                            if ($map instanceof Entity\Map) {
-                                $paramValue = $map->getId();
+                        foreach ($paramValues as $pv) {
+                            if (! is_numeric($pv)) {
+                                $map = $this->getService('Map')->getMapper()->findOneByCode($pv);
+                                if ($map instanceof Entity\Map) {
+                                    $paramValue[] = $map->getId();
+                                }
                             }
                         }
                     break;
                     case 'match_type':
-                        if (! is_numeric($paramValue)) {
-                            $match_type = $this->getService('MatchType')->getMapper()->findOneByCode($paramValue);
-                            if ($match_type instanceof Entity\MatchType) {
-                                $paramValue = $match_type->getId();
+                        foreach ($paramValues as $pv) {
+                            if (! is_numeric($pv)) {
+                                $matchType = $this->getService('MatchType')->getMapper()->findOneByCode($pv);
+                                if ($matchType instanceof Entity\MatchType) {
+                                    $paramValue[] = $matchType->getId();
+                                }
                             }
                         }
                     break;
