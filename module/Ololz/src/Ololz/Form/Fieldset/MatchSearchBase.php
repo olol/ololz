@@ -76,7 +76,7 @@ abstract class MatchSearchBase extends SearchBase
         $position = new Element\Text;
         $position->setLabel('Position')
                  ->setName('position')
-                 ->setAttribute('placeholder', 'top, mid, adc, support, jungler');
+                 ->setAttribute('placeholder', 'top, mid, adc, support, jungle');
 
         return $position;
     }
