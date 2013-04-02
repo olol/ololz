@@ -87,7 +87,7 @@ class Invocation extends Base
         $query = $this->findBySummonerQuery($summoner, $criteria, $orderBy, $limit, $offset);
 
         if ($dateStart instanceof \DateTime) {
-            $query->andWhere('m.date > :dateStart')
+            $query->andWhere('m.date >= :dateStart')
                   ->setParameter('dateStart', $dateStart->format('Y-m-d H:i:s'));
         }
 
