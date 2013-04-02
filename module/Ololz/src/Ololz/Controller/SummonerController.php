@@ -81,8 +81,8 @@ class SummonerController extends BaseController
 
         $invocations = $this->getServiceLocator()->get('Ololz\Service\Persist\Invocation')->getMapper()->findBySummonerAndMatchDate(
             $summoner,
-            ! is_null($this->params()->fromPost('date_min')) ? new \DateTime($this->params()->fromPost('date_min')) : null,
-            ! is_null($this->params()->fromPost('date_max')) ? new \DateTime($this->params()->fromPost('date_max')) : null,
+            ! is_null($this->params()->fromPost('date_min')) ? new \DateTime($this->params()->fromPost('date_min') . ' 00:00:00') : null,
+            ! is_null($this->params()->fromPost('date_max')) ? new \DateTime($this->params()->fromPost('date_max') . ' 23:59:59') : null,
             $criteria,
             $this->params()->fromPost('order_by'),
             ! is_null($this->params()->fromPost('limit')) ? $this->params()->fromPost('limit') : 20,
