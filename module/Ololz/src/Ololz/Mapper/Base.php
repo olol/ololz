@@ -663,12 +663,14 @@ abstract class Base
         if (is_array($criteria)) {
             foreach ($criteria as $criteriaColumn => $criteriaValue) {
                 $parameterKey = str_replace('.', '', $criteriaColumn);
-                if (is_array($criteriaValue)) {
+
+                if (is_array($criteriaValue) && !empty($criteriaValue)) {
                     $query->andWhere($criteriaColumn . ' IN (:' . $parameterKey . ')');
-                } else {
+                    $query->setParameter($parameterKey, $criteriaValue);
+                } else if (! is_array($criteriaValue)) {
                     $query->andWhere($criteriaColumn . ' = :' . $parameterKey);
+                    $query->setParameter($parameterKey, $criteriaValue);
                 }
-                $query->setParameter($parameterKey, $criteriaValue);
             }
         }
 
