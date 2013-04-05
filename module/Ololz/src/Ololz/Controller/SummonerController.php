@@ -58,70 +58,14 @@ class SummonerController extends BaseController
     {
         $summoner = $this->getService()->getMapper()->find($this->params('summoner'));
 
-        // @todo put somewhere else
-        $allowedCriteria = array('champion' => 'i.champion', 'position' => 'i.position', 'map' => 'm.map', 'match_type' => 'm.matchType');
-        $allowedCriteriaKeys = array_keys($allowedCriteria);
-        $criteria = array();
-        foreach ($this->params()->fromPost() as $paramKey => $paramValue) {
-            if (in_array($paramKey, $allowedCriteriaKeys)) {
-                $paramValues = explode(',', str_replace(' ', '', $paramValue));
-                $paramValue = array();
-                switch ($paramKey)
-                {
-                    case 'champion':
-                        foreach ($paramValues as $pv) {
-                            if (! is_numeric($pv)) {
-                                $champion = $this->getService('Champion')->getMapper()->findOneByCode($pv);
-                                if ($champion instanceof Entity\Champion) {
-                                    $paramValue[] = $champion->getId();
-                                }
-                            }
-                        }
-                    break;
-                    case 'position':
-                        foreach ($paramValues as $pv) {
-                            if (! is_numeric($pv)) {
-                                $position = $this->getService('Position')->getMapper()->findOneByCode($pv);
-                                if ($position instanceof Entity\Position) {
-                                    $paramValue[] = $position->getId();
-                                }
-                            }
-                        }
-                    break;
-                    case 'map':
-                        foreach ($paramValues as $pv) {
-                            if (! is_numeric($pv)) {
-                                $map = $this->getService('Map')->getMapper()->findOneByCode($pv);
-                                if ($map instanceof Entity\Map) {
-                                    $paramValue[] = $map->getId();
-                                }
-                            }
-                        }
-                    break;
-                    case 'match_type':
-                        foreach ($paramValues as $pv) {
-                            if (! is_numeric($pv)) {
-                                $matchType = $this->getService('MatchType')->getMapper()->findOneByCode($pv);
-                                if ($matchType instanceof Entity\MatchType) {
-                                    $paramValue[] = $matchType->getId();
-                                }
-                            }
-                        }
-                    break;
-                }
-                $criteria[$allowedCriteria[$paramKey]] = $paramValue;
-            }
-        }
+        $invocations = $this->getServiceLocator()->get('Ololz\Service\Search\Invocation')
+            ->setParams($this->params()->fromPost())
+            ->setSummoner($summoner)
+            ->setDateStart(! is_null($this->params()->fromPost('date_min')) ? new \DateTime($this->params()->fromPost('date_min') . ' 00:00:00') : null)
+            ->setDateEnd(! is_null($this->params()->fromPost('date_max')) ? new \DateTime($this->params()->fromPost('date_max') . ' 23:59:59') : null)
 
-        $invocations = $this->getService('Invocation')->getMapper()->findBySummonerAndMatchDate(
-            $summoner,
-            ! is_null($this->params()->fromPost('date_min')) ? new \DateTime($this->params()->fromPost('date_min') . ' 00:00:00') : null,
-            ! is_null($this->params()->fromPost('date_max')) ? new \DateTime($this->params()->fromPost('date_max') . ' 23:59:59') : null,
-            $criteria,
-            $this->params()->fromPost('order_by'),
-            ! is_null($this->params()->fromPost('limit')) ? $this->params()->fromPost('limit') : 20,
-            $this->params()->fromPost('offset')
-        );
+            ->search()
+        ;
 
         $viewModel = new ViewModel(array(
             'summoner'      => $summoner,
