@@ -76,6 +76,7 @@ class Invocation extends Base
      * @param \Ololz\Entity\Summoner    $summoner
      * @param \DateTime                 $dateStart
      * @param \DateTime                 $dateEnd
+     * @param array                     $criteria
      * @param string|array              $orderBy
      * @param int                       $limit
      * @param int                       $offset
@@ -106,6 +107,7 @@ class Invocation extends Base
      * @param \Ololz\Entity\Summoner    $summoner
      * @param \DateTime                 $dateStart
      * @param \DateTime                 $dateEnd
+     * @param array                     $criteria
      * @param string|array              $orderBy
      * @param int                       $limit
      * @param int                       $offset
