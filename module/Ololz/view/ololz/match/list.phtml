@@ -2,18 +2,10 @@
     <h3>The matches</h3>
 </div>
 <div style="margin-left: 160px;">
-<?php if (count($matches)) : ?>
-    <ul class="nav nav-tabs nav-stacked">
-    <?php foreach ($matches as $match) : ?>
-        <?php if ($match instanceof \Ololz\Entity\Match) : ?>
-        <li>
-            <a href="<?php echo $this->url('ololz/match', array('match' => $match->getId()))?>">
-                <?php echo $this->partial('ololz/p/match/line', array('match' => $match)) ?>
-            </a>
-        </li>
-        <?php endif; ?>
-    <?php endforeach; ?>
-    </ul>
-<?php endif; ?>
+    <div id="matches">
+        <?php echo $this->partial('ololz/p/match/search', array()); ?>
+        <div class="loader"></div>
+        <ul class="matches-list nav nav-tabs nav-stacked"></ul>
+    </div>
 </div>
 <div style="clear:both;"></div>

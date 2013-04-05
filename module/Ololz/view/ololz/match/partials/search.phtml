@@ -10,8 +10,10 @@
 <div>
     <span><?php echo $this->formSearchMatch('search_match')->get('champion')->getLabel() ?> : </span>
     <?php echo $this->formText()->render($this->formSearchMatch('search_match')->get('champion')) ?>
-    <span><?php echo $this->formSearchMatch('search_match')->get('position')->getLabel() ?> : </span>
-    <?php echo $this->formText()->render($this->formSearchMatch('search_match')->get('position')) ?>
+    <span><?php echo $this->formSearchMatch('search_match')->get('summoner')->getLabel() ?> : </span>
+    <?php echo $this->formText()->render($this->formSearchMatch('search_match')->get('summoner')) ?>
+    <span><?php echo $this->formSearchMatch('search_match')->get('realm')->getLabel() ?> : </span>
+    <?php echo $this->formText()->render($this->formSearchMatch('search_match')->get('realm')) ?>
 </div>
 <div>
     <span><?php echo $this->formSearchMatch('search_match')->get('map')->getLabel() ?> : </span>

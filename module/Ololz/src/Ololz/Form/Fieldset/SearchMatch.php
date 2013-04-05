@@ -26,7 +26,8 @@ class SearchMatch extends SearchBase
         $this->add($this->getElementDateMin())
              ->add($this->getElementDateMax())
              ->add($this->getElementChampion())
-             ->add($this->getElementPosition())
+             ->add($this->getElementSummoner())
+             ->add($this->getElementRealm())
              ->add($this->getElementMap())
              ->add($this->getElementMatchType())
 

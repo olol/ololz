@@ -101,6 +101,7 @@ class Module implements
                 'Ololz\Service\Chart\Invocation'    => new ServiceFactory\ServiceChart('Invocation'),
 
                 'Ololz\Service\Search\Invocation'   => new ServiceFactory\ServiceSearch('Invocation'),
+                'Ololz\Service\Search\Match'        => new ServiceFactory\ServiceSearch('Match'),
 
                 'Ololz\Service\Updater\Champion'    => new ServiceFactory\Updater('Champion'),
                 'Ololz\Service\Updater\Item'        => new ServiceFactory\Updater('Item'),

@@ -161,6 +161,18 @@ return array(
                                 'action'     => 'list',
                             ),
                         ),
+                        'may_terminate' => true,
+                        'child_routes' => array(
+                            'matches' => array(
+                                'type'    => 'Segment',
+                                'options' => array(
+                                    'route'    => '/matches',
+                                    'defaults' => array(
+                                        'action' => 'matches',
+                                    ),
+                                ),
+                            ),
+                        ),
                     ),
 
                     'champion' => array(

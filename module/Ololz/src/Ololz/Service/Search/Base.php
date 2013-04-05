@@ -1,8 +1,9 @@
 <?php
 namespace Ololz\Service\Search;
 
-use Ololz\Service\Persist as Service;
+use Ololz\Entity;
 use Ololz\Form;
+use Ololz\Service\Persist as Service;
 
 use Doctrine\ORM\QueryBuilder;
 
@@ -382,10 +383,6 @@ abstract class Base
      */
     protected function processParams()
     {
-        if (is_null($this->getParams())) {
-            return;
-        }
-
         $params = $this->getParams();
         if (is_null($params)) {
             return;
@@ -407,10 +404,30 @@ abstract class Base
                 $paramValues = explode(',', str_replace(' ', '', $paramValue));
                 $paramValue = array();
 
-                switch ($paramKey)
+                switch ($paramKey) // For now we can stay with that, but we will need something more fancy in the future
                 {
-                    default: // For now we can stay with that, but we might need something more fancy in the future
-                        $type = ucfirst(strtolower($paramKey));
+                    case 'realm':
+                        foreach ($paramValues as $pv) {
+                            $paramValue[] = $pv;
+                        }
+                    break;
+
+                    case 'summoner':
+                        foreach ($paramValues as $pv) {
+                            if (! is_numeric($pv)) {
+                                $summoner = $this->getServiceManager()->get('Ololz\Service\Persist\Summoner')->getMapper()->getRepository()->findOneByName($pv);
+                                if ($summoner instanceof Entity\Summoner) {
+                                    $paramValue[] = $summoner->getId();
+                                }
+                            } else {
+                                $paramValue[] = $pv;
+                            }
+                        }
+                    break;
+
+                    default:
+                        $camelCaseFilter = new \Zend\Filter\Word\UnderscoreToCamelCase;
+                        $type = $camelCaseFilter->filter($paramKey);
                         foreach ($paramValues as $pv) {
                             if (! is_numeric($pv)) {
                                 if ($this->getServiceManager()->has('Ololz\Service\Persist\\' . $type)) {
@@ -421,9 +438,9 @@ abstract class Base
                                             $paramValue[] = $entity->getId();
                                         }
                                     }
-                                } else {
-                                    // @todo log something ?
                                 }
+                            } else {
+                                $paramValue[] = $pv;
                             }
                         }
                         break;

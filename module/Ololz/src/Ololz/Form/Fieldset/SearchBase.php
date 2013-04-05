@@ -86,6 +86,32 @@ abstract class SearchBase extends Base
     /**
      * @return \Zend\Form\Element\Text
      */
+    public function getElementSummoner()
+    {
+        $summoner = new Element\Text;
+        $summoner->setLabel('Summoner')
+                 ->setName('summoner')
+                 ->setAttribute('placeholder', 'summoner\'s name...');
+
+        return $summoner;
+    }
+
+    /**
+     * @return \Zend\Form\Element\Text
+     */
+    public function getElementRealm()
+    {
+        $realm = new Element\Text;
+        $realm->setLabel('Realm')
+              ->setName('realm')
+              ->setAttribute('placeholder', 'br, eune, euw, kr, na');
+
+        return $realm;
+    }
+
+    /**
+     * @return \Zend\Form\Element\Text
+     */
     public function getElementChampion()
     {
         $champion = new Element\Text;
