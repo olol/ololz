@@ -107,6 +107,15 @@ return array(
                                     ),
                                 ),
                             ),
+                            'invocations' => array(
+                                'type'    => 'Segment',
+                                'options' => array(
+                                    'route'    => '/invocations',
+                                    'defaults' => array(
+                                        'action' => 'invocations',
+                                    ),
+                                ),
+                            ),
                         ),
                     ),
 
@@ -278,6 +287,7 @@ return array(
             'ololz/p/invocation/detail/summoner'    => __DIR__ . '/../view/ololz/invocation/partials/detail/summoner.phtml',
             'ololz/p/match/line'                    => __DIR__ . '/../view/ololz/match/partials/line.phtml',
             'ololz/p/match/detail/summary'          => __DIR__ . '/../view/ololz/match/partials/detail/summary.phtml',
+            'ololz/p/match/search'                  => __DIR__ . '/../view/ololz/match/partials/search.phtml',
         ),
         'template_path_stack' => array(
             __DIR__ . '/../view',

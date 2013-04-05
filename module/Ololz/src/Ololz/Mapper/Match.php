@@ -48,7 +48,7 @@ class Match extends Base
     public function findBySummonerQuery(Entity\Summoner $summoner, $orderBy = null, $limit = null, $offset = null)
     {
         if (is_null($orderBy)) {
-            $orderBy = array('m.date', 'DESC');
+            $orderBy = array('m.date' => 'DESC');
         }
 
         $query = $this->getEntityManager()->createQueryBuilder()
@@ -61,7 +61,7 @@ class Match extends Base
             ->setParameter('summoner', $summoner->getId())
         ;
 
-        return $this->restrictQuery($query, $orderBy, $limit, $offset);
+        return $this->restrictQuery($query, null, $orderBy, $limit, $offset);
     }
 
     /**

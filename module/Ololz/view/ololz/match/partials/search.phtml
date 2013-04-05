@@ -1,0 +1,37 @@
+<?php echo $this->form()->openTag($this->formMatchSearch()) ?>
+
+<div>
+    <span><?php echo $this->formMatchSearch('match_search')->get('date_min')->getLabel() ?> : </span>
+    <?php echo $this->formText()->render($this->formMatchSearch('match_search')->get('date_min')) ?>
+    <span><?php echo $this->formMatchSearch('match_search')->get('date_max')->getLabel() ?> : </span>
+    <?php echo $this->formText()->render($this->formMatchSearch('match_search')->get('date_max')) ?>
+</div>
+
+<div>
+    <span><?php echo $this->formMatchSearch('match_search')->get('champion')->getLabel() ?> : </span>
+    <?php echo $this->formText()->render($this->formMatchSearch('match_search')->get('champion')) ?>
+    <span><?php echo $this->formMatchSearch('match_search')->get('position')->getLabel() ?> : </span>
+    <?php echo $this->formText()->render($this->formMatchSearch('match_search')->get('position')) ?>
+</div>
+<div>
+    <span><?php echo $this->formMatchSearch('match_search')->get('map')->getLabel() ?> : </span>
+    <?php echo $this->formText()->render($this->formMatchSearch('match_search')->get('map')) ?>
+    <span><?php echo $this->formMatchSearch('match_search')->get('match_type')->getLabel() ?> : </span>
+    <?php echo $this->formText()->render($this->formMatchSearch('match_search')->get('match_type')) ?>
+</div>
+
+<div>
+    <span><?php echo $this->formMatchSearch('match_search')->get('limit')->getLabel() ?> : </span>
+    <?php echo $this->formText()->render($this->formMatchSearch('match_search')->get('limit')) ?>
+</div>
+
+<div id="search_actions">
+    <?php echo $this->formButton()->render($this->formMatchSearch()->get('search')) ?>
+</div>
+
+<?php echo $this->form()->closeTag($this->formMatchSearch()) ?>
+
+<script type="text/javascript">
+$(function() {
+} );
+</script>

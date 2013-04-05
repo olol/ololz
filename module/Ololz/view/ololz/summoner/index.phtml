@@ -1,26 +1,31 @@
 <div style="float:left; padding-right:16px; width: 150px;">
     <h2><?php echo $summoner->getName() ?></h2>
 </div>
-<div style="margin-left: 160px;">
-    <div id="champions">
-        <h3>Champions played the last 7 days</h3>
-        <ul class="champions-list nav nav-tabs">
-        <?php foreach ($champions as $champion) : ?>
-            <?php if ($champion instanceof \Ololz\Entity\Champion) : ?>
-                <?php echo $this->partial('ololz/p/summoner/champion', array('summoner' => $summoner, 'champion' => $champion)); ?>
-            <?php endif; ?>
-        <?php endforeach; ?>
-        </ul>
-    </div>
-    <div id="invocations">
-        <h3>Last matches</h3>
-        <ul class="summoner-invocations-list nav nav-tabs nav-stacked">
-        <?php foreach ($invocations as $invocation) : ?>
-            <?php if ($invocation instanceof \Ololz\Entity\Invocation) : ?>
-                <?php echo $this->partial('ololz/p/summoner/invocation', array('summoner' => $summoner, 'invocation' => $invocation, 'match' => $invocation->getMatchTeam()->getMatch())) ?>
-            <?php endif; ?>
-        <?php endforeach; ?>
-        </ul>
+<div id="summoner" style="margin-left: 160px;">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#profile" data-toggle="tab"><h3>Profile</h3></a></li>
+        <li><a href="#matches" data-toggle="tab"><h3>Matches</h3></a></li>
+    </ul>
+
+    <div class="tab-content">
+        <div id="profile" class="active tab-pane">
+            <div id="champions">
+                <h4>Champions played the last 7 days</h4>
+                <ul class="champions-list nav nav-tabs">
+                <?php foreach ($champions as $champion) : ?>
+                    <?php if ($champion instanceof \Ololz\Entity\Champion) : ?>
+                        <?php echo $this->partial('ololz/p/summoner/champion', array('summoner' => $summoner, 'champion' => $champion)); ?>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+                </ul>
+            </div>
+        </div>
+        <div id="matches" class="tab-pane">
+            <?php echo $this->partial('ololz/p/match/search', array()); ?>
+            <div class="loader"></div>
+            <ul class="summoner-invocations-list nav nav-tabs nav-stacked"></ul>
+        </div>
     </div>
 </div>
+<script type="text/javascript">ololz.summoner = {id: <?php echo $summoner->getId() ?>};</script>
 <div style="clear:both;"></div>
