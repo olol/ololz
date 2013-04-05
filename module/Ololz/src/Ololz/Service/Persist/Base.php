@@ -27,13 +27,18 @@ abstract class Base
     protected $eventManager;
 
     /**
-     * @var Mapper\Base
+     * @var \Ololz\Mapper\Base
      */
     protected $mapper;
 
     /**
-     *
+     * @var \Ololz\Service\Base
+     */
+    protected $service;
+
+    /**
      * @param \Zend\ServiceManager\ServiceManager   $serviceManager
+     *
      * @return \Ololz\Service\Updater
      */
     public function setServiceManager(ServiceManager $serviceManager)
@@ -52,6 +57,18 @@ abstract class Base
     }
 
     /**
+     * @param \Zend\EventManager\EventManager   $eventManager
+     *
+     * @return \Ololz\Service\Persist\Base
+     */
+    public function setEventManager(EventManager $eventManager)
+    {
+        $this->eventManager = $eventManager;
+
+        return $this;
+    }
+
+    /**
      * @return \Zend\EventManager\EventManager
      */
     public function getEventManager()
@@ -67,13 +84,13 @@ abstract class Base
     }
 
     /**
-     * @param \Zend\EventManager\EventManager   $eventManager
+     * @param \Ololz\Mapper\Base    $mapper
      *
      * @return \Ololz\Service\Persist\Base
      */
-    public function setEventManager(EventManager $eventManager)
+    public function setMapper(Mapper\Base $mapper)
     {
-        $this->eventManager = $eventManager;
+        $this->mapper = $mapper;
 
         return $this;
     }
@@ -84,18 +101,6 @@ abstract class Base
     public function getMapper()
     {
         return $this->mapper;
-    }
-
-    /**
-     * @param \Ololz\Mapper\Base    $mapper
-     *
-     * @return \Ololz\Service\Persist\Base
-     */
-    public function setMapper(Mapper\Base $mapper)
-    {
-        $this->mapper = $mapper;
-
-        return $this;
     }
 
     /**

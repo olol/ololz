@@ -28,14 +28,14 @@ abstract class Base
     protected $eventManager;
 
     /**
-     * @var Mapper\Base
+     * @var \Ololz\Mapper\Base
      */
     protected $mapper;
 
     /**
-     *
      * @param \Zend\ServiceManager\ServiceManager   $serviceManager
-     * @return \Ololz\Service\Updater
+     *
+     * @return \Ololz\Service\Chart\Base
      */
     public function setServiceManager(ServiceManager $serviceManager)
     {
@@ -50,6 +50,18 @@ abstract class Base
     public function getServiceManager()
     {
         return $this->serviceManager;
+    }
+
+    /**
+     * @param \Zend\EventManager\EventManager   $eventManager
+     *
+     * @return \Ololz\Service\Chart\Base
+     */
+    public function setEventManager(EventManager $eventManager)
+    {
+        $this->eventManager = $eventManager;
+
+        return $this;
     }
 
     /**
@@ -68,13 +80,13 @@ abstract class Base
     }
 
     /**
-     * @param \Zend\EventManager\EventManager   $eventManager
+     * @param \Ololz\Mapper\Base    $mapper
      *
-     * @return \Ololz\Service\Persist\Base
+     * @return \Ololz\Service\Chart\Base
      */
-    public function setEventManager(EventManager $eventManager)
+    public function setMapper(Mapper\Base $mapper)
     {
-        $this->eventManager = $eventManager;
+        $this->mapper = $mapper;
 
         return $this;
     }
@@ -88,16 +100,9 @@ abstract class Base
     }
 
     /**
-     * @param \Ololz\Mapper\Base    $mapper
-     *
-     * @return \Ololz\Service\Persist\Base
+     * Has to be called in the factory after all dependencies have been injected.
      */
-    public function setMapper(Mapper\Base $mapper)
-    {
-        $this->mapper = $mapper;
-
-        return $this;
-    }
+    public function init() {}
 
     /**
      * @param array $result

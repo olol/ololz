@@ -43,7 +43,7 @@ class Match extends Base
      * @param int                       $limit
      * @param int                       $offset
      *
-     * @return QueryBuilder
+     * @return \Doctrine\ORM\QueryBuilder
      */
     public function findBySummonerQuery(Entity\Summoner $summoner, $orderBy = null, $limit = null, $offset = null)
     {

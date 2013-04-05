@@ -28,7 +28,7 @@ class ServiceChart implements FactoryInterface
     /**
      * {@inheritDoc}
      *
-     * @return \Ololz\Mapper\Base
+     * @return \Ololz\Service\Search\Base
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
@@ -44,6 +44,8 @@ class ServiceChart implements FactoryInterface
         $serviceChart = new $serviceChartClass();
         $serviceChart->setMapper($mapper);
         $serviceChart->setServiceManager($serviceLocator);
+
+        $serviceChart->init();
 
         return $serviceChart;
     }

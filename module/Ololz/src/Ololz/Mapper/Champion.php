@@ -42,7 +42,7 @@ class Champion extends Base
      * @param int                       $limit
      * @param int                       $offset
      *
-     * @return QueryBuilder
+     * @return \Doctrine\ORM\QueryBuilder
      */
     public function findBySummonerQuery(Entity\Summoner $summoner, $orderBy = null, $limit = null, $offset = null)
     {
@@ -90,7 +90,7 @@ class Champion extends Base
      * @param int                       $limit
      * @param int                       $offset
      *
-     * @return QueryBuilder
+     * @return \Doctrine\ORM\QueryBuilder
      */
     public function findBySummonerAndMatchDateQuery(Entity\Summoner $summoner, \DateTime $dateStart, \DateTime $dateEnd = null, $orderBy = null, $limit = null, $offset = null)
     {
@@ -140,7 +140,7 @@ class Champion extends Base
      * @param int                       $limit
      * @param int                       $offset
      *
-     * @return QueryBuilder
+     * @return \Doctrine\ORM\QueryBuilder
      */
     public function findDistinctBySummonerAndMatchDateQuery(Entity\Summoner $summoner, \DateTime $dateStart, \DateTime $dateEnd = null, $orderBy = null, $limit = null, $offset = null)
     {

@@ -28,7 +28,7 @@ class ServicePersist implements FactoryInterface
     /**
      * {@inheritDoc}
      *
-     * @return \Ololz\Mapper\Base
+     * @return \Ololz\Service\Persist\Base
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
