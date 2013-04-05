@@ -37,7 +37,13 @@ div.container a.brand {
     padding: 8px 20px 12px 40px;
 }
 
-.nav-tabs > li {
+.loader {
+    text-align: center;
+    height: 32px;
+    background: url("../../images/ajax-loader.gif") no-repeat transparent center center;
+}
+
+#champions .nav-tabs > li {
     min-width: 200px;
 }
 
@@ -96,6 +102,11 @@ div.container a.brand {
 .summoner-invocation-details > div:nth-child(n+2) {
     margin-left: 5px;
 }
+
+.champion-details .champion-name {
+    width: 100px;
+}
+
 /* Invocation section */
 .summoner-invocation-details > * p,
 .match-details-summary > p {

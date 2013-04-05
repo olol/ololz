@@ -34,10 +34,10 @@ class Invocation extends Base
      *
      * @return QueryBuilder
      */
-    public function findBySummonerQuery(Entity\Summoner $summoner, $orderBy = null, $limit = null, $offset = null)
+    public function findBySummonerQuery(Entity\Summoner $summoner, $criteria = null, $orderBy = null, $limit = null, $offset = null)
     {
         if (is_null($orderBy)) {
-            $orderBy = array('m.date', 'DESC');
+            $orderBy = array('m.date' => 'DESC');
         }
 
         $query = $this->getEntityManager()->createQueryBuilder()
@@ -50,7 +50,7 @@ class Invocation extends Base
             ->setParameter('summoner', $summoner->getId())
         ;
 
-        return $this->restrictQuery($query, $orderBy, $limit, $offset);
+        return $this->restrictQuery($query, $criteria, $orderBy, $limit, $offset);
     }
 
     /**
@@ -63,9 +63,60 @@ class Invocation extends Base
      *
      * @return array
      */
-    public function findBySummoner(Entity\Summoner $summoner, $orderBy = null, $limit = null, $offset = null)
+    public function findBySummoner(Entity\Summoner $summoner, $criteria, $orderBy = null, $limit = null, $offset = null)
     {
-        $query = $this->findBySummonerQuery($summoner, $orderBy, $limit, $offset);
+        $query = $this->findBySummonerQuery($summoner, $criteria, $orderBy, $limit, $offset);
+
+        return $query->getQuery()->getResult();
+    }
+    /**
+     * The query to find last matches since the given date of the given
+     * summoner.
+     *
+     * @param \Ololz\Entity\Summoner    $summoner
+     * @param \DateTime                 $dateStart
+     * @param \DateTime                 $dateEnd
+     * @param array                     $criteria
+     * @param string|array              $orderBy
+     * @param int                       $limit
+     * @param int                       $offset
+     *
+     * @return QueryBuilder
+     */
+    public function findBySummonerAndMatchDateQuery(Entity\Summoner $summoner, \DateTime $dateStart = null, \DateTime $dateEnd = null, $criteria = null, $orderBy = null, $limit = null, $offset = null)
+    {
+        $query = $this->findBySummonerQuery($summoner, $criteria, $orderBy, $limit, $offset);
+
+        if ($dateStart instanceof \DateTime) {
+            $query->andWhere('m.date >= :dateStart')
+                  ->setParameter('dateStart', $dateStart->format('Y-m-d H:i:s'));
+        }
+
+        if ($dateEnd instanceof \DateTime) {
+            $query->andWhere('m.date <= :dateEnd')
+                  ->setParameter('dateEnd', $dateEnd->format('Y-m-d H:i:s'));
+        }
+
+        return $query;
+    }
+
+    /**
+     * The query to find last matches since the given date of the given
+     * summoner.
+     *
+     * @param \Ololz\Entity\Summoner    $summoner
+     * @param \DateTime                 $dateStart
+     * @param \DateTime                 $dateEnd
+     * @param array                     $criteria
+     * @param string|array              $orderBy
+     * @param int                       $limit
+     * @param int                       $offset
+     *
+     * @return array
+     */
+    public function findBySummonerAndMatchDate(Entity\Summoner $summoner, \DateTime $dateStart = null, \DateTime $dateEnd = null, $criteria = null, $orderBy = null, $limit = null, $offset = null)
+    {
+        $query = $this->findBySummonerAndMatchDateQuery($summoner, $dateStart, $dateEnd, $criteria, $orderBy, $limit, $offset);
 
         return $query->getQuery()->getResult();
     }

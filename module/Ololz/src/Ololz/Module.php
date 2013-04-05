@@ -68,18 +68,20 @@ class Module implements
             ),
 
             'factories' => array(
-                'Ololz\Mapper\Champion'      => new ServiceFactory\Mapper('Champion'),
-                'Ololz\Mapper\Invocation'    => new ServiceFactory\Mapper('Invocation'),
-                'Ololz\Mapper\Item'          => new ServiceFactory\Mapper('Item'),
-                'Ololz\Mapper\Map'           => new ServiceFactory\Mapper('Map'),
-                'Ololz\Mapper\Mapping'       => new ServiceFactory\Mapper('Mapping'),
-                'Ololz\Mapper\Match'         => new ServiceFactory\Mapper('Match'),
-                'Ololz\Mapper\MatchTeam'     => new ServiceFactory\Mapper('MatchTeam'),
-                'Ololz\Mapper\MatchType'     => new ServiceFactory\Mapper('MatchType'),
-                'Ololz\Mapper\Position'      => new ServiceFactory\Mapper('Position'),
-                'Ololz\Mapper\Spell'         => new ServiceFactory\Mapper('Spell'),
-                'Ololz\Mapper\Source'        => new ServiceFactory\Mapper('Source'),
-                'Ololz\Mapper\Summoner'      => new ServiceFactory\Mapper('Summoner'),
+                'Ololz\Mapper\Champion'     => new ServiceFactory\Mapper('Champion'),
+                'Ololz\Mapper\Invocation'   => new ServiceFactory\Mapper('Invocation'),
+                'Ololz\Mapper\Item'         => new ServiceFactory\Mapper('Item'),
+                'Ololz\Mapper\Map'          => new ServiceFactory\Mapper('Map'),
+                'Ololz\Mapper\Mapping'      => new ServiceFactory\Mapper('Mapping'),
+                'Ololz\Mapper\Match'        => new ServiceFactory\Mapper('Match'),
+                'Ololz\Mapper\MatchTeam'    => new ServiceFactory\Mapper('MatchTeam'),
+                'Ololz\Mapper\MatchType'    => new ServiceFactory\Mapper('MatchType'),
+                'Ololz\Mapper\Position'     => new ServiceFactory\Mapper('Position'),
+                'Ololz\Mapper\Spell'        => new ServiceFactory\Mapper('Spell'),
+                'Ololz\Mapper\Source'       => new ServiceFactory\Mapper('Source'),
+                'Ololz\Mapper\Summoner'     => new ServiceFactory\Mapper('Summoner'),
+
+                'Ololz\Form\MatchSearch'    => new ServiceFactory\Form('MatchSearch'),
 
                 'Ololz\Service\Persist\Champion'    => new ServiceFactory\ServicePersist('Champion'),
                 'Ololz\Service\Persist\Invocation'  => new ServiceFactory\ServicePersist('Invocation'),
@@ -150,6 +152,12 @@ class Module implements
                     // @todo handle default source via config
                     $viewHelper->setDefaultSource($locator->get('Ololz\Mapper\Source')->findOneByCode('lolking'))
                                ->setMappingMapper($locator->get('Ololz\Mapper\Mapping'));
+                    return $viewHelper;
+                },
+                'formMatchSearch' => function ($sm) {
+                    $locator = $sm->getServiceLocator();
+                    $viewHelper = new View\Helper\Form\MatchSearch;
+                    $viewHelper->setForm($locator->get('Ololz\Form\MatchSearch'));
                     return $viewHelper;
                 },
             ),

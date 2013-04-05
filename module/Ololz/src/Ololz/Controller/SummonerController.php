@@ -9,6 +9,7 @@
 
 namespace Ololz\Controller;
 
+use Ololz\Entity;
 use Ololz\Service\Persist as ServicePersist;
 
 use Zend\View\Model\ViewModel;
@@ -25,15 +26,17 @@ class SummonerController extends BaseController
      */
     public function indexAction()
     {
-        $summoner           = $this->getService()->getMapper()->find($this->params('summoner'));
-        $last10Invocations  = $this->getServiceLocator()->get('Ololz\Service\Persist\Invocation')->getMapper()->findBySummoner($summoner, null, 10);
+        $this->getViewHelper('HeadScript')->appendFile($this->getRequest()->getBasePath() . '/assets/ololz/summoner/index.js');
+
+        $summoner = $this->getService()->getMapper()->find($this->params('summoner'));
         $lastWeek = new \DateTime;
         $lastWeek->sub(new \DateInterval('P7D'));
-        $championsPlayedThisWeek = $this->getServiceLocator()->get('Ololz\Service\Persist\Champion')->getMapper()->findDistinctBySummonerAndMatchDate($summoner, $lastWeek);
+        $championsPlayedThisWeek = $this->getService('Champion')->getMapper()->findDistinctBySummonerAndMatchDate($summoner, $lastWeek);
+
+        $this->getServiceLocator()->get('Ololz\Form\MatchSearch')->setData($this->params()->fromQuery());
 
         return new ViewModel(array(
             'summoner'      => $summoner,
-            'invocations'   => $last10Invocations,
             'champions'     => $championsPlayedThisWeek
         ) );
     }
@@ -49,6 +52,84 @@ class SummonerController extends BaseController
         return new ViewModel(array(
             'summoners' => $summoners
         ) );
+    }
+
+    public function invocationsAction()
+    {
+        $summoner = $this->getService()->getMapper()->find($this->params('summoner'));
+
+        // @todo put somewhere else
+        $allowedCriteria = array('champion' => 'i.champion', 'position' => 'i.position', 'map' => 'm.map', 'match_type' => 'm.matchType');
+        $allowedCriteriaKeys = array_keys($allowedCriteria);
+        $criteria = array();
+        foreach ($this->params()->fromPost() as $paramKey => $paramValue) {
+            if (in_array($paramKey, $allowedCriteriaKeys)) {
+                $paramValues = explode(',', str_replace(' ', '', $paramValue));
+                $paramValue = array();
+                switch ($paramKey)
+                {
+                    case 'champion':
+                        foreach ($paramValues as $pv) {
+                            if (! is_numeric($pv)) {
+                                $champion = $this->getService('Champion')->getMapper()->findOneByCode($pv);
+                                if ($champion instanceof Entity\Champion) {
+                                    $paramValue[] = $champion->getId();
+                                }
+                            }
+                        }
+                    break;
+                    case 'position':
+                        foreach ($paramValues as $pv) {
+                            if (! is_numeric($pv)) {
+                                $position = $this->getService('Position')->getMapper()->findOneByCode($pv);
+                                if ($position instanceof Entity\Position) {
+                                    $paramValue[] = $position->getId();
+                                }
+                            }
+                        }
+                    break;
+                    case 'map':
+                        foreach ($paramValues as $pv) {
+                            if (! is_numeric($pv)) {
+                                $map = $this->getService('Map')->getMapper()->findOneByCode($pv);
+                                if ($map instanceof Entity\Map) {
+                                    $paramValue[] = $map->getId();
+                                }
+                            }
+                        }
+                    break;
+                    case 'match_type':
+                        foreach ($paramValues as $pv) {
+                            if (! is_numeric($pv)) {
+                                $matchType = $this->getService('MatchType')->getMapper()->findOneByCode($pv);
+                                if ($matchType instanceof Entity\MatchType) {
+                                    $paramValue[] = $matchType->getId();
+                                }
+                            }
+                        }
+                    break;
+                }
+                $criteria[$allowedCriteria[$paramKey]] = $paramValue;
+            }
+        }
+
+        $invocations = $this->getService('Invocation')->getMapper()->findBySummonerAndMatchDate(
+            $summoner,
+            ! is_null($this->params()->fromPost('date_min')) ? new \DateTime($this->params()->fromPost('date_min') . ' 00:00:00') : null,
+            ! is_null($this->params()->fromPost('date_max')) ? new \DateTime($this->params()->fromPost('date_max') . ' 23:59:59') : null,
+            $criteria,
+            $this->params()->fromPost('order_by'),
+            ! is_null($this->params()->fromPost('limit')) ? $this->params()->fromPost('limit') : 20,
+            $this->params()->fromPost('offset')
+        );
+
+        $viewModel = new ViewModel(array(
+            'summoner'      => $summoner,
+            'invocations'   => $invocations
+        ) );
+        $viewModel->setTerminal(true);
+
+        return $viewModel;
     }
 
     public function championAction()

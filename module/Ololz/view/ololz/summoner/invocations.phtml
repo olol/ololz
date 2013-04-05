@@ -1,0 +1,6 @@
+
+            <?php foreach ($invocations as $invocation) : ?>
+                <?php if ($invocation instanceof \Ololz\Entity\Invocation) : ?>
+                    <?php echo $this->partial('ololz/p/summoner/invocation', array('summoner' => $summoner, 'invocation' => $invocation, 'match' => $invocation->getMatchTeam()->getMatch())) ?>
+                <?php endif; ?>
+            <?php endforeach; ?>
