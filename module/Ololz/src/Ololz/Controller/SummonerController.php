@@ -33,7 +33,7 @@ class SummonerController extends BaseController
         $lastWeek->sub(new \DateInterval('P7D'));
         $championsPlayedThisWeek = $this->getService('Champion')->getMapper()->findDistinctBySummonerAndMatchDate($summoner, $lastWeek);
 
-        $this->getServiceLocator()->get('Ololz\Form\MatchSearch')->setData($this->params()->fromQuery());
+        $this->getServiceLocator()->get('Ololz\Form\SearchMatch')->setData($this->params()->fromQuery());
 
         return new ViewModel(array(
             'summoner'      => $summoner,

@@ -2,20 +2,20 @@
 
 namespace Ololz\View\Helper\Form;
 
-use Ololz\Form\MatchSearch as FormMatchSearch;
+use Ololz\Form\Base;
 use Zend\View\Helper\AbstractHelper;
 
-class MatchSearch extends AbstractHelper
+class Form extends AbstractHelper
 {
     /**
-     * @var \Ololz\Form\MatchSearch
+     * @var \Ololz\Form\Base
      */
     protected $form;
 
     /**
      * @param string    $elementName
      *
-     * @return \Ololz\Form\MatchSearch
+     * @return \Ololz\Form\Base
      */
     public function __invoke($elementName = null)
     {
@@ -28,7 +28,7 @@ class MatchSearch extends AbstractHelper
     }
 
     /**
-     * @return \Ololz\Form\MatchSearch
+     * @return \Ololz\Form\Base
      */
     protected function getForm()
     {
@@ -38,9 +38,9 @@ class MatchSearch extends AbstractHelper
     /**
      * @param  \Ololz\Form\MatchSearch  $form
      *
-     * @return \Ololz\View\Helper\Form\MatchSearch
+     * @return \Ololz\View\Helper\Form\Form
      */
-    public function setForm(FormMatchSearch $form)
+    public function setForm(Base $form)
     {
         $this->form = $form;
 

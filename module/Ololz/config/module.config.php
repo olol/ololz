@@ -285,6 +285,7 @@ return array(
             'ololz/p/invocation/detail/spells'      => __DIR__ . '/../view/ololz/invocation/partials/detail/spells.phtml',
             'ololz/p/invocation/detail/summoner'    => __DIR__ . '/../view/ololz/invocation/partials/detail/summoner.phtml',
             'ololz/p/invocation/detail/summoner'    => __DIR__ . '/../view/ololz/invocation/partials/detail/summoner.phtml',
+            'ololz/p/invocation/search'             => __DIR__ . '/../view/ololz/invocation/partials/search.phtml',
             'ololz/p/match/line'                    => __DIR__ . '/../view/ololz/match/partials/line.phtml',
             'ololz/p/match/detail/summary'          => __DIR__ . '/../view/ololz/match/partials/detail/summary.phtml',
             'ololz/p/match/search'                  => __DIR__ . '/../view/ololz/match/partials/search.phtml',

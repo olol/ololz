@@ -81,7 +81,8 @@ class Module implements
                 'Ololz\Mapper\Source'       => new ServiceFactory\Mapper('Source'),
                 'Ololz\Mapper\Summoner'     => new ServiceFactory\Mapper('Summoner'),
 
-                'Ololz\Form\MatchSearch'    => new ServiceFactory\Form('MatchSearch'),
+                'Ololz\Form\SearchInvocation'   => new ServiceFactory\Form('SearchInvocation'),
+                'Ololz\Form\SearchMatch'        => new ServiceFactory\Form('SearchMatch'),
 
                 'Ololz\Service\Persist\Champion'    => new ServiceFactory\ServicePersist('Champion'),
                 'Ololz\Service\Persist\Invocation'  => new ServiceFactory\ServicePersist('Invocation'),
@@ -156,10 +157,16 @@ class Module implements
                                ->setMappingMapper($locator->get('Ololz\Mapper\Mapping'));
                     return $viewHelper;
                 },
-                'formMatchSearch' => function ($sm) {
+                'formSearchMatch' => function ($sm) {
                     $locator = $sm->getServiceLocator();
-                    $viewHelper = new View\Helper\Form\MatchSearch;
-                    $viewHelper->setForm($locator->get('Ololz\Form\MatchSearch'));
+                    $viewHelper = new View\Helper\Form\Form;
+                    $viewHelper->setForm($locator->get('Ololz\Form\SearchMatch'));
+                    return $viewHelper;
+                },
+                'formSearchInvocation' => function ($sm) {
+                    $locator = $sm->getServiceLocator();
+                    $viewHelper = new View\Helper\Form\Form;
+                    $viewHelper->setForm($locator->get('Ololz\Form\SearchInvocation'));
                     return $viewHelper;
                 },
             ),
