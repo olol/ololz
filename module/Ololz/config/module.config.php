@@ -15,10 +15,12 @@ return array(
                     'assets/bootstrap/bootstrap.css',
                     'assets/ololz/ololz.css',
                     'assets/bootstrap/bootstrap-responsive.css',
+                    'assets/chosen/chosen.css',
                 ),
                 'js/ololz.js' => array(
                     'assets/jquery/jquery.js',
                     'assets/bootstrap/bootstrap.js',
+                    'assets/chosen/chosen.jquery.js',
                     'assets/ololz/ololz.js'
                 ),
                 'js/highcharts.js' => array(
@@ -27,6 +29,9 @@ return array(
             ),
             'paths' => array(
                 __DIR__ . '/../public',
+            ),
+            'map' => array(
+                'css/chosen-sprite.png' =>  __DIR__ . '/../public/assets/chosen/chosen-sprite.png'
             ),
         ),
         'caching' => array(
