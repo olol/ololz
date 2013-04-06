@@ -69,6 +69,7 @@ class Invocation extends Base
 
         return $query->getQuery()->getResult();
     }
+
     /**
      * The query to find last matches since the given date of the given
      * summoner.
