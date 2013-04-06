@@ -49,7 +49,8 @@ abstract class SearchBase extends Base
         $limit = new ZFElement\Text;
         $limit->setLabel('max # of results')
               ->setName('limit')
-              ->setValue(20);
+              ->setValue(20)
+              ->setAttribute('class', 'input-small');
 
         return $limit;
     }
@@ -73,7 +74,8 @@ abstract class SearchBase extends Base
     {
         $offset = new ZFElement\Text;
         $offset->setLabel('Starting from result #')
-               ->setName('offset');
+               ->setName('offset')
+               ->setAttribute('class', 'input-small');
 
         return $offset;
     }
@@ -90,7 +92,11 @@ abstract class SearchBase extends Base
         $dateMin->setLabel('Matches in between')
                 ->setName('date_min')
                 ->setValue($value->format('Y-m-d'))
-                ->setAttribute('placeholder', $dateMin->getValue());
+                ->setAttributes(array(
+                    'class'             => 'input-small',
+                    'placeholder'       => $dateMin->getValue(),
+                    'data-date-format'  => 'yyyy-mm-dd'
+                ) );
 
         return $dateMin;
     }
@@ -106,7 +112,11 @@ abstract class SearchBase extends Base
         $dateMax->setLabel('and')
                 ->setName('date_max')
                 ->setValue($value->format('Y-m-d'))
-                ->setAttribute('placeholder', $dateMax->getValue());
+                ->setAttributes(array(
+                    'class'             => 'input-small',
+                    'placeholder'       => $dateMax->getValue(),
+                    'data-date-format'  => 'yyyy-mm-dd'
+                ) );
 
         return $dateMax;
     }

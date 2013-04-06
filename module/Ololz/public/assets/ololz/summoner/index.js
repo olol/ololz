@@ -1,6 +1,14 @@
 $(function() {
     $('#search').find('[name="champion[]"], [name="position[]"], [name="map[]"], [name="match_type[]"]').chosen();
 
+    $('.chzn-choices .search-field input').focusin(function() {
+        $(this).parents('.chzn-choices').first().addClass('chzn-choices-focus');
+    } ).focusout(function() {
+        $(this).parents('.chzn-choices').first().removeClass('chzn-choices-focus');
+    } );
+
+    $('.input-daterange').datepicker({autoclose: true, weekStart: 1});
+
     $('#search button[name=search]').click(loadInvocations);
 
     var searchFields = ['date_min', 'date_max', 'champion[]', 'position[]', 'map[]', 'match_type[]', 'limit'];

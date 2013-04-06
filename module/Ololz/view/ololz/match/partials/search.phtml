@@ -1,7 +1,7 @@
 <?php echo $this->form()->openTag($this->formSearchMatch()) ?>
 
-<div>
-    <span><?php echo $this->formSearchMatch('search_match')->get('date_min')->getLabel() ?> : </span>
+<div class="input-daterange">
+    <span><?php echo $this->formSearchMatch('search_match')->get('date_min')->getLabel() ?> :</span>
     <?php echo $this->formText()->render($this->formSearchMatch('search_match')->get('date_min')) ?>
     <span><?php echo $this->formSearchMatch('search_match')->get('date_max')->getLabel() ?> : </span>
     <?php echo $this->formText()->render($this->formSearchMatch('search_match')->get('date_max')) ?>
