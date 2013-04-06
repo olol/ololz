@@ -401,7 +401,11 @@ abstract class Base
         $criteria = array();
         foreach ($params as $paramKey => $paramValue) {
             if (in_array($paramKey, $allowedFields) && array_key_exists($paramKey, $mappedFields)) {
-                $paramValues = explode(',', str_replace(' ', '', $paramValue));
+                if (is_array($paramValue)) {
+                    $paramValues = $paramValue;
+                } else {
+                    $paramValues = explode(',', str_replace(' ', '', $paramValue));
+                }
                 $paramValue = array();
 
                 switch ($paramKey) // For now we can stay with that, but we will need something more fancy in the future

@@ -9,17 +9,17 @@
 
 <div>
     <span><?php echo $this->formSearchMatch('search_match')->get('champion')->getLabel() ?> : </span>
-    <?php echo $this->formText()->render($this->formSearchMatch('search_match')->get('champion')) ?>
+    <?php echo $this->formSelect()->render($this->formSearchMatch('search_match')->get('champion')) ?>
     <span><?php echo $this->formSearchMatch('search_match')->get('summoner')->getLabel() ?> : </span>
-    <?php echo $this->formText()->render($this->formSearchMatch('search_match')->get('summoner')) ?>
+    <?php echo $this->formSelect()->render($this->formSearchMatch('search_match')->get('summoner')) ?>
     <span><?php echo $this->formSearchMatch('search_match')->get('realm')->getLabel() ?> : </span>
-    <?php echo $this->formText()->render($this->formSearchMatch('search_match')->get('realm')) ?>
+    <?php echo $this->formSelect()->render($this->formSearchMatch('search_match')->get('realm')) ?>
 </div>
 <div>
     <span><?php echo $this->formSearchMatch('search_match')->get('map')->getLabel() ?> : </span>
-    <?php echo $this->formText()->render($this->formSearchMatch('search_match')->get('map')) ?>
+    <?php echo $this->formSelect()->render($this->formSearchMatch('search_match')->get('map')) ?>
     <span><?php echo $this->formSearchMatch('search_match')->get('match_type')->getLabel() ?> : </span>
-    <?php echo $this->formText()->render($this->formSearchMatch('search_match')->get('match_type')) ?>
+    <?php echo $this->formSelect()->render($this->formSearchMatch('search_match')->get('match_type')) ?>
 </div>
 
 <div>

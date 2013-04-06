@@ -1,7 +1,10 @@
 <?php
 namespace Ololz\Form\Fieldset;
 
-use Zend\Form\Element;
+use Ololz\Form\Element as Element;
+
+use Zend\Form\Element as ZFElement;
+use Zend\ServiceManager\ServiceManager;
 
 /**
  * Base fieldset to search for something
@@ -14,11 +17,36 @@ use Zend\Form\Element;
 abstract class SearchBase extends Base
 {
     /**
+     * @var \Zend\ServiceManager\ServiceManager
+     */
+    protected $serviceManager;
+
+    /**
+     * @param \Zend\ServiceManager\ServiceManager $serviceManager
+     *
+     * @return \Ololz\Form\Base
+     */
+    public function setServiceManager(ServiceManager $serviceManager)
+    {
+        $this->serviceManager = $serviceManager;
+
+        return $this;
+    }
+
+    /**
+     * @return \Zend\ServiceManager\ServiceManager
+     */
+    protected function getServiceManager()
+    {
+        return $this->serviceManager;
+    }
+
+    /**
      * @return \Zend\Form\Element\Text
      */
     public function getElementLimit()
     {
-        $limit = new Element\Text;
+        $limit = new ZFElement\Text;
         $limit->setLabel('max # of results')
               ->setName('limit')
               ->setValue(20);
@@ -31,7 +59,7 @@ abstract class SearchBase extends Base
      */
     public function getElementOrderBy()
     {
-        $orderBy = new Element\Text;
+        $orderBy = new ZFElement\Text;
         $orderBy->setLabel('Ordered by')
                 ->setName('order_by');
 
@@ -43,7 +71,7 @@ abstract class SearchBase extends Base
      */
     public function getElementOffset()
     {
-        $offset = new Element\Text;
+        $offset = new ZFElement\Text;
         $offset->setLabel('Starting from result #')
                ->setName('offset');
 
@@ -58,7 +86,7 @@ abstract class SearchBase extends Base
         $value = new \DateTime;
         $value->sub(new \DateInterval('P7D'));
 
-        $dateMin = new Element\Text;
+        $dateMin = new ZFElement\Text;
         $dateMin->setLabel('Matches in between')
                 ->setName('date_min')
                 ->setValue($value->format('Y-m-d'))
@@ -74,7 +102,7 @@ abstract class SearchBase extends Base
     {
         $value = new \DateTime;
 
-        $dateMax = new Element\Text;
+        $dateMax = new ZFElement\Text;
         $dateMax->setLabel('and')
                 ->setName('date_max')
                 ->setValue($value->format('Y-m-d'))
@@ -84,66 +112,71 @@ abstract class SearchBase extends Base
     }
 
     /**
-     * @return \Zend\Form\Element\Text
+     * @return \Ololz\Form\Element\Summoner
      */
     public function getElementSummoner()
     {
-        $summoner = new Element\Text;
-        $summoner->setLabel('Summoner')
-                 ->setName('summoner')
-                 ->setAttribute('placeholder', 'summoner\'s name...');
+        $summoner = new Element\Summoner;
+        if ($this->getServiceManager()) {
+            $summoner->setMapper($this->getServiceManager()->get('Ololz\Mapper\Summoner'))
+                     ->setValueOptions();
+        }
 
         return $summoner;
     }
 
     /**
-     * @return \Zend\Form\Element\Text
+     * @return \Ololz\Form\Element\Realm
      */
     public function getElementRealm()
     {
-        $realm = new Element\Text;
-        $realm->setLabel('Realm')
-              ->setName('realm')
-              ->setAttribute('placeholder', 'br, eune, euw, kr, na');
+        $realm = new Element\Realm;
+        if ($this->getServiceManager()) {
+            $realm->setMapper($this->getServiceManager()->get('Ololz\Mapper\Summoner'))
+                  ->setValueOptions();
+        }
 
         return $realm;
     }
 
     /**
-     * @return \Zend\Form\Element\Text
+     * @return \Ololz\Form\Element\Champion
      */
     public function getElementChampion()
     {
-        $champion = new Element\Text;
-        $champion->setLabel('Champion')
-                 ->setName('champion')
-                 ->setAttribute('placeholder', 'graves, cho-gath, lee-sin...');
+        $champion = new Element\Champion;
+        if ($this->getServiceManager()) {
+            $champion->setMapper($this->getServiceManager()->get('Ololz\Mapper\Champion'))
+                     ->setValueOptions();
+        }
 
         return $champion;
     }
 
     /**
-     * @return \Zend\Form\Element\Text
+     * @return \Ololz\Form\Element\Position
      */
     public function getElementPosition()
     {
-        $position = new Element\Text;
-        $position->setLabel('Position')
-                 ->setName('position')
-                 ->setAttribute('placeholder', 'top, mid, adc, support, jungle');
+        $position = new Element\Position;
+        if ($this->getServiceManager()) {
+            $position->setMapper($this->getServiceManager()->get('Ololz\Mapper\Position'))
+                     ->setValueOptions();
+        }
 
         return $position;
     }
 
     /**
-     * @return \Zend\Form\Element\Text
+     * @return \Ololz\Form\Element\Map
      */
     public function getElementMap()
     {
-        $map = new Element\Text;
-        $map->setLabel('Map')
-            ->setName('map')
-            ->setAttribute('placeholder', 'summoner-s-rift, crystal-scar...');
+        $map = new Element\Map;
+        if ($this->getServiceManager()) {
+            $map->setMapper($this->getServiceManager()->get('Ololz\Mapper\Map'))
+                ->setValueOptions();
+        }
 
         return $map;
     }
@@ -153,10 +186,11 @@ abstract class SearchBase extends Base
      */
     public function getElementMatchType()
     {
-        $matchType = new Element\Text;
-        $matchType->setLabel('Match type')
-                  ->setName('match_type')
-                  ->setAttribute('placeholder', 'normal-5v5, ranked-solo-5v5...');
+        $matchType = new Element\MatchType;
+        if ($this->getServiceManager()) {
+            $matchType->setMapper($this->getServiceManager()->get('Ololz\Mapper\MatchType'))
+                      ->setValueOptions();
+        }
 
         return $matchType;
     }

@@ -22,7 +22,13 @@ class SearchInvocation extends SearchBase
         }
 
         parent::__construct($name, $options);
+    }
 
+    /**
+     * @return \Ololz\Form\Fieldset\SearchInvocation
+     */
+    public function init()
+    {
         $this->add($this->getElementDateMin())
              ->add($this->getElementDateMax())
              ->add($this->getElementChampion())
@@ -32,5 +38,7 @@ class SearchInvocation extends SearchBase
 
              ->add($this->getElementLimit())
         ;
+
+        return $this;
     }
 }

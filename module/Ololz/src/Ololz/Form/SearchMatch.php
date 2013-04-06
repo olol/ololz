@@ -18,7 +18,9 @@ class SearchMatch extends SearchBase
     public function init()
     {
         $matchSearchFieldset = new Fieldset\SearchMatch;
-        $matchSearchFieldset->setUseAsBaseFieldset(true);
+        $matchSearchFieldset->setServiceManager($this->getServiceManager())
+                            ->setUseAsBaseFieldset(true)
+                            ->init();
         $this->add($matchSearchFieldset);
 
         parent::init();

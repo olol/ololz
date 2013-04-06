@@ -1,14 +1,22 @@
 $(function() {
+    $('#search').find('[name="champion[]"], [name="position[]"], [name="map[]"], [name="match_type[]"]').chosen();
+
     $('#search button[name=search]').click(loadInvocations);
 
-    var searchFields = ['date_min', 'date_max', 'champion', 'position', 'map', 'match_type', 'limit'];
+    var searchFields = ['date_min', 'date_max', 'champion[]', 'position[]', 'map[]', 'match_type[]', 'limit'];
 
     $.each(searchFields, function(idx, field) {
-        $('#search input[name=' + field + ']').keyup(function(e) {
+        $('#search [name="' + field + '"]').keyup(function(e) {
             if(e.which == 13) {
                 $('#search button[name=search]').click();
             }
         } );
+    } );
+
+    $('.search-field input').keyup(function(e) {
+        if(e.which == 13) {
+            $('#search button[name=search]').click();
+        }
     } );
 
     $('#search input[name=limit]').blur(function() {
@@ -22,7 +30,8 @@ $(function() {
         var criteria = {};
 
         $.each(searchFields, function(idx, fieldName) {
-            if ((value = $search.find('input[name=' + fieldName + ']').val()) != '') {
+            var value = $search.find('[name="' + fieldName + '"]').val();
+            if (value != '' && value != null) {
                 criteria[fieldName] = value;
             }
         } );

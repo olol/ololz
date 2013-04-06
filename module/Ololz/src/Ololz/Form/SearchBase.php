@@ -4,6 +4,7 @@ namespace Ololz\Form;
 use Ololz\Form\Fieldset;
 
 use Zend\Form\Element;
+use Zend\ServiceManager\ServiceManager;
 
 /**
  * Base form to search
@@ -15,6 +16,31 @@ use Zend\Form\Element;
  */
 abstract class SearchBase extends Base
 {
+    /**
+     * @var \Zend\ServiceManager\ServiceManager
+     */
+    protected $serviceManager;
+
+    /**
+     * @param \Zend\ServiceManager\ServiceManager $serviceManager
+     *
+     * @return \Ololz\Form\Base
+     */
+    public function setServiceManager(ServiceManager $serviceManager)
+    {
+        $this->serviceManager = $serviceManager;
+
+        return $this;
+    }
+
+    /**
+     * @return \Zend\ServiceManager\ServiceManager
+     */
+    protected function getServiceManager()
+    {
+        return $this->serviceManager;
+    }
+
     public function init()
     {
         $this->setAttribute('id', 'search');

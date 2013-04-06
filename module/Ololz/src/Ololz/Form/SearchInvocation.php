@@ -18,7 +18,9 @@ class SearchInvocation extends SearchBase
     public function init()
     {
         $invocationSearchFieldset = new Fieldset\SearchInvocation;
-        $invocationSearchFieldset->setUseAsBaseFieldset(true);
+        $invocationSearchFieldset->setServiceManager($this->getServiceManager())
+                                 ->setUseAsBaseFieldset(true)
+                                 ->init();
         $this->add($invocationSearchFieldset);
 
         parent::init();

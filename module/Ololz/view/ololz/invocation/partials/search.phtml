@@ -9,15 +9,15 @@
 
 <div>
     <span><?php echo $this->formSearchInvocation('search_invocation')->get('champion')->getLabel() ?> : </span>
-    <?php echo $this->formText()->render($this->formSearchInvocation('search_invocation')->get('champion')) ?>
+    <?php echo $this->formSelect()->render($this->formSearchInvocation('search_invocation')->get('champion')) ?>
     <span><?php echo $this->formSearchInvocation('search_invocation')->get('position')->getLabel() ?> : </span>
-    <?php echo $this->formText()->render($this->formSearchInvocation('search_invocation')->get('position')) ?>
+    <?php echo $this->formSelect()->render($this->formSearchInvocation('search_invocation')->get('position')) ?>
 </div>
 <div>
     <span><?php echo $this->formSearchInvocation('search_invocation')->get('map')->getLabel() ?> : </span>
-    <?php echo $this->formText()->render($this->formSearchInvocation('search_invocation')->get('map')) ?>
+    <?php echo $this->formSelect()->render($this->formSearchInvocation('search_invocation')->get('map')) ?>
     <span><?php echo $this->formSearchInvocation('search_invocation')->get('match_type')->getLabel() ?> : </span>
-    <?php echo $this->formText()->render($this->formSearchInvocation('search_invocation')->get('match_type')) ?>
+    <?php echo $this->formSelect()->render($this->formSearchInvocation('search_invocation')->get('match_type')) ?>
 </div>
 
 <div>
