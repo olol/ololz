@@ -5,6 +5,21 @@ body {
 
 .chzn-container {
     font-size: 14px !important;
+    -webkit-border-radius: 3px !important;
+    -moz-border-radius: 3px !important;
+    border-radius: 3px !important;
+}
+.chzn-container-multi .chzn-choices {
+    background-image: none !important;
+    -webkit-border-radius: 3px !important;
+    -moz-border-radius: 3px !important;
+    border-radius: 3px !important;
+}
+
+.input-daterange input:last-child {
+    -webkit-border-radius: 3px !important;
+    -moz-border-radius: 3px !important;
+    border-radius: 3px !important;
 }
 
 .ololz-color {

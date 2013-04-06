@@ -12,15 +12,17 @@ return array(
         'resolver_configs' => array(
             'collections' => array(
                 'css/ololz.css' => array(
-                    'assets/bootstrap/bootstrap.css',
+                    'assets/bootstrap/css/bootstrap.css',
                     'assets/ololz/ololz.css',
-                    'assets/bootstrap/bootstrap-responsive.css',
+                    'assets/bootstrap/css/bootstrap-responsive.css',
                     'assets/chosen/chosen.css',
+                    'assets/datepicker/datepicker.css',
                 ),
                 'js/ololz.js' => array(
                     'assets/jquery/jquery.js',
-                    'assets/bootstrap/bootstrap.js',
+                    'assets/bootstrap/js/bootstrap.js',
                     'assets/chosen/chosen.jquery.js',
+                    'assets/datepicker/bootstrap-datepicker.js',
                     'assets/ololz/ololz.js'
                 ),
                 'js/highcharts.js' => array(
@@ -31,7 +33,8 @@ return array(
                 __DIR__ . '/../public',
             ),
             'map' => array(
-                'css/chosen-sprite.png' =>  __DIR__ . '/../public/assets/chosen/chosen-sprite.png'
+                'css/chosen-sprite.png'         =>  __DIR__ . '/../public/assets/chosen/chosen-sprite.png',
+                'img/glyphicons-halflings.png'  =>  __DIR__ . '/../public/assets/bootstrap/img/glyphicons-halflings.png'
             ),
         ),
         'caching' => array(
