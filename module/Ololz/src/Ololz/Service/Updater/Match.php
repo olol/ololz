@@ -275,10 +275,16 @@ class Match extends Updater
             $doc = \phpQuery::newDocumentHTML($html);
             \phpQuery::selectDocument($doc);
 
+            foreach (pq('.tabs2 li a') as $cptTab => $tab) {
+                if (pq($tab)->attr('id') == 'hash-history') {
+                    break;
+                }
+            }
+
             $summonerHtml = pq('.summoner_titlebar div:eq(1) div:eq(0)');
             $summonerName = $summonerHtml->text();
 
-            $history = pq('.tabs2_container .pane_inner:eq(3)');
+            $history = pq('.tabs2_container .pane_inner:eq(' . $cptTab . ')');
 
             $actualInvocation = null;
 
