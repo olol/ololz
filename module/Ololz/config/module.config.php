@@ -244,11 +244,28 @@ return array(
             ),
         ),
     ),
+
+    'console' => array(
+        'router' => array(
+            'routes' => array(
+                'updater' => array(
+                    'options' => array(
+                        'route'    => 'update [champion|item|match|spell|summoner]:action [<summoner>]',
+                        'defaults' => array(
+                            'controller' => 'Ololz\Controller\Updater',
+                        )
+                    )
+                )
+            )
+        )
+    ),
+
     'service_manager' => array(
         'factories' => array(
             'translator' => 'Zend\I18n\Translator\TranslatorServiceFactory',
         ),
     ),
+
     'translator' => array(
         'locale' => 'en_US',
         'translation_file_patterns' => array(
@@ -259,6 +276,7 @@ return array(
             ),
         ),
     ),
+
     'controllers' => array(
         'invokables' => array(
             'Ololz\Controller\Index'    => 'Ololz\Controller\IndexController',
@@ -269,6 +287,7 @@ return array(
             'Ololz\Controller\Summoner' => 'Ololz\Controller\SummonerController',
         ),
     ),
+
     'view_manager' => array(
         'display_not_found_reason' => true,
         'display_exceptions'       => true,
