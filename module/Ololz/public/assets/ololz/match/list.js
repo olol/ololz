@@ -1,5 +1,5 @@
 $(function() {
-    $('#search').find('[name="champion[]"], [name="position[]"], [name="map[]"], [name="match_type[]"]').chosen();
+    $('#search').find('[name="summoner[]"], [name="realm[]"], [name="champion[]"], [name="map[]"], [name="match_type[]"]').chosen();
 
     $('.chzn-choices .search-field input').focusin(function() {
         $(this).parents('.chzn-choices').first().addClass('chzn-choices-focus');
@@ -9,9 +9,9 @@ $(function() {
 
     $('.input-daterange').datepicker({autoclose: true, weekStart: 1});
 
-    $('#search button[name=search]').click(loadInvocations);
+    $('#search button[name=search]').click(loadMatches);
 
-    var searchFields = ['date_min', 'date_max', 'champion[]', 'position[]', 'map[]', 'match_type[]', 'limit'];
+    var searchFields = ['date_min', 'date_max', 'champion[]', 'summoner[]', 'realm[]', 'map[]', 'match_type[]', 'limit'];
 
     $.each(searchFields, function(idx, field) {
         $('#search [name="' + field + '"]').keyup(function(e) {
@@ -19,12 +19,6 @@ $(function() {
                 $('#search button[name=search]').click();
             }
         } );
-    } );
-
-    $('.search-field input').keyup(function(e) {
-        if(e.which == 13) {
-            $('#search button[name=search]').click();
-        }
     } );
 
     $('#search input[name=limit]').blur(function() {
@@ -47,7 +41,7 @@ $(function() {
         return criteria;
     }
 
-    function loadInvocations() {
+    function loadMatches() {
         var $loader = $('#matches > div.loader');
         var $list = $('#matches > ul');
         $loader.slideDown();
@@ -55,19 +49,11 @@ $(function() {
 
         var criteria = getSearchCriteria();
 
-        $list.load('/summoner/' + ololz.summoner.id + '/invocations', criteria, function() {
+        $list.load('/matches/matches', criteria, function() {
             $list.slideDown();
             $('#matches > div.loader').slideUp('loader');
         } );
     }
 
-    $('a[data-toggle="tab"]').on('shown', function (e) {
-        switch ($(e.target).attr('href')) {
-            case '#matches':
-                if ($('#matches > ul > li').length == 0) {
-                    loadInvocations();
-                }
-            break;
-        }
-    } );
+    loadMatches();
 } );

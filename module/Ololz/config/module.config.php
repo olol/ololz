@@ -12,13 +12,17 @@ return array(
         'resolver_configs' => array(
             'collections' => array(
                 'css/ololz.css' => array(
-                    'assets/bootstrap/bootstrap.css',
+                    'assets/bootstrap/css/bootstrap.css',
                     'assets/ololz/ololz.css',
-                    'assets/bootstrap/bootstrap-responsive.css',
+                    'assets/bootstrap/css/bootstrap-responsive.css',
+                    'assets/chosen/chosen.css',
+                    'assets/datepicker/datepicker.css',
                 ),
                 'js/ololz.js' => array(
                     'assets/jquery/jquery.js',
-                    'assets/bootstrap/bootstrap.js',
+                    'assets/bootstrap/js/bootstrap.js',
+                    'assets/chosen/chosen.jquery.js',
+                    'assets/datepicker/bootstrap-datepicker.js',
                     'assets/ololz/ololz.js'
                 ),
                 'js/highcharts.js' => array(
@@ -27,6 +31,10 @@ return array(
             ),
             'paths' => array(
                 __DIR__ . '/../public',
+            ),
+            'map' => array(
+                'css/chosen-sprite.png'         =>  __DIR__ . '/../public/assets/chosen/chosen-sprite.png',
+                'img/glyphicons-halflings.png'  =>  __DIR__ . '/../public/assets/bootstrap/img/glyphicons-halflings.png'
             ),
         ),
         'caching' => array(
@@ -161,6 +169,18 @@ return array(
                                 'action'     => 'list',
                             ),
                         ),
+                        'may_terminate' => true,
+                        'child_routes' => array(
+                            'matches' => array(
+                                'type'    => 'Segment',
+                                'options' => array(
+                                    'route'    => '/matches',
+                                    'defaults' => array(
+                                        'action' => 'matches',
+                                    ),
+                                ),
+                            ),
+                        ),
                     ),
 
                     'champion' => array(
@@ -285,6 +305,7 @@ return array(
             'ololz/p/invocation/detail/spells'      => __DIR__ . '/../view/ololz/invocation/partials/detail/spells.phtml',
             'ololz/p/invocation/detail/summoner'    => __DIR__ . '/../view/ololz/invocation/partials/detail/summoner.phtml',
             'ololz/p/invocation/detail/summoner'    => __DIR__ . '/../view/ololz/invocation/partials/detail/summoner.phtml',
+            'ololz/p/invocation/search'             => __DIR__ . '/../view/ololz/invocation/partials/search.phtml',
             'ololz/p/match/line'                    => __DIR__ . '/../view/ololz/match/partials/line.phtml',
             'ololz/p/match/detail/summary'          => __DIR__ . '/../view/ololz/match/partials/detail/summary.phtml',
             'ololz/p/match/search'                  => __DIR__ . '/../view/ololz/match/partials/search.phtml',

@@ -81,7 +81,8 @@ class Module implements
                 'Ololz\Mapper\Source'       => new ServiceFactory\Mapper('Source'),
                 'Ololz\Mapper\Summoner'     => new ServiceFactory\Mapper('Summoner'),
 
-                'Ololz\Form\MatchSearch'    => new ServiceFactory\Form('MatchSearch'),
+                'Ololz\Form\SearchInvocation'   => new ServiceFactory\Form('SearchInvocation'),
+                'Ololz\Form\SearchMatch'        => new ServiceFactory\Form('SearchMatch'),
 
                 'Ololz\Service\Persist\Champion'    => new ServiceFactory\ServicePersist('Champion'),
                 'Ololz\Service\Persist\Invocation'  => new ServiceFactory\ServicePersist('Invocation'),
@@ -98,6 +99,9 @@ class Module implements
 
                 'Ololz\Service\Chart\Champion'      => new ServiceFactory\ServiceChart('Champion'),
                 'Ololz\Service\Chart\Invocation'    => new ServiceFactory\ServiceChart('Invocation'),
+
+                'Ololz\Service\Search\Invocation'   => new ServiceFactory\ServiceSearch('Invocation'),
+                'Ololz\Service\Search\Match'        => new ServiceFactory\ServiceSearch('Match'),
 
                 'Ololz\Service\Updater\Champion'    => new ServiceFactory\Updater('Champion'),
                 'Ololz\Service\Updater\Item'        => new ServiceFactory\Updater('Item'),
@@ -154,10 +158,16 @@ class Module implements
                                ->setMappingMapper($locator->get('Ololz\Mapper\Mapping'));
                     return $viewHelper;
                 },
-                'formMatchSearch' => function ($sm) {
+                'formSearchMatch' => function ($sm) {
                     $locator = $sm->getServiceLocator();
-                    $viewHelper = new View\Helper\Form\MatchSearch;
-                    $viewHelper->setForm($locator->get('Ololz\Form\MatchSearch'));
+                    $viewHelper = new View\Helper\Form\Form;
+                    $viewHelper->setForm($locator->get('Ololz\Form\SearchMatch'));
+                    return $viewHelper;
+                },
+                'formSearchInvocation' => function ($sm) {
+                    $locator = $sm->getServiceLocator();
+                    $viewHelper = new View\Helper\Form\Form;
+                    $viewHelper->setForm($locator->get('Ololz\Form\SearchInvocation'));
                     return $viewHelper;
                 },
             ),

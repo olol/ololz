@@ -37,17 +37,25 @@ class MatchController extends BaseController
 
     public function listAction()
     {
-        // @todo paginator ?
-//        $paginator = new \Zend\Paginator\Paginator(new \Zend\Paginator\Adapter\Array());
-//        $paginator->setCurrentPageNumber($this->params('page'));
+        $this->getViewHelper('HeadScript')->appendFile($this->getRequest()->getBasePath() . '/assets/ololz/match/list.js');
+    }
 
-        $criteria = array();
+    public function matchesAction()
+    {
+        $matches = $this->getServiceLocator()->get('Ololz\Service\Search\Match')
+            ->setParams($this->params()->fromPost())
+            ->setDateStart(! is_null($this->params()->fromPost('date_min')) ? new \DateTime($this->params()->fromPost('date_min') . ' 00:00:00') : null)
+            ->setDateEnd(! is_null($this->params()->fromPost('date_max')) ? new \DateTime($this->params()->fromPost('date_max') . ' 23:59:59') : null)
 
-        $matches = $this->getService()->getMapper()->findBy($criteria, array('date' => 'DESC'), 20);
+            ->search()
+        ;
 
-        return new ViewModel(array(
-            'matches' => $matches
+        $viewModel = new ViewModel(array(
+            'matches'   => $matches
         ) );
+        $viewModel->setTerminal(true);
+
+        return $viewModel;
     }
 
     /**

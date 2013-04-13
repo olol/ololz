@@ -23,6 +23,36 @@ class Position extends Base
     }
 
     /**
+     * {@inheritedDoc}
+     */
+    public function findAll($orderBy = null)
+    {
+        if (is_null($orderBy)) {
+            $orderBy = array('name' => 'ASC');
+        }
+
+        return parent::findAll($orderBy);
+    }
+
+    /**
+     * Find all positions for a list
+     *
+     * @param string|array  $orderBy
+     *
+     * @return array
+     */
+    public function findAllForList($orderBy = null)
+    {
+        $list = array();
+
+        foreach ($this->findAll($orderBy) as $position) {
+            $list[$position->getId()] = (string) $position;
+        }
+
+        return $list;
+    }
+
+    /**
      * @param string        $code
      *
      * @return \Ololz\Entity\Position
