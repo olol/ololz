@@ -102,4 +102,14 @@ class Updater implements ServiceManagerAwareInterface
     {
         return $this->getServiceManager()->get('Ololz\Service\Persist' . ucfirst($serviceName));
     }
+
+    /**
+     * @param string $updaterName
+     *
+     * @return \Ololz\Service\Updater\Updater
+     */
+    public function getUpdater($updaterName)
+    {
+        return $this->getServiceManager()->get('Ololz\Service\Updater' . ucfirst($updaterName));
+    }
 }

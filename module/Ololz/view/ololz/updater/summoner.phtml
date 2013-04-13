@@ -1,0 +1,12 @@
+<div class="row">
+
+    <p><?php echo sprintf($this->translate("Updating %s's matches"), (string) $summoner) ?></p>
+
+    <ul>
+    <?php foreach ($matchesLogs as $matchLog) : ?>
+        <li><?php echo $matchLog['message'] ?></li>
+    <?php endforeach; ?>
+    </ul>
+
+    <p>Go back to <a href="<?php echo $this->url('ololz/summoner', array('summoner' => $summoner->getId())) ?>"><?php echo (string) $summoner ?>'s page</a>.</p>
+</div>

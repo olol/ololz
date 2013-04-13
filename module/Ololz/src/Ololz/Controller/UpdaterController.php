@@ -22,9 +22,9 @@ class UpdaterController extends BaseController
 
     public function championAction()
     {
-        $service = $this->getServiceLocator()->get('Ololz\Service\Updater\Champion');
-        $service->update();
-        $writer = $service->getLogger()->getWriters()->current();
+        $updater = $this->getServiceLocator()->get('Ololz\Service\Updater\Champion');
+        $updater->update();
+        $writer = $updater->getLogger()->getWriters()->current();
 
         $variables = array(
             'name' => 'Champions',
@@ -36,9 +36,9 @@ class UpdaterController extends BaseController
 
     public function itemAction()
     {
-        $service = $this->getServiceLocator()->get('Ololz\Service\Updater\Item');
-        $service->update();
-        $writer = $service->getLogger()->getWriters()->current();
+        $updater = $this->getServiceLocator()->get('Ololz\Service\Updater\Item');
+        $updater->update();
+        $writer = $updater->getLogger()->getWriters()->current();
 
         $variables = array(
             'name' => 'Items',
@@ -50,9 +50,9 @@ class UpdaterController extends BaseController
 
     public function spellAction()
     {
-        $service = $this->getServiceLocator()->get('Ololz\Service\Updater\Spell');
-        $service->update();
-        $writer = $service->getLogger()->getWriters()->current();
+        $updater = $this->getServiceLocator()->get('Ololz\Service\Updater\Spell');
+        $updater->update();
+        $writer = $updater->getLogger()->getWriters()->current();
 
         $variables = array(
             'name' => 'Spells',
@@ -64,13 +64,39 @@ class UpdaterController extends BaseController
 
     public function matchAction()
     {
-        $service = $this->getServiceLocator()->get('Ololz\Service\Updater\Match');
-        $service->update();
-        $writer = $service->getLogger()->getWriters()->current();
+        $updater = $this->getServiceLocator()->get('Ololz\Service\Updater\Match');
+        $updater->update();
+        $writer = $updater->getLogger()->getWriters()->current();
 
         $variables = array(
             'name' => 'Matches',
             'logs' => $writer->events
+        );
+
+        return new ViewModel($variables);
+    }
+
+    public function summonerAction()
+    {
+        if (! $this->params()->fromQuery('summoner')) {
+            throw new \InvalidArgumentException('Missing summoner');
+        }
+
+        $summoner = $this->getServiceLocator()->get('Ololz\Service\Persist\Summoner')->getMapper()->find($this->params()->fromQuery('summoner'));
+
+        if (! $summoner instanceof Entity\Summoner || ($summoner instanceof Entity\Summoner && ! $summoner->getActive())) {
+            throw new \InvalidArgumentException('Wrong summoner');
+        }
+
+        $updater = $this->getServiceLocator()->get('Ololz\Service\Updater\Summoner');
+        $updater->setSummoner($summoner);
+        $updater->update();
+        $matchWriter = $updater->getMatchUpdater()->getLogger()->getWriters()->current();
+
+        $variables = array(
+            'name'        => 'Summoner',
+            'summoner'    => $summoner,
+            'matchesLogs' => $matchWriter->events
         );
 
         return new ViewModel($variables);

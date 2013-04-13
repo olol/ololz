@@ -1,5 +1,6 @@
 <div style="float:left; padding-right:16px; width: 150px;">
     <h2><?php echo $summoner->getName() ?></h2>
+    <p><a class="btn" href="<?php echo $this->url('ololz/default', array('controller' => 'updater', 'action' => 'summoner')) ?>?summoner=<?php echo $summoner->getId() ?>">Update data</a></p>
 </div>
 <div id="summoner" style="margin-left: 160px;">
     <ul class="nav nav-tabs">

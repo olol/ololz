@@ -107,6 +107,7 @@ class Module implements
                 'Ololz\Service\Updater\Item'        => new ServiceFactory\Updater('Item'),
                 'Ololz\Service\Updater\Match'       => new ServiceFactory\Updater('Match'),
                 'Ololz\Service\Updater\Spell'       => new ServiceFactory\Updater('Spell'),
+                'Ololz\Service\Updater\Summoner'    => new ServiceFactory\Updater('Summoner'),
 
                 'Ololz\Service\Logger'              => function() {
                     $logger = new \Zend\Log\Logger(array(

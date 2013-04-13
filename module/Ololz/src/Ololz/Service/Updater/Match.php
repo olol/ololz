@@ -16,9 +16,38 @@ use Ololz\Entity;
  */
 class Match extends Updater
 {
+    /**
+     * @var array
+     */
+    protected $summoners;
+
     public function __construct()
     {
         set_time_limit(0);
+    }
+
+    /**
+     * @param array $summoners
+     *
+     * @return \Ololz\Service\Updater\Match
+     */
+    public function setSummoners(array $summoners)
+    {
+        $this->summoners = $summoners;
+
+        return $this;
+    }
+
+    /**
+     * @return \Ololz\Entity\Summoner
+     */
+    public function getSummoners()
+    {
+        if (is_null($this->summoners)) {
+            $this->setSummoners($this->getService('Summoner')->getMapper()->findByActive(true));
+        }
+
+        return $this->summoners;
     }
 
     /**
@@ -263,7 +292,7 @@ class Match extends Updater
         $smiteSpell         = $this->getService('Spell')->getMapper()->findOneByCode('smite');
 
         /* @var $summoner \Ololz\Entity\Summoner */
-        foreach ($this->getService('Summoner')->getMapper()->findByActive(true) as $summoner) {
+        foreach ($this->getSummoners() as $summoner) {
 
             // Skip summoners for whom we don't have a LolKing ID
             if (! $summonerMapping = $summoner->getMappingBySource($this->getSource(), 'id')) {
