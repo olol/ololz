@@ -13,18 +13,16 @@ use Zend\Form\Element;
  * @link    https://github.com/olol/oLolZ
  * @package Ololz
  */
-class MatchSearch extends Base
+class SearchMatch extends SearchBase
 {
     public function init()
     {
-        $this->setAttribute('id', 'search');
-
-        $matchSearchFieldset = new Fieldset\MatchSearch;
-        $matchSearchFieldset->setUseAsBaseFieldset(true);
+        $matchSearchFieldset = new Fieldset\SearchMatch;
+        $matchSearchFieldset->setServiceManager($this->getServiceManager())
+                            ->setUseAsBaseFieldset(true)
+                            ->init();
         $this->add($matchSearchFieldset);
 
-        $searchButton = new Element\Button('search');
-        $searchButton->setLabel('Search');
-        $this->add($searchButton);
+        parent::init();
     }
 }

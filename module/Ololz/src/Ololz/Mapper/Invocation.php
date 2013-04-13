@@ -32,7 +32,7 @@ class Invocation extends Base
      * @param int                       $limit
      * @param int                       $offset
      *
-     * @return QueryBuilder
+     * @return \Doctrine\ORM\QueryBuilder
      */
     public function findBySummonerQuery(Entity\Summoner $summoner, $criteria = null, $orderBy = null, $limit = null, $offset = null)
     {
@@ -69,6 +69,7 @@ class Invocation extends Base
 
         return $query->getQuery()->getResult();
     }
+
     /**
      * The query to find last matches since the given date of the given
      * summoner.
@@ -81,7 +82,7 @@ class Invocation extends Base
      * @param int                       $limit
      * @param int                       $offset
      *
-     * @return QueryBuilder
+     * @return \Doctrine\ORM\QueryBuilder
      */
     public function findBySummonerAndMatchDateQuery(Entity\Summoner $summoner, \DateTime $dateStart = null, \DateTime $dateEnd = null, $criteria = null, $orderBy = null, $limit = null, $offset = null)
     {

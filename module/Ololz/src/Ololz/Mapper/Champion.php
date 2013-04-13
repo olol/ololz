@@ -25,6 +25,36 @@ class Champion extends Base
     }
 
     /**
+     * {@inheritedDoc}
+     */
+    public function findAll($orderBy = null)
+    {
+        if (is_null($orderBy)) {
+            $orderBy = array('name' => 'ASC');
+        }
+
+        return parent::findAll($orderBy);
+    }
+
+    /**
+     * Find all champions for a list
+     *
+     * @param string|array  $orderBy
+     *
+     * @return array
+     */
+    public function findAllForList($orderBy = null)
+    {
+        $list = array();
+
+        foreach ($this->findAll($orderBy) as $champion) {
+            $list[$champion->getId()] = (string) $champion;
+        }
+
+        return $list;
+    }
+
+    /**
      * @param string        $code
      *
      * @return \Ololz\Entity\Champion
@@ -42,7 +72,7 @@ class Champion extends Base
      * @param int                       $limit
      * @param int                       $offset
      *
-     * @return QueryBuilder
+     * @return \Doctrine\ORM\QueryBuilder
      */
     public function findBySummonerQuery(Entity\Summoner $summoner, $orderBy = null, $limit = null, $offset = null)
     {
@@ -90,7 +120,7 @@ class Champion extends Base
      * @param int                       $limit
      * @param int                       $offset
      *
-     * @return QueryBuilder
+     * @return \Doctrine\ORM\QueryBuilder
      */
     public function findBySummonerAndMatchDateQuery(Entity\Summoner $summoner, \DateTime $dateStart, \DateTime $dateEnd = null, $orderBy = null, $limit = null, $offset = null)
     {
@@ -140,7 +170,7 @@ class Champion extends Base
      * @param int                       $limit
      * @param int                       $offset
      *
-     * @return QueryBuilder
+     * @return \Doctrine\ORM\QueryBuilder
      */
     public function findDistinctBySummonerAndMatchDateQuery(Entity\Summoner $summoner, \DateTime $dateStart, \DateTime $dateEnd = null, $orderBy = null, $limit = null, $offset = null)
     {

@@ -23,6 +23,36 @@ class MatchType extends Base
     }
 
     /**
+     * {@inheritedDoc}
+     */
+    public function findAll($orderBy = null)
+    {
+        if (is_null($orderBy)) {
+            $orderBy = array('name' => 'ASC');
+        }
+
+        return parent::findAll($orderBy);
+    }
+
+    /**
+     * Find all match types for a list
+     *
+     * @param string|array  $orderBy
+     *
+     * @return array
+     */
+    public function findAllForList($orderBy = null)
+    {
+        $list = array();
+
+        foreach ($this->findAll($orderBy) as $matchType) {
+            $list[$matchType->getId()] = (string) $matchType;
+        }
+
+        return $list;
+    }
+
+    /**
      * @param string        $code
      *
      * @return \Ololz\Entity\MatchType
