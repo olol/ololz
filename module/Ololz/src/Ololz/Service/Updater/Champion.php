@@ -15,7 +15,7 @@ class Champion extends Updater
 {
     private function positionMapping($lolKingSource, $mappingService)
     {
-        $mappings = $mappingService->getMapper()->findBySourceAndTypeAndColumn($lolKingSource, Entity\Mapping::TYPE_POSITION, Entity\Mapping::COLUMN_ID);
+        $mappings = $mappingService->getMapper()->findBySourceAndTypeAndColumn($lolKingSource, Entity\Mapping::TYPE_POSITION, Entity\Mapping::COLUMN_CODE);
 
         $return = array();
         foreach ($mappings as $mapping) {
@@ -37,14 +37,12 @@ class Champion extends Updater
 
         $lolKingSource = $this->getServiceManager()->get('Ololz\Service\Persist\Source')->getMapper()->findOneByCode(Entity\Source::CODE_LOLKING);
 
-        $htmlChampions = pq('.champion-list tr');
+        $htmlChampions = pq('.champion-list tbody tr');
         $htmlChampions = pq($htmlChampions);
         $positionMapping = $this->positionMapping($lolKingSource, $mappingService);
 
         foreach ($htmlChampions as $cptChampion => $htmlChampion) {
-            if ($cptChampion == 0) {
-                continue;
-            }
+
             $htmlChampion = pq($htmlChampion);
             $htmlChampionName = pq($htmlChampion['> td:eq(0) > div:eq(1) a']);
             $championName = $htmlChampionName->text();
