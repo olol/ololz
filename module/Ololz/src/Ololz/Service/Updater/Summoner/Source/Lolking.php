@@ -13,7 +13,7 @@ use Ololz\Service\Updater\Summoner\Summoner;
  * @link    https://github.com/olol/oLolZ
  * @package Ololz
  */
-class Summoner extends Summoner
+class Lolking extends Summoner
 {
     /**
      * @var \Ololz\Entity\Summoner
@@ -55,7 +55,7 @@ class Summoner extends Summoner
      *
      * @return \Ololz\Service\Updater\Summoner
      */
-    public function setMatchUpdater(Service\Updater\Match $matchUpdater)
+    public function setMatchUpdater(Service\Updater\Match\Match $matchUpdater)
     {
         $this->matchUpdater = $matchUpdater;
 
