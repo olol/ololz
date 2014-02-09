@@ -48,7 +48,7 @@ class Champion extends Updater
             $championName = $htmlChampionName->text();
             $championTheirsCode = str_replace('/champions/', '', $htmlChampionName->attr('href'));
             $htmlChampionContainer = pq($htmlChampionName->parent()->parent());
-            $championTheirsId = str_replace(array('background:url(//img.lolking.net/shared/riot/images/champions/', '_32.png)'), '', $htmlChampionContainer['.champion-list-icon']->attr('style'));
+            $championTheirsId = str_replace(array('background:url(//lkimg.zamimg.com/shared/riot/images/champions/', '_32.png)'), '', $htmlChampionContainer['.champion-list-icon']->attr('style'));
             $championPosition = $htmlChampion['> td:eq(6)']->text();
             $championPositionId = @$positionMapping[$championPosition];
             if (! $championPositionId) {
