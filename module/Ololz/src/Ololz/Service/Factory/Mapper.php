@@ -33,7 +33,7 @@ class Mapper implements FactoryInterface
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
         /* @var $em \Doctrine\ORM\EntityManager */
-        $em = $serviceLocator->get('doctrine.entity_manager.orm_default');
+        $em = $serviceLocator->get('doctrine.entitymanager.orm_default');
         $mapperClass = 'Ololz\Mapper\\' . $this->mapperName;;
 
         if (! class_exists($mapperClass)) {
