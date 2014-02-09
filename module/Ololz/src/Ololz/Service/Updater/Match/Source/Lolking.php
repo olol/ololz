@@ -1,10 +1,11 @@
 <?php
-namespace Ololz\Service\Updater;
+namespace Ololz\Service\Updater\Match\Source;
 
 use Ololz\Entity;
+use Ololz\Service\Updater\Match\Match;
 
 /**
- * Match updater
+ * Source updater via Lolking website
  *
  * I know it's very poorly coded, but i got tired of the doctrine entity "merge"
  * problem...
@@ -14,7 +15,7 @@ use Ololz\Entity;
  * @link    https://github.com/olol/oLolZ
  * @package Ololz
  */
-class Match extends Updater
+class Lolking extends Match
 {
     /**
      * @var array

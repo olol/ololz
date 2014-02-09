@@ -1,18 +1,19 @@
 <?php
-namespace Ololz\Service\Updater;
+namespace Ololz\Service\Updater\Summoner\Source;
 
 use Ololz\Entity;
 use Ololz\Service;
+use Ololz\Service\Updater\Summoner\Summoner;
 
 /**
- * Summoner updater
+ * Summoner updater via Lolking website
  *
  * @since   0.2
  * @author  Jérémy Huet <jeremy.huet+olol@gmail.com>
  * @link    https://github.com/olol/oLolZ
  * @package Ololz
  */
-class Summoner extends Updater
+class Summoner extends Summoner
 {
     /**
      * @var \Ololz\Entity\Summoner

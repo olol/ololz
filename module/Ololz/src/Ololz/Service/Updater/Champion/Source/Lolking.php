@@ -1,17 +1,18 @@
 <?php
-namespace Ololz\Service\Updater;
+namespace Ololz\Service\Updater\Champion\Source;
 
 use Ololz\Entity;
+use Ololz\Service\Updater\Champion\Champion;
 
 /**
- * Champion updater
+ * Champion updater via Lolking website
  *
  * @since   0.1
  * @author  Jérémy Huet <jeremy.huet+olol@gmail.com>
  * @link    https://github.com/olol/oLolZ
  * @package Ololz
  */
-class Champion extends Updater
+class Lolking extends Champion
 {
     private function positionMapping($lolKingSource, $mappingService)
     {

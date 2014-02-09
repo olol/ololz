@@ -1,17 +1,18 @@
 <?php
-namespace Ololz\Service\Updater;
+namespace Ololz\Service\Updater\Item\Source;
 
 use Ololz\Entity;
+use Ololz\Service\Updater\Item\Item;
 
 /**
- * Item updater
+ * Item updater via Lolking website
  *
  * @since   0.1
  * @author  Jérémy Huet <jeremy.huet+olol@gmail.com>
  * @link    https://github.com/olol/oLolZ
  * @package Ololz
  */
-class Item extends Updater
+class Lolking extends Item
 {
     public function update()
     {

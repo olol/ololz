@@ -16,7 +16,7 @@ use Zend\Log\Logger;
  * @link    https://github.com/olol/oLolZ
  * @package Ololz
  */
-class Updater implements ServiceManagerAwareInterface
+abstract class Updater implements ServiceManagerAwareInterface
 {
     /**
      * @var \Zend\ServiceManager\ServiceManager
@@ -112,4 +112,6 @@ class Updater implements ServiceManagerAwareInterface
     {
         return $this->getServiceManager()->get('Ololz\Service\Updater' . ucfirst($updaterName));
     }
+
+    abstract public function update();
 }
