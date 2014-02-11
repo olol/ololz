@@ -49,7 +49,7 @@ class PictureUrl extends AbstractHelper
                 switch ($type)
                 {
                     case self::TYPE_ICON:
-                        $url = 'http://img.lolking.net/images/spells/' . $lolKingId . '.png';
+                        $url = 'http://lkimg.zamimg.com/images/spells/' . $lolKingId . '.png';
                         break;
 
                     default:
