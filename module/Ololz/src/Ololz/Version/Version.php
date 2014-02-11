@@ -10,5 +10,5 @@ final class Version
     /**
      * Open LoL Ztatistics current version.
      */
-    const VERSION = '0.1.2';
+    const VERSION = '0.1.3';
 }

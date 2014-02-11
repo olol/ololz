@@ -46,11 +46,11 @@ return array(
             ),
         ),
         'filters' => array(
-            'application/javascript' => array(
-                array(
-                    'filter' => 'JSMinPlus',  // Allowed format is Filtername[Filter]. Can also be FQCN
-                ),
-            ),
+//            'application/javascript' => array(
+//                array(
+//                    'filter' => 'JSMinPlus',  // Allowed format is Filtername[Filter]. Can also be FQCN
+//                ),
+//            ),
 //            'text/css' => array(
 //                array(
 //                    'filter' => 'CssMin',  // Allowed format is Filtername[Filter]. Can also be FQCN
