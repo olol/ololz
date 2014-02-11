@@ -236,8 +236,8 @@ class Invocation extends Base
      */
     public function addItem(Item $item)
     {
-        if (count($this->getItems()) >= 6) {
-            throw new \Exception('You can not add more than 6 items for a invocation.');
+        if (count($this->getItems()) >= 7) {
+            throw new \Exception('You can not add more than 7 items for an invocation.');
         }
 
         $this->items[] = $item;
