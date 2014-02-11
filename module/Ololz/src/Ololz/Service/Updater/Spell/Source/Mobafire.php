@@ -1,17 +1,18 @@
 <?php
-namespace Ololz\Service\Updater;
+namespace Ololz\Service\Updater\Spell\Source;
 
 use Ololz\Entity;
+use Ololz\Service\Updater\Spell\Spell;
 
 /**
- * Spell updater
+ * Spell updater via Mobafire website
  *
  * @since   0.1
  * @author  Jérémy Huet <jeremy.huet+olol@gmail.com>
  * @link    https://github.com/olol/oLolZ
  * @package Ololz
  */
-class Spell extends Updater
+class Mobafire extends Spell
 {
     public function update()
     {

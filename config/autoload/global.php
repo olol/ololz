@@ -12,5 +12,23 @@
  */
 
 return array(
-    // ...
+    'ololz' => array(
+        'updater' => array(
+            'champion' => array(
+                'source' => 'lolking'
+            ),
+            'item' => array(
+                'source' => 'lolking'
+            ),
+            'match' => array(
+                'source' => 'lolking'
+            ),
+            'spell' => array(
+                'source' => 'mobafire'
+            ),
+            'summoner' => array(
+                'source' => 'lolking'
+            ),
+        )
+    )
 );

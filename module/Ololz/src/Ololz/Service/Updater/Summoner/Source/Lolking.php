@@ -1,18 +1,19 @@
 <?php
-namespace Ololz\Service\Updater;
+namespace Ololz\Service\Updater\Summoner\Source;
 
 use Ololz\Entity;
 use Ololz\Service;
+use Ololz\Service\Updater\Summoner\Summoner;
 
 /**
- * Summoner updater
+ * Summoner updater via Lolking website
  *
  * @since   0.2
  * @author  Jérémy Huet <jeremy.huet+olol@gmail.com>
  * @link    https://github.com/olol/oLolZ
  * @package Ololz
  */
-class Summoner extends Updater
+class Lolking extends Summoner
 {
     /**
      * @var \Ololz\Entity\Summoner
@@ -54,7 +55,7 @@ class Summoner extends Updater
      *
      * @return \Ololz\Service\Updater\Summoner
      */
-    public function setMatchUpdater(Service\Updater\Match $matchUpdater)
+    public function setMatchUpdater(Service\Updater\Match\Match $matchUpdater)
     {
         $this->matchUpdater = $matchUpdater;
 

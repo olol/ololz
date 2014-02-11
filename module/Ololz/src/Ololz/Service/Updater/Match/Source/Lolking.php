@@ -1,10 +1,11 @@
 <?php
-namespace Ololz\Service\Updater;
+namespace Ololz\Service\Updater\Match\Source;
 
 use Ololz\Entity;
+use Ololz\Service\Updater\Match\Match;
 
 /**
- * Match updater
+ * Source updater via Lolking website
  *
  * I know it's very poorly coded, but i got tired of the doctrine entity "merge"
  * problem...
@@ -14,40 +15,11 @@ use Ololz\Entity;
  * @link    https://github.com/olol/oLolZ
  * @package Ololz
  */
-class Match extends Updater
+class Lolking extends Match
 {
-    /**
-     * @var array
-     */
-    protected $summoners;
-
     public function __construct()
     {
         set_time_limit(0);
-    }
-
-    /**
-     * @param array $summoners
-     *
-     * @return \Ololz\Service\Updater\Match
-     */
-    public function setSummoners(array $summoners)
-    {
-        $this->summoners = $summoners;
-
-        return $this;
-    }
-
-    /**
-     * @return \Ololz\Entity\Summoner
-     */
-    public function getSummoners()
-    {
-        if (is_null($this->summoners)) {
-            $this->setSummoners($this->getService('Summoner')->getMapper()->findByActive(true));
-        }
-
-        return $this->summoners;
     }
 
     /**
@@ -304,16 +276,15 @@ class Match extends Updater
             $doc = \phpQuery::newDocumentHTML($html);
             \phpQuery::selectDocument($doc);
 
-            foreach (pq('.tabs2 li a') as $cptTab => $tab) {
-                if (pq($tab)->attr('id') == 'hash-history') {
+            foreach (pq('.tabs3 li a') as $cptTab => $tab) {
+                if (pq($tab)->attr('href') == '#matches') {
                     break;
                 }
             }
 
-            $summonerHtml = pq('.summoner_titlebar div:eq(1) div:eq(0)');
-            $summonerName = $summonerHtml->text();
+            $summonerName = pq('#summoner-titlebar-summoner-name')->text();
 
-            $history = pq('.tabs2_container .pane_inner:eq(' . $cptTab . ')');
+            $history = pq('.tabs3-tabs > div:eq(' . $cptTab . ')');
 
             $actualInvocation = null;
 
@@ -478,17 +449,13 @@ class Match extends Updater
                             $actualInvocation['assists'] = (int) $details['strong:eq(2)']->text();
                         break;
 
-                        case 4: // Gold
+                        case 4: // Gold & Minions
 //                            $actualInvocation->setGold((float) $details['strong']->text());
-                            $actualInvocation['gold'] = (float) $details['strong']->text();
+                            $actualInvocation['gold'] = (float) $details['strong:eq(0)']->text();
+                            $actualInvocation['minions'] = (int) $details['strong:eq(1)']->text();
                         break;
 
-                        case 5: // Minions
-//                            $actualInvocation->setMinions((int) $details['strong']->text());
-                            $actualInvocation['minions'] = (int) $details['strong']->text();
-                        break;
-
-                        case 6: // Spells
+                        case 5: // Spells
                             foreach ($details['div.icon_36'] as $htmlSpell) {
                                 $htmlSpell = pq($htmlSpell)->attr('style');
                                 $lolKingSpell = substr($htmlSpell, strrpos($htmlSpell, '/') + 1, strrpos($htmlSpell, '.') - 1 - strrpos($htmlSpell, '/'));
@@ -500,7 +467,19 @@ class Match extends Updater
                             }
                         break;
 
-                        case 7: // Items
+                        case 6: // Items
+                            foreach ($details['div.icon_32 a'] as $htmlItem) {
+                                $htmlItem = pq($htmlItem);
+                                $lolKingItem = str_replace('/items/', '', $htmlItem->attr('href'));
+                                $item = $this->getService('Mapping')->getMapper()->findOneOurs($this->getSource(), Entity\Mapping::TYPE_ITEM, Entity\Mapping::COLUMN_ID, $lolKingItem);
+                                if ($item) {
+//                                    $actualInvocation->addItem($item);
+                                    $actualInvocation['items'][] = $item;
+                                }
+                            }
+                        break;
+
+                        case 7: // Trinket
                             foreach ($details['div.icon_32 a'] as $htmlItem) {
                                 $htmlItem = pq($htmlItem);
                                 $lolKingItem = str_replace('/items/', '', $htmlItem->attr('href'));
